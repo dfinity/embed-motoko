@@ -1,0 +1,43 @@
+html,
+body {
+    background-color: #222;
+    color: white;
+    margin: 0;
+    overflow-y: hidden;
+    font-family: sans-serif;
+}
+
+pre {
+    white-space: pre-wrap;
+}
+
+.button-menu {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 10px;
+}
+
+.button {
+    transition: 0.1s transform ease-out;
+    padding: 10px 15px;
+    border-radius: 10px;
+    /* background: #0008; */
+    /* background: white; */
+    border: solid 2px #222;
+    color: #222;
+    display: flex;
+    cursor: pointer;
+
+    &:hover {
+        background: #fff5;
+        // color: darkblue;
+        // border-color: darkblue;
+        transform: scale(1.1);
+    }
+    
+    &:active {
+        background: #fff;
+        transform: scale(1.2);
+    }
+}
