@@ -15,7 +15,7 @@ actor Main {
   };
 };
 
-await Main.hello()
+await Main.hello();
 `;
 
 const EMBED_LINK_BASE = window.location.origin + '/';
