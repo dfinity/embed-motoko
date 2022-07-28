@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { FaCode } from 'react-icons/fa';
 import { Motoko } from 'motoko';
+import pako from 'pako';
 import ReactTooltip from 'react-tooltip';
 import copy from 'copy-to-clipboard';
 import CodeEditor from './CodeEditor';
@@ -17,18 +18,28 @@ actor Main {
 await Main.hello()
 `;
 
-const EMBED_LINK_BASE = 'https://embed.smartcontracts.org/';
+const EMBED_LINK_BASE = window.location.origin + '/';
 
-const UNCOMPRESSED_FORMAT = 'c';
+const GZIP_FORMAT = 'g';
 
 let defaultCode;
-const shareData = window.location.pathname.substring(1);
+const shareData = window.location.pathname.substring(1); // Remove leading '/'
 if (shareData) {
-  if (shareData.startsWith(UNCOMPRESSED_FORMAT)) {
+  if (shareData.startsWith(GZIP_FORMAT)) {
     try {
-      defaultCode = atob(shareData.substring(UNCOMPRESSED_FORMAT.length));
+      defaultCode = pako.inflate(
+        new Uint8Array(
+          atob(shareData.substring(GZIP_FORMAT.length))
+            .split('')
+            .map((c) => c.charCodeAt(0)),
+        ),
+        {
+          to: 'string',
+        },
+      );
     } catch (err) {
       defaultCode = '// Unable to parse share link';
+      console.error(err);
     }
   }
 } else {
@@ -41,6 +52,7 @@ export default function App() {
 
   const output = useMemo(() => {
     try {
+      setMessage(null);
       Motoko.saveFile('Main.mo', value);
       return Motoko.run([], 'Main.mo');
     } catch (err) {
@@ -49,17 +61,19 @@ export default function App() {
   }, [value]);
 
   const copyEmbedLink = () => {
-    const format = UNCOMPRESSED_FORMAT;
-    const link = `${EMBED_LINK_BASE}${format}${btoa(value)}`;
+    const format = GZIP_FORMAT;
+    console.log(pako.deflate(value)); ///
+    const payload = btoa(String.fromCharCode.apply(null, pako.deflate(value)));
+    const link = `${EMBED_LINK_BASE}${format}${payload}`;
     if (link.length >= 2048) {
       setMessage('> Your code is too long to fit into a URL!');
     } else {
       copy(link);
       setMessage(
-        `> Copied embed link to clipboard.\n\nPaste into a Medium post .`,
+        `> Copied embed link to clipboard.\n\nPaste into a Medium post to embed this code snippet!`,
       );
     }
-    setTimeout(() => setMessage(null), 3000);
+    // setTimeout(() => setMessage(null), 3000);
   };
 
   const outputHeight = 100;
@@ -73,7 +87,11 @@ export default function App() {
         height={`calc(100vh - ${outputHeight}px)`}
       />
       <div className="button-menu">
-        <div className="button" onClick={copyEmbedLink} title="Copy embed link">
+        <div
+          className="button"
+          onClick={copyEmbedLink}
+          data-tip="Copy embed link"
+        >
           <FaCode />
         </div>
       </div>
