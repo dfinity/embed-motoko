@@ -70,7 +70,7 @@ export default function App() {
     } else {
       copy(link);
       setMessage(
-        `> Copied embed link to clipboard.\n\nPaste into a Medium post to embed this code snippet!`,
+        `> Copied link to clipboard.\n\nPaste into a Medium post to embed this code snippet!`,
       );
     }
     // setTimeout(() => setMessage(null), 3000);
@@ -90,7 +90,7 @@ export default function App() {
         <div
           className="button"
           onClick={copyEmbedLink}
-          data-tip="Copy embed link"
+          data-tip="Embed this code snippet"
         >
           <FaCode />
         </div>
