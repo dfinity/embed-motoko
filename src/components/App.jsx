@@ -11,8 +11,12 @@ export default function App() {
       ) : (
         <div className="h-screen flex flex-col bg-[#F5F5F5] justify-center items-center">
           <div>
-            <h1 className="text-4xl sm:text-6xl text-center">Embed Motoko</h1>
-            <hr className="my-5" />
+            <h1 className="text-4xl sm:text-7xl opacity-80 text-center lowercase font-light">
+              Embed
+              <img src="/img/motoko.png" className="inline h-[50px] sm:h-[100px] mr-1" />
+              Motoko
+            </h1>
+            <hr className="my-3" />
           </div>
           <div className="w-full p-4">
             <iframe

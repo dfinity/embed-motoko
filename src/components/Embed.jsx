@@ -17,12 +17,13 @@ actor Main {
 // await Main.hello();
 `;
 
-const EMBED_LINK_BASE = window.location.origin + '/';
+const RELATIVE_PATH = '/motoko/';
+const EMBED_LINK_BASE = window.location.origin + RELATIVE_PATH;
 
 const GZIP_FORMAT = 'g'; // TODO: refactor
 
 let defaultCode;
-const shareData = window.location.pathname.substring(1); // Remove leading '/'
+const shareData = window.location.pathname.substring(RELATIVE_PATH.length);
 if (shareData) {
   if (shareData.startsWith(GZIP_FORMAT)) {
     try {
@@ -55,6 +56,7 @@ export default function Embed() {
       Motoko.saveFile('Main.mo', value);
       return Motoko.run([], 'Main.mo');
     } catch (err) {
+      console.error(err);
       return { stderr: err.message || String(err) };
     }
   }, [value]);
@@ -88,6 +90,7 @@ export default function Embed() {
           className="button"
           onClick={copyEmbedLink}
           data-tip="Embed this code snippet"
+          data-place="left"
         >
           <FaCode />
         </div>
@@ -104,14 +107,13 @@ export default function Embed() {
         }}
       >
         {message ? (
-          <pre style={{ color: 'white', overflow: 'auto' }}>{message}</pre>
+          <pre style={{ color: 'white' }}>{message}</pre>
         ) : (
           <>
             {!!output?.stdout && (
               <pre
                 style={{
                   color: 'lightgreen',
-                  overflow: 'auto',
                 }}
               >
                 {output.stdout}
@@ -121,8 +123,7 @@ export default function Embed() {
               <pre
                 style={{
                   color: 'pink',
-                  opacity: 0.8,
-                  overflow: 'auto',
+                  opacity: 0.75,
                 }}
               >
                 {output.stderr}
