@@ -2,7 +2,6 @@ import { useState, useMemo } from 'react';
 import { FaCode } from 'react-icons/fa';
 import { Motoko } from 'motoko';
 import pako from 'pako';
-import ReactTooltip from 'react-tooltip';
 import copy from 'copy-to-clipboard';
 import CodeEditor from './CodeEditor';
 
@@ -15,12 +14,12 @@ actor Main {
   };
 };
 
-await Main.hello();
+// await Main.hello();
 `;
 
 const EMBED_LINK_BASE = window.location.origin + '/';
 
-const GZIP_FORMAT = 'g';
+const GZIP_FORMAT = 'g'; // TODO: refactor
 
 let defaultCode;
 const shareData = window.location.pathname.substring(1); // Remove leading '/'
@@ -46,7 +45,7 @@ if (shareData) {
   defaultCode = initialCode.trim() + '\n';
 }
 
-export default function App() {
+export default function Embed() {
   const [value, setValue] = useState(defaultCode);
   const [message, setMessage] = useState(null);
 
@@ -62,7 +61,6 @@ export default function App() {
 
   const copyEmbedLink = () => {
     const format = GZIP_FORMAT;
-    console.log(pako.deflate(value)); ///
     const payload = btoa(String.fromCharCode.apply(null, pako.deflate(value)));
     const link = `${EMBED_LINK_BASE}${format}${payload}`;
     if (link.length >= 2048) {
@@ -79,8 +77,7 @@ export default function App() {
   const outputHeight = 100;
 
   return (
-    <div className="App">
-      <ReactTooltip />
+    <>
       <CodeEditor
         value={value}
         onChange={setValue}
@@ -96,12 +93,13 @@ export default function App() {
         </div>
       </div>
       <div
+        className="output"
         style={{
-          fontSize: 16,
-          padding: '5px 20px',
+          fontSize: window.innerWidth < 600 ? 14 : 16,
+          padding: '15px 15px',
           textAlign: 'left',
           maxWidth: '100vw',
-          maxHeight: outputHeight,
+          height: outputHeight,
           overflowY: 'auto',
         }}
       >
@@ -133,6 +131,6 @@ export default function App() {
           </>
         )}
       </div>
-    </div>
+    </>
   );
 }
