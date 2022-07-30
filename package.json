@@ -7,19 +7,22 @@
     "copy-to-clipboard": "3.3.1",
     "monaco-themes": "0.4.2",
     "motoko": "0.1.2",
-    "pako": "^2.0.4",
+    "pako": "2.0.4",
     "react-icons": "4.4.0",
     "react-tooltip": "4.2.21",
-    "sass": "1.54.0"
+    "sass": "^1.54.0"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "4.2.4",
     "@testing-library/react": "12.1.5",
     "@testing-library/user-event": "13.5.0",
+    "autoprefixer": "10.4.8",
     "netlify": "12.0.0",
-    "react": "17",
-    "react-dom": "17",
+    "postcss": "8.4.14",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
     "react-scripts": "4.0.3",
+    "tailwindcss": "3.1.6",
     "web-vitals": "2.1.4"
   },
   "scripts": {
