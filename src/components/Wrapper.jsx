@@ -1,8 +1,19 @@
 import React from 'react';
 import classNames from 'classnames';
+import { FaCode } from 'react-icons/fa';
 import motokoFlatImage from '../assets/motoko-flat.png?width=144&height=144&webp';
 import motokoColorImage from '../assets/motoko-color.png?width=144&height=144&webp';
 import dfinityImage from '../assets/icp.png?webp';
+
+const iframeText = `
+<iframe
+  src="https://embed.smartcontracts.org"
+  width="100%"
+  height="500"
+  style="border:0"
+  title="Embed Motoko"
+/>
+`.trim();
 
 export default function Wrapper() {
   return (
@@ -40,7 +51,7 @@ export default function Wrapper() {
           <div className="w-full py-4">
             <iframe
               title="Embed Motoko"
-              className="w-full h-[480px] max-h-screen border-0 mx-auto"
+              className="w-full h-[480px] max-h-screen border-0 mx-auto rounded"
               style={{
                 boxShadow: '0 0 20px #CCC',
               }}
@@ -69,7 +80,30 @@ export default function Wrapper() {
               </div>
             </div>
           </div>
-          <hr className="w-full mt-8" />
+          <hr className="w-full my-8" />
+          <div className="w-full">
+            <h2 className="mb-3 font-bold text-3xl opacity-50">
+              Medium article:
+            </h2>
+            <pre className="block p-4 bg-[#FFF] rounded-lg drop-shadow-lg">
+              https://embed.smartcontracts.org
+            </pre>
+            <p className="text-xl mt-4 text-[#555360]">
+              Use the
+              <FaCode className="inline-block mx-2 border-[3px] border-[#555360] w-10 h-10 p-[10px] rounded-full" />
+              button to embed your custom code snippet.
+            </p>
+          </div>
+          <hr className="w-full my-8" />
+          <div className="w-full">
+            <h2 className="mb-3 font-bold text-3xl opacity-50">
+              Blog or webapp:
+            </h2>
+            <pre className="block p-4 bg-[#FFF] rounded-lg drop-shadow-lg">
+              {iframeText}
+            </pre>
+          </div>
+          <hr className="w-full my-8" />
         </div>
       </div>
     </>
