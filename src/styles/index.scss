@@ -17,6 +17,7 @@ $button-size: 44px;
 $button-border-width: 3px;
 
 $embed-button-color: #555360;
+$embed-button-emphasized-color: darken(#29abe2, 5);
 
 html,
 body {
@@ -59,18 +60,18 @@ body {
   }
 }
 
-@keyframes wobble {
+@keyframes breathe {
   0% {
-    transform: rotate(0deg);
+    transform: scale(1);
   }
   30% {
-    transform: rotate(-20deg);
+    transform: scale(1.05);
   }
-  60% {
-    transform: rotate(20deg);
-  }
+  // 70% {
+  //   transform: scale(.95);
+  // }
   100% {
-    transform: rotate(0deg);
+    transform: scale(1);
   }
 }
 
@@ -86,10 +87,11 @@ body {
   width: $button-size;
   height: $button-size;
 
-  // .emphasized {
-  //   background: $ic-gradient;
-  //   animation: wobble 1s ease-out;
-  // }
+  &.emphasized {
+    background: $embed-button-emphasized-color;
+    color: $embed-button-emphasized-color;
+    animation: breathe 3s ease-in-out infinite;
+  }
 
   &:hover {
     // color: darkblue;

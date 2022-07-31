@@ -49,12 +49,14 @@ export default function Embed() {
         height={`calc(100vh - ${outputHeight}px)`}
       />
       <div className="flex-grow p-3 absolute right-0 top-0">
-        <div className="button-wrapper flex justify-center items-center">
+        <div
+          className={classNames(
+            'button-wrapper flex justify-center items-center',
+            changed && 'emphasized',
+          )}
+        >
           <div
-            className={classNames(
-              'button flex justify-center items-center',
-              changed && 'emphasized',
-            )}
+            className="button flex justify-center items-center"
             onClick={copyEmbedLink}
             data-tip="Embed this code snippet"
             data-place="left"
