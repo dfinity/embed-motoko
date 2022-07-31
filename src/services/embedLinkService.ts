@@ -1,6 +1,6 @@
-import { INITIAL_CODE } from './../hooks/useCodeState';
 import pako from 'pako';
 import bs58 from 'bs58';
+import initialCode from '../config/initialCode';
 
 const EMBED_LINK_BASE = window.location.origin;
 
@@ -22,8 +22,8 @@ export function parseEmbedLink(path: string): EmbedData {
   }
   const [language = 'motoko', payload = ''] = path.split('/');
   if (!payload) {
-    // return { language, code: INITIAL_CODE_MAP.get(language) || '' };
-    return { language: 'motoko', code: preprocessCode(INITIAL_CODE) };
+    // return { language, code: initialCodeMap.get(language) || '' };
+    return { language: 'motoko', code: preprocessCode(initialCode) };
   }
   if (payload.startsWith(GZIP_FORMAT)) {
     let code: string;

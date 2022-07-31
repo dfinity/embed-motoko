@@ -1,23 +1,24 @@
+import { describe, expect, it } from 'vitest';
 import { parseEmbedLink, getEmbedLink } from './embedLinkService';
-import { INITIAL_CODE } from './../hooks/useCodeState';
+import initialCode from '../config/initialCode';
 
 describe('embedLinkService', () => {
   it('parses a link', () => {
-    expect(parseEmbedLink('/motoko/gFtqc6mAnLA8fhVT6knkjrY')).toBe({
+    expect(parseEmbedLink('/motoko/gFtqc6mAnLA8fhVT6knkjrY')).toStrictEqual({
       language: 'motoko',
       code: '// TEST\n',
     });
   });
   it('parses an empty payload', () => {
-    expect(parseEmbedLink('motoko/g')).toBe({
+    expect(parseEmbedLink('motoko/g')).toStrictEqual({
       language: 'motoko',
       code: '',
     });
   });
   it('parses an invalid link', () => {
-    expect(parseEmbedLink('')).toBe({
+    expect(parseEmbedLink('')).toStrictEqual({
       language: 'motoko',
-      code: `${INITIAL_CODE.trim()}\n`,
+      code: `${initialCode.trim()}\n`,
     });
   });
   it('generates a link', () => {
@@ -26,6 +27,6 @@ describe('embedLinkService', () => {
         language: 'motoko',
         code: '// TEST',
       }),
-    ).toBe('/motoko/gFtqc6mAnLA8fhVT6knkjrY');
+    ).toBe('http://localhost:3000/motoko/gFtqc6mAnLA8fhVT6knkjrY');
   });
 });
