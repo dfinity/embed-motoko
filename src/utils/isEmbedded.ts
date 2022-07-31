@@ -3,6 +3,6 @@ try {
   embedded = window.self !== window.top;
 } catch (e) {}
 
-export default function isEmbedded() {
+export default function isEmbedded(): boolean {
   return embedded;
 }

@@ -1,5 +1,14 @@
 import MonacoEditor from '@monaco-editor/react';
+import React from 'react';
 import { configureMonaco } from '../config/configureMonaco';
+
+// export interface CodeEditorProps {
+//   /*  extends EditorProps */
+//   value: string;
+//   onChange: (value: string) => void;
+//   readOnly: boolean;
+//   options: any;
+// }
 
 export default function CodeEditor({
   value,
@@ -10,7 +19,7 @@ export default function CodeEditor({
 }) {
   return (
     <MonacoEditor
-      theme="custom-theme"
+      theme="motoko-theme"
       defaultLanguage="motoko"
       beforeMount={configureMonaco}
       value={value}
