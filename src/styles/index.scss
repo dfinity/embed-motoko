@@ -17,7 +17,7 @@ $button-size: 44px;
 $button-border-width: 3px;
 
 $embed-button-color: #555360;
-$embed-button-emphasized-color: #222;
+$embed-button-emphasized-color: darken(#29abe2, 5);
 
 html,
 body {
@@ -90,7 +90,7 @@ body {
   &.emphasized {
     background: $embed-button-emphasized-color;
     color: $embed-button-emphasized-color;
-    animation: breathe 3s ease-in-out infinite;
+    animation: breathe 5s ease-in-out infinite;
   }
 
   &:hover {

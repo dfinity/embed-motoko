@@ -2,8 +2,7 @@ import { parseEmbedLink } from '../services/embedLinkService';
 import makeObservable from '../utils/makeObservable';
 import useObservableState from './utils/useObservableState';
 
-export const INITIAL_CODE =
-  `
+export const INITIAL_CODE = `
 // A simple Motoko smart contract.
 
 actor Main {
@@ -13,7 +12,7 @@ actor Main {
 };
 
 // await Main.hello();
-`.trim() + '\n';
+`;
 
 const initial = parseEmbedLink(window.location.pathname);
 

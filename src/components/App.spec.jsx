@@ -8,7 +8,7 @@ describe('App', () => {
     render(<App />);
     expect(screen.getByTitle('Embed Motoko')).toHaveAttribute('src');
     expect(
-      screen.getByText(/Embed an interactive Motoko code snippet/i),
+      screen.getByText(/Embed a custom Motoko code snippet/i),
     ).toBeInTheDocument();
   });
 });

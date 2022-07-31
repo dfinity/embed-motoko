@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "vite --port 3000",
-    "build": "vite build",
+    "build": "npm test && vite build",
     "test": "vitest run",
     "test:watch": "vitest",
     "deploy": "npm run build && netlify deploy --dir=dist",
@@ -19,6 +19,7 @@
     "@testing-library/user-event": "13.5.0",
     "@types/react": "18.0.15",
     "@types/react-dom": "18.0.6",
+    "bs58": "5.0.0",
     "classnames": "2.3.1",
     "copy-to-clipboard": "3.3.1",
     "monaco-themes": "0.4.2",

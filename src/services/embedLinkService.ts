@@ -1,5 +1,6 @@
 import { INITIAL_CODE } from './../hooks/useCodeState';
 import pako from 'pako';
+import bs58 from 'bs58';
 
 const EMBED_LINK_BASE = window.location.origin;
 
@@ -10,45 +11,41 @@ export interface EmbedData {
   code: string;
 }
 
+function preprocessCode(s: string) {
+  s = s.trim();
+  return s ? s + '\n' : s;
+}
+
 export function parseEmbedLink(path: string): EmbedData {
   if (path.startsWith('/')) {
     path = path.substring(1);
   }
-  const parts = path.split('/', 1);
-  const [language = 'motoko', payload = ''] = parts;
+  const [language = 'motoko', payload = ''] = path.split('/');
   if (!payload) {
     // return { language, code: INITIAL_CODE_MAP.get(language) || '' };
-    return { language: 'motoko', code: INITIAL_CODE };
+    return { language: 'motoko', code: preprocessCode(INITIAL_CODE) };
   }
   if (payload.startsWith(GZIP_FORMAT)) {
     let code: string;
     try {
-      code = pako.inflate(
-        new Uint8Array(
-          atob(payload.substring(GZIP_FORMAT.length))
-            .split('')
-            .map((c) => c.charCodeAt(0)),
-        ),
-        {
-          to: 'string',
-        },
-      );
+      const data = bs58.decode(payload.substring(GZIP_FORMAT.length));
+      code = pako.inflate(data, { to: 'string' }) || '';
     } catch (err) {
       console.error(err);
       //   if (language === 'motoko') {
       code = '// Unable to parse embed link';
       //   }
     }
-    return { language, code };
+    return { language, code: preprocessCode(code) };
   }
   return {
     language,
-    code: '// Unknown embed link format',
+    code: preprocessCode('// Unknown embed link format'),
   };
 }
 
 export function getEmbedLink({ language, code }: EmbedData): string {
   const format = GZIP_FORMAT;
-  const payload = btoa(String.fromCharCode.apply(null, pako.deflate(code)));
+  const payload = bs58.encode(pako.deflate(preprocessCode(code)));
   return `${EMBED_LINK_BASE}/${language}/${format}${payload}`;
 }

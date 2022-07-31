@@ -7,6 +7,7 @@ import useCodeState from '../hooks/useCodeState';
 import { getEmbedLink } from '../services/embedLinkService';
 import useChangedState from '../hooks/useChangedState';
 import classNames from 'classnames';
+import isMobile from '../utils/isMobile';
 
 const language = 'motoko'; // TODO: refactor
 
@@ -27,14 +28,19 @@ export default function Embed() {
   }, [code]);
 
   const copyEmbedLink = () => {
-    const link = getEmbedLink({ language, code });
-    if (link.length >= 2048) {
-      setMessage('> Your code is too long to fit into a URL!');
-    } else {
-      copy(link);
-      setMessage(
-        '> Copied link to clipboard.\n\nPaste into a Medium post to embed this code snippet!',
-      );
+    try {
+      const link = getEmbedLink({ language, code });
+      if (link.length >= 2048) {
+        setMessage('> Your code is too long to fit into a URL!');
+      } else {
+        copy(link);
+        setMessage(
+          '> Copied link to clipboard.\n\nPaste into a Medium post to embed this code snippet!',
+        );
+      }
+    } catch (err) {
+      console.error(err);
+      setMessage(`Error: ${err.message || err}`);
     }
     // setTimeout(() => setMessage(null), 3000);
   };
@@ -48,23 +54,27 @@ export default function Embed() {
         onChange={setCode}
         height={`calc(100vh - ${outputHeight}px)`}
       />
-      <div className="flex-grow p-3 absolute right-0 top-0">
-        <div
-          className={classNames(
-            'button-wrapper flex justify-center items-center',
-            changed && 'emphasized',
-          )}
-        >
-          <div
-            className="button flex justify-center items-center"
-            onClick={copyEmbedLink}
-            data-tip="Embed this code snippet"
-            data-place="left"
-          >
-            <FaCode />
+      {!isMobile() && (
+        <>
+          <div className="flex-grow p-3 absolute right-0 top-0">
+            <div
+              className={classNames(
+                'button-wrapper flex justify-center items-center',
+                changed && 'emphasized',
+              )}
+            >
+              <div
+                className="button flex justify-center items-center"
+                onClick={copyEmbedLink}
+                data-tip="Embed this code snippet"
+                data-place="left"
+              >
+                <FaCode />
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+        </>
+      )}
       <div
         className="output"
         style={{
