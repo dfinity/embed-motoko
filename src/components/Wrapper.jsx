@@ -85,8 +85,8 @@ export default function Wrapper() {
           </div>
           <hr className="w-full my-8" />
           <div className="w-full">
-            <h2 className="mb-3 font-bold text-3xl opacity-50">
-              <SiMedium className="inline mr-3 translate-y-[-2px]" />
+            <h2 className="mb-3 font-bold text-3xl opacity-60">
+              <SiMedium className="inline ml-1 mr-3 translate-y-[-2px]" />
               Medium article:
             </h2>
             <pre className="block p-4 bg-[#FFF] rounded-lg drop-shadow-lg">
@@ -100,8 +100,8 @@ export default function Wrapper() {
           </div>
           <hr className="w-full my-8" />
           <div className="w-full">
-            <h2 className="mb-3 font-bold text-3xl opacity-50">
-              <SiWordpress className="inline mr-3 translate-y-[-2px]" />
+            <h2 className="mb-3 font-bold text-3xl opacity-60">
+              <SiWordpress className="inline ml-1 mr-3 translate-y-[-2px]" />
               Blog or webapp:
             </h2>
             <SyntaxHighlighter
