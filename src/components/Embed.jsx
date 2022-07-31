@@ -33,7 +33,7 @@ export default function Embed() {
     } else {
       copy(link);
       setMessage(
-        `> Copied link to clipboard.\n\nPaste into a Medium post to embed this code snippet!`,
+        '> Copied link to clipboard.\n\nPaste into a Medium post to embed this code snippet!',
       );
     }
     // setTimeout(() => setMessage(null), 3000);
@@ -51,7 +51,10 @@ export default function Embed() {
       <div className="flex-grow p-3 absolute right-0 top-0">
         <div className="button-wrapper flex justify-center items-center">
           <div
-            className={classNames('button flex justify-center items-center', changed && 'emphasized')}
+            className={classNames(
+              'button flex justify-center items-center',
+              changed && 'emphasized',
+            )}
             onClick={copyEmbedLink}
             data-tip="Embed this code snippet"
             data-place="left"
