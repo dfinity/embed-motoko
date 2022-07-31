@@ -1,6 +1,9 @@
 import React from 'react';
 import classNames from 'classnames';
+import SyntaxHighlighter from 'react-syntax-highlighter';
+import { githubGist as syntaxStyle } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import { FaCode } from 'react-icons/fa';
+import { SiMedium, SiWordpress } from 'react-icons/si';
 import motokoFlatImage from '../assets/motoko-flat.png?width=144&height=144&webp';
 import motokoColorImage from '../assets/motoko-color.png?width=144&height=144&webp';
 import dfinityImage from '../assets/icp.png?webp';
@@ -83,6 +86,7 @@ export default function Wrapper() {
           <hr className="w-full my-8" />
           <div className="w-full">
             <h2 className="mb-3 font-bold text-3xl opacity-50">
+              <SiMedium className="inline mr-3 translate-y-[-2px]" />
               Medium article:
             </h2>
             <pre className="block p-4 bg-[#FFF] rounded-lg drop-shadow-lg">
@@ -97,11 +101,17 @@ export default function Wrapper() {
           <hr className="w-full my-8" />
           <div className="w-full">
             <h2 className="mb-3 font-bold text-3xl opacity-50">
+              <SiWordpress className="inline mr-3 translate-y-[-2px]" />
               Blog or webapp:
             </h2>
-            <pre className="block p-4 bg-[#FFF] rounded-lg drop-shadow-lg">
+            <SyntaxHighlighter
+              language="html"
+              style={syntaxStyle}
+              customStyle={{ background: 'white', padding: '1rem' }}
+              className="rounded-lg drop-shadow-lg"
+            >
               {iframeText}
-            </pre>
+            </SyntaxHighlighter>
           </div>
           <hr className="w-full my-8" />
         </div>
