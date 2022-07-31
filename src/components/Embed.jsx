@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { FaCode } from 'react-icons/fa';
 import { Motoko } from 'motoko';
 import copy from 'copy-to-clipboard';
-import CodeEditor from './CodeEditor';
+import CodeEditor, { EDITOR_FONT_SIZE } from './CodeEditor';
 import useCodeState from '../hooks/useCodeState';
 import { getEmbedLink } from '../services/embedLinkService';
 import useChangedState from '../hooks/useChangedState';
@@ -68,7 +68,7 @@ export default function Embed() {
       <div
         className="output"
         style={{
-          fontSize: window.innerWidth < 600 ? 14 : 16,
+          fontSize: EDITOR_FONT_SIZE,
           padding: '15px 15px',
           textAlign: 'left',
           maxWidth: '100vw',

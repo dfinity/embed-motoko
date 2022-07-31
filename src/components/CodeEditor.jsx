@@ -1,6 +1,9 @@
 import MonacoEditor from '@monaco-editor/react';
 import React from 'react';
 import { configureMonaco } from '../config/configureMonaco';
+import { isMobile } from 'react-device-detect';
+
+export const EDITOR_FONT_SIZE = isMobile ? 14 : 16;
 
 // export interface CodeEditorProps {
 //   /*  extends EditorProps */
@@ -30,8 +33,8 @@ export default function CodeEditor({
         wordWrap: 'off',
         // wrappingIndent: 'indent',
         scrollBeyondLastLine: false,
-        fontSize: 16,
-        readOnly,
+        fontSize: EDITOR_FONT_SIZE,
+        readOnly: readOnly || isMobile,
         ...options,
       }}
       {...others}

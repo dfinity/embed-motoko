@@ -47,13 +47,13 @@ export default function Wrapper() {
               src={window.location.href}
             />
           </div>
-          <div className="mt-4 w-full">
+          <div className="mt-4 sm:px-4 w-full">
             <div className="sm:flex items-center">
               <div className="flex-grow flex sm:block justify-center">
-                <p className="text-md sm:text-2xl opacity-75 inline-block">
-                  Embed an interactive Motoko code snippet
+                <p className="text-lg sm:text-2xl opacity-75 inline-block">
+                  Embed a custom Motoko code snippet
                   <br />
-                  in a Medium article, blog post, or webapp.
+                  in a Medium article, blog, or webapp.
                 </p>
               </div>
               <div className="my-8 sm:my-0 flex justify-center">
