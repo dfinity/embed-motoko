@@ -16,6 +16,8 @@
 $button-size: 44px;
 $button-border-width: 3px;
 
+$embed-button-color: #555360;
+
 html,
 body {
   font-family: 'Nunito';
@@ -50,8 +52,8 @@ body {
   transition-property: transform background-color width height;
   padding: 2px;
   // background: #222;
-  background: #522785;
-  color: #522785;
+  background: $embed-button-color;
+  color: $embed-button-color;
   border-radius: 50%;
   cursor: pointer;
   width: $button-size;
@@ -67,11 +69,11 @@ body {
     // border-color: darkblue; // Fallback
     // border-color: $ic-gradient;
     // background: $ic-gradient;
-    transform: scale(1.1);
+    transform: scale(1.05);
   }
 
   &:active {
-    transform: scale(1.2);
+    transform: scale(1.1);
     transition-duration: 0.05s;
 
     .button {
