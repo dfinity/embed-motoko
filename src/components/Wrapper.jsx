@@ -13,17 +13,23 @@ export default function Wrapper() {
           href="https://github.com/dfinity/embed-motoko"
           target="_blank"
           title="GitHub repository"
+          rel="noreferrer"
         >
           <h1 className="main-title md:px-5 text-4xl sm:text-7xl text-center lowercase font-light select-none tracking-wide">
             Embed
-            {[motokoFlatImage, motokoColorImage].map((motokoImage, i) => (
+            {[
+              [motokoFlatImage, 'hover-hide'],
+              [motokoColorImage, 'hover-show'],
+            ].map(([motokoImage, className]) => (
               <img
-                key={i}
+                key={motokoImage}
                 src={motokoImage}
                 className={classNames(
                   'inline h-[40px] sm:h-[72px] mr-1 sm:mr-2',
-                  i === 0 ? 'hover-hide' : 'hover-show',
+                  className,
                 )}
+                alt=""
+                rel="noreferrer"
               />
             ))}
             Motoko
@@ -54,9 +60,10 @@ export default function Wrapper() {
                 className="inline-block w-[100px] hover:scale-105 duration-100"
                 href="https://smartcontracts.org/"
                 target="_blank"
+                rel="noreferrer"
                 title="Learn more about the Internet Computer"
               >
-                <img src={dfinityImage} />
+                <img src={dfinityImage} alt="SmartContracts.org" />
               </a>
             </div>
           </div>
