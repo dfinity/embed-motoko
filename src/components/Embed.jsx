@@ -31,18 +31,17 @@ export default function Embed() {
     try {
       const link = getEmbedLink({ language, code });
       if (link.length >= 2048) {
-        setMessage('> Your code is too long to fit into a URL!');
+        setMessage('Your code is too long to fit into a URL!');
       } else {
         copy(link);
         setMessage(
-          '> Copied link to clipboard.\n\nPaste into a Medium post to embed this code snippet!',
+          'Copied link to clipboard.\n\nPaste into a Medium post to embed this code snippet!',
         );
       }
     } catch (err) {
       console.error(err);
       setMessage(`Error: ${err.message || err}`);
     }
-    // setTimeout(() => setMessage(null), 3000);
   };
 
   const outputHeight = 100;
@@ -87,7 +86,7 @@ export default function Embed() {
         }}
       >
         {message ? (
-          <pre style={{ color: 'white' }}>{message}</pre>
+          <pre style={{ color: 'white' }}>&gt; {message}</pre>
         ) : (
           <>
             {!!output?.stdout && (
