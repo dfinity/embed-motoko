@@ -38,5 +38,10 @@
     "vite": "3.0.4",
     "vite-imagetools": "4.0.4",
     "web-vitals": "2.1.4"
+  },
+  "lint-staged": {
+    "src/**/*.{js,ts,jsx,tsx}": [
+      "eslint --max-warnings=0 --fix"
+    ]
   }
 }
