@@ -75,7 +75,7 @@ export default function Embed() {
             {!!output?.stdout && (
               <pre
                 style={{
-                  color: 'lightgreen',
+                  color: '#29E249',
                 }}
               >
                 {output.stdout}
@@ -84,8 +84,8 @@ export default function Embed() {
             {!!output?.stderr && (
               <pre
                 style={{
-                  color: 'pink',
-                  opacity: 0.75,
+                  color: '#F15A24',
+                  opacity: 0.8,
                 }}
               >
                 {output.stderr}
