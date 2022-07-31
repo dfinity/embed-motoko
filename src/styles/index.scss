@@ -4,6 +4,18 @@
 @tailwind components;
 @tailwind utilities;
 
+// $ic-gradient: conic-gradient(
+//   at center,
+//   #f15a24 0%,
+//   #fbb03b 25%,
+//   #ed1e79 50%,
+//   #522785 75%,
+//   #f15a24 100%
+// );
+
+$button-size: 44px;
+$button-border-width: 3px;
+
 html,
 body {
   font-family: 'Nunito';
@@ -18,24 +30,65 @@ body {
   }
 }
 
-.button {
-  transition: 0.1s transform ease-out;
-  padding: 10px 12px;
-  border-radius: 20px;
-  background: #fffa;
-  border: solid 2px #222;
-  color: #222;
-  display: flex;
+@keyframes wobble {
+  0% {
+    transform: rotate(0deg);
+  }
+  30% {
+    transform: rotate(-20deg);
+  }
+  60% {
+    transform: rotate(20deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+.button-wrapper {
+  transition: 0.1s all ease-out;
+  transition-property: transform background-color width height;
+  padding: 2px;
+  // background: #222;
+  background: #522785;
+  color: #522785;
+  border-radius: 50%;
   cursor: pointer;
+  width: $button-size;
+  height: $button-size;
+
+  // .emphasized {
+  //   background: $ic-gradient;
+  //   animation: wobble 1s ease-out;
+  // }
 
   &:hover {
     // color: darkblue;
-    border-color: darkblue;
+    // border-color: darkblue; // Fallback
+    // border-color: $ic-gradient;
+    // background: $ic-gradient;
     transform: scale(1.1);
   }
 
   &:active {
-    background: #fff;
     transform: scale(1.2);
+    transition-duration: 0.05s;
+
+    .button {
+      background: white;
+    }
+  }
+
+  .button {
+    // padding: 10px 12px;
+    background: rgba(255, 255, 255, 0.97);
+    width: $button-size - $button-border-width * 2;
+    height: $button-size - $button-border-width * 2;
+    border-radius: 50%;
+    // border: solid 2px #222;
   }
 }
+
+// ::selection {
+//   background: #555;
+// }

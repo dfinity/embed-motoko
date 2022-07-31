@@ -13,7 +13,7 @@ export default function App() {
       ) : (
         <div className="h-screen flex flex-col bg-[#F5F5F5] justify-center items-center">
           <div>
-            <h1 className="text-4xl sm:text-7xl opacity-80 text-center lowercase font-light cursor-default select-none">
+            <h1 className="text-4xl sm:text-7xl opacity-80 text-center lowercase font-light cursor-default select-none tracking-wide">
               Embed
               <img
                 src={logoImage}

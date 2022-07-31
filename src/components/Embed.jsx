@@ -6,6 +6,7 @@ import CodeEditor from './CodeEditor';
 import useCodeState from '../hooks/useCodeState';
 import { getEmbedLink } from '../services/embedLinkService';
 import useChangedState from '../hooks/useChangedState';
+import classNames from 'classnames';
 
 const language = 'motoko'; // TODO: refactor
 
@@ -48,13 +49,15 @@ export default function Embed() {
         height={`calc(100vh - ${outputHeight}px)`}
       />
       <div className="flex-grow p-3 absolute right-0 top-0">
-        <div
-          className="button"
-          onClick={copyEmbedLink}
-          data-tip="Embed this code snippet"
-          data-place="left"
-        >
-          <FaCode />
+        <div className="button-wrapper flex justify-center items-center">
+          <div
+            className={classNames('button flex justify-center items-center', changed && 'emphasized')}
+            onClick={copyEmbedLink}
+            data-tip="Embed this code snippet"
+            data-place="left"
+          >
+            <FaCode />
+          </div>
         </div>
       </div>
       <div
