@@ -4,14 +4,14 @@
 @tailwind components;
 @tailwind utilities;
 
-// $ic-gradient: conic-gradient(
-//   at center,
-//   #f15a24 0%,
-//   #fbb03b 25%,
-//   #ed1e79 50%,
-//   #522785 75%,
-//   #f15a24 100%
-// );
+$ic-gradient: linear-gradient(
+  to top,
+  #f15a24 0%,
+  #fbb03b 25%,
+  #ed1e79 50%,
+  #522785 75%,
+  #f15a24 100%
+);
 
 $button-size: 44px;
 $button-border-width: 3px;
@@ -21,6 +21,34 @@ $embed-button-color: #555360;
 html,
 body {
   font-family: 'Nunito';
+}
+
+.main-title {
+  opacity: 0.8;
+
+  &:hover {
+    opacity: 0.9;
+    color: transparent;
+    // text-fill-color: transparent;
+    background: $ic-gradient;
+    background-clip: text;
+
+    .hover-hide {
+      display: none;
+    }
+
+    .hover-show {
+      display: inline-block;
+    }
+  }
+
+  .hover-hide {
+    display: inline-block;
+  }
+
+  .hover-show {
+    display: none;
+  }
 }
 
 .output {

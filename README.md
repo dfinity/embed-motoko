@@ -39,4 +39,7 @@ npm install
 
 # Run the development server
 npm start
+
+# Run tests
+npm test
 ```
