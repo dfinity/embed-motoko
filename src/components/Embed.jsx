@@ -5,17 +5,19 @@ import copy from 'copy-to-clipboard';
 import CodeEditor from './CodeEditor';
 import useCodeState from '../hooks/useCodeState';
 import { getEmbedLink } from '../services/embedLinkService';
+import useChangedState from '../hooks/useChangedState';
 
 const language = 'motoko'; // TODO: refactor
 
 export default function Embed() {
   const [code, setCode] = useCodeState();
+  const [changed] = useChangedState();
   const [message, setMessage] = useState('');
 
   const output = useMemo(() => {
     try {
       setMessage('');
-      Motoko.saveFile('Main.mo', code);
+      Motoko.saveFile('Main.mo', code || '');
       return Motoko.run([], 'Main.mo');
     } catch (err) {
       console.error(err);
@@ -43,10 +45,9 @@ export default function Embed() {
       <CodeEditor
         value={code}
         onChange={setCode}
-        className="flex flex-col"
-        // height={`calc(100vh - ${outputHeight}px)`}
+        height={`calc(100vh - ${outputHeight}px)`}
       />
-      <div className="button-menu flex-1">
+      <div className="flex-grow p-3 absolute right-0 top-0">
         <div
           className="button"
           onClick={copyEmbedLink}

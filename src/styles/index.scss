@@ -18,18 +18,11 @@ body {
   }
 }
 
-.button-menu {
-  position: absolute;
-  top: 0;
-  right: 0;
-  margin: 10px;
-}
-
 .button {
   transition: 0.1s transform ease-out;
-  padding: 10px 15px;
-  border-radius: 10px;
-  background: #fff5;
+  padding: 10px 12px;
+  border-radius: 20px;
+  background: #fffa;
   border: solid 2px #222;
   color: #222;
   display: flex;

@@ -14,7 +14,7 @@ export function parseEmbedLink(path: string): EmbedData {
   if (path.startsWith('/')) {
     path = path.substring(1);
   }
-  const parts = path.split('/');
+  const parts = path.split('/', 1);
   const [language = 'motoko', payload = ''] = parts;
   if (!payload) {
     // return { language, code: INITIAL_CODE_MAP.get(language) || '' };

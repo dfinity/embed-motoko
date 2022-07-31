@@ -19,6 +19,6 @@ const initial = parseEmbedLink(window.location.pathname);
 
 export const CODE_STORE = makeObservable(initial.code);
 
-export default function () {
+export default () => {
   return useObservableState(CODE_STORE);
-}
+};
