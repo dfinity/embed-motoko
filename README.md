@@ -1,4 +1,4 @@
-# Embed Motoko
+# [embed.smartcontracts.org](https://embed.smartcontracts.org)
 
 > #### Embed interactive Motoko code snippets in your Medium article or website.
 
@@ -6,7 +6,7 @@
 
 ## Medium Articles
 
-#### > Note: this feature is coming soon!
+> #### Note: this feature is coming soon!
 
 Paste the following link into your Medium article:
 
