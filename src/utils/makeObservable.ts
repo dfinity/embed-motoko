@@ -1,7 +1,7 @@
 // Lightweight observable value implementation
 // Derived from: https://stackoverflow.com/a/62002044
 
-type Listener<T> = (next: T, previous: T) => void;
+type Listener<T> = (next: T, previous?: T) => void;
 
 export class Observable<T> {
   _value: T;
@@ -16,7 +16,7 @@ export class Observable<T> {
     return this._value;
   }
 
-  set(newValue) {
+  set(newValue: T) {
     if (this._value === newValue) {
       return;
     }
@@ -25,17 +25,17 @@ export class Observable<T> {
     this._listeners.forEach((fn) => fn(this._value, previous));
   }
 
-  callAndSubscribe(listenerFn) {
+  callAndSubscribe(listenerFn: Listener<T>) {
     listenerFn(this._value);
     this.subscribe(listenerFn);
   }
 
-  subscribe(listenerFn) {
+  subscribe(listenerFn: Listener<T>) {
     this._listeners.push(listenerFn);
     return () => this.unsubscribe(listenerFn);
   }
 
-  unsubscribe(listenerFn) {
+  unsubscribe(listenerFn: Listener<T>) {
     this._listeners = this._listeners.filter((fn) => fn !== listenerFn);
   }
 }
