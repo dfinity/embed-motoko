@@ -30,7 +30,7 @@ export default function Embed() {
   const copyEmbedLink = () => {
     try {
       const link = getEmbedLink({ language, code });
-      if (link.length >= 2048) {
+      if (link.length >= 2000) {
         setMessage('Your code is too long to fit into a URL!');
       } else {
         copy(link);

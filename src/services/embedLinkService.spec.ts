@@ -4,13 +4,13 @@ import initialCode from '../config/initialCode';
 
 describe('embedLinkService', () => {
   it('parses a link', () => {
-    expect(parseEmbedLink('/motoko/gFtqc6mAnLA8fhVT6knkjrY')).toStrictEqual({
+    expect(parseEmbedLink('/motoko/g/Ftqc6mAnLA8fhVT6knkjrY')).toStrictEqual({
       language: 'motoko',
       code: '// TEST\n',
     });
   });
-  it('parses an empty payload', () => {
-    expect(parseEmbedLink('motoko/g')).toStrictEqual({
+  it('parses an empty gzip payload', () => {
+    expect(parseEmbedLink('motoko/g/')).toStrictEqual({
       language: 'motoko',
       code: '',
     });
@@ -27,6 +27,6 @@ describe('embedLinkService', () => {
         language: 'motoko',
         code: '// TEST',
       }),
-    ).toBe('http://localhost:3000/motoko/gFtqc6mAnLA8fhVT6knkjrY');
+    ).toBe('http://localhost:3000/motoko/g/Ftqc6mAnLA8fhVT6knkjrY');
   });
 });

@@ -20,15 +20,14 @@ export function parseEmbedLink(path: string): EmbedData {
   if (path.startsWith('/')) {
     path = path.substring(1);
   }
-  const [language = 'motoko', payload = ''] = path.split('/');
-  if (!payload) {
+  const [language = 'motoko', format = '', payload = ''] = path.split('/');
+  if (!format) {
     // return { language, code: initialCodeMap.get(language) || '' };
     return { language: 'motoko', code: preprocessCode(initialCode) };
-  }
-  if (payload.startsWith(GZIP_FORMAT)) {
+  } else if (format === GZIP_FORMAT) {
     let code: string;
     try {
-      const data = bs58.decode(payload.substring(GZIP_FORMAT.length));
+      const data = bs58.decode(payload);
       code = pako.inflate(data, { to: 'string' }) || '';
     } catch (err) {
       console.error(err);
@@ -47,5 +46,5 @@ export function parseEmbedLink(path: string): EmbedData {
 export function getEmbedLink({ language, code }: EmbedData): string {
   const format = GZIP_FORMAT;
   const payload = bs58.encode(pako.deflate(preprocessCode(code)));
-  return `${EMBED_LINK_BASE}/${language}/${format}${payload}`;
+  return `${EMBED_LINK_BASE}/${language}/${format}/${payload}`;
 }
