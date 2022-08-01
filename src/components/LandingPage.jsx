@@ -14,14 +14,17 @@ const iframeText = `
   width="100%"
   height="500"
   style="border:0"
-  title="Embed Motoko"
+  title="Code snippet"
 />
 `.trim();
 
-export default function Wrapper() {
+export default function LandingPage() {
+  // hotfix, TODO: split landing page into separate bundle
+  document.body.style.backgroundColor = '#F5F5F5';
+
   return (
     <>
-      <div className="min-h-screen flex flex-col bg-[#F5F5F5] justify-center items-center">
+      <div className="min-h-screen flex flex-col justify-center items-center">
         <div className="p-4 w-full max-w-[640px] flex flex-col justify-center items-center">
           <a
             className="block mt-1"
