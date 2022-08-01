@@ -24,7 +24,7 @@ export default function Wrapper() {
       <div className="min-h-screen flex flex-col bg-[#F5F5F5] justify-center items-center">
         <div className="p-4 w-full max-w-[640px] flex flex-col justify-center items-center">
           <a
-            className="block"
+            className="block mt-1"
             href="https://github.com/dfinity/embed-motoko"
             target="_blank"
             title="GitHub repository"
