@@ -26,7 +26,7 @@ Paste the following HTML tag into your website:
     width="100%"
     height="500"
     style="border:0"
-    title="Embed Motoko"
+    title="Code snippet"
 />
 ```
 
