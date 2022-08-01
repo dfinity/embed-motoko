@@ -23,7 +23,7 @@ Paste the following HTML tag into your website:
 ```html
 <iframe
     width="100%"
-    height="400"
+    height="500"
     style="border:0"
     src="https://embed.smartcontracts.org"
 />
