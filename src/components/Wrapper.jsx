@@ -70,7 +70,7 @@ export default function Wrapper() {
                   in a Medium article, blog, or webapp.
                 </p>
               </div>
-              <div className="my-8 sm:my-0 flex justify-center">
+              <div className="mt-8 mb-0 sm:mt-0 sm:mb-0 flex justify-center">
                 <a
                   className="inline-block w-[100px] hover:scale-105 duration-100"
                   href="https://smartcontracts.org/"
@@ -85,7 +85,7 @@ export default function Wrapper() {
           </div>
           <hr className="w-full my-8" />
           <div className="w-full">
-            <h2 className="mb-3 font-bold text-3xl opacity-60">
+            <h2 className="mb-4 font-bold text-3xl opacity-60">
               <SiMedium className="inline ml-1 mr-3 translate-y-[-2px]" />
               Medium article:
             </h2>
@@ -100,7 +100,7 @@ export default function Wrapper() {
           </div>
           <hr className="w-full my-8" />
           <div className="w-full">
-            <h2 className="mb-3 font-bold text-3xl opacity-60">
+            <h2 className="mb-4 font-bold text-3xl opacity-60">
               <SiWordpress className="inline ml-1 mr-3 translate-y-[-2px]" />
               Blog or webapp:
             </h2>
