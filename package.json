@@ -4,11 +4,12 @@
   "private": true,
   "scripts": {
     "start": "vite --port 3000",
-    "build": "npm test && vite build",
+    "build:frontend": "vite build",
+    "build": "npm run build:frontend",
     "test": "vitest run",
     "test:watch": "vitest",
-    "deploy": "npm run build && netlify deploy --dir=dist",
-    "deploy:prod": "npm run build && netlify deploy --dir=dist --prod",
+    "deploy": "npm run test && npm run build && netlify deploy --dir=dist",
+    "deploy:prod": "npm run test && npm run build && netlify deploy --dir=dist --prod",
     "prepare": "husky install",
     "precommit": "lint-staged"
   },
@@ -33,6 +34,7 @@
     "react-tooltip": "4.2.21"
   },
   "devDependencies": {
+    "@netlify/functions": "1.0.0",
     "@vitejs/plugin-react": "2.0.0",
     "autoprefixer": "10.4.8",
     "cross-env": "7.0.3",
