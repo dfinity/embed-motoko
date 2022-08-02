@@ -12,6 +12,8 @@ exports.handler = async (event, context) => {
   const format = query.format;
   const result = {
     version: '1.0',
+    provider_name: 'Embed Motoko',
+    provider_url: 'https://embed.smartcontracts.org',
     type: 'rich',
     width,
     height,
