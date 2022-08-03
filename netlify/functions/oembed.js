@@ -20,7 +20,7 @@ exports.handler = async (event, context) => {
     height,
     html: `<iframe src=${JSON.stringify(
       url,
-    )} style="width:${width}px; height:${height}px; border:0" />`,
+    )} width="${width}" height="${height}" style="border:0" />`,
   };
   return {
     statusCode: 200,
