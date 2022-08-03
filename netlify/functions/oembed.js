@@ -1,10 +1,17 @@
+const BASE_URL = 'https://embed.smartcontracts.org';
+
 exports.handler = async (event, context) => {
   const query = event.queryStringParameters;
   const url = decodeURIComponent(query.url || '');
-  if (!url || !url.startsWith('https://embed.smartcontracts.org')) {
+  if (
+    !url ||
+    !url.startsWith(BASE_URL) ||
+    url.startsWith(`${BASE_URL}/api`) ||
+    url.includes('.', BASE_URL.length)
+  ) {
     return {
       statusCode: 400,
-      body: 'Invalid URL',
+      body: 'Invalid embed link',
     };
   }
   const width = +query.maxwidth || 800;
@@ -25,6 +32,9 @@ exports.handler = async (event, context) => {
   return {
     statusCode: 200,
     body: format === 'xml' ? getXML(result) : JSON.stringify(result),
+    headers: {
+      'Content-Type': format === 'xml' ? 'text/xml' : 'application/json',
+    },
   };
 };
 
