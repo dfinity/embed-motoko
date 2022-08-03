@@ -7,11 +7,10 @@ exports.handler = async (event, context) => {
       body: 'Invalid URL',
     };
   }
-  const width = +query.maxwidth;
+  const width = +query.maxwidth || 800;
   const height = +query.maxheight || 500;
   const format = query.format;
 
-  const maxWidthStyle = width ? `max-width:${width}px;` : '';
   const result = {
     version: '1.0',
     provider_name: 'Embed Motoko',
@@ -21,7 +20,7 @@ exports.handler = async (event, context) => {
     height,
     html: `<iframe src=${JSON.stringify(
       url,
-    )} style="width:100%;height:${height}px;${maxWidthStyle}border:0" />`,
+    )} style="width:${width}px; height:${height}px; border:0" />`,
   };
   return {
     statusCode: 200,
