@@ -7,6 +7,7 @@ import { SiMedium, SiWordpress } from 'react-icons/si';
 import motokoFlatImage from '../assets/motoko-flat.png?width=144&height=144&webp';
 import motokoColorImage from '../assets/motoko-color.png?width=144&height=144&webp';
 import dfinityImage from '../assets/icp.png?webp';
+import Embed from './Embed';
 
 const iframeText = `
 <iframe
@@ -55,14 +56,22 @@ export default function LandingPage() {
           </a>
           <hr className="w-full mb-3" />
           <div className="w-full py-4">
-            <iframe
+            {/* <iframe
               title="Embed Motoko"
               className="w-full h-[480px] max-h-screen border-0 mx-auto rounded"
               style={{
                 boxShadow: '0 0 20px #CCC',
               }}
               src={window.location.href}
-            />
+            /> */}
+            <div
+              className="h-[500px] mx-auto rounded"
+              style={{
+                boxShadow: '0 0 20px #CCC',
+              }}
+            >
+              <Embed />
+            </div>
           </div>
           <div className="mt-4 sm:px-4 w-full">
             <div className="sm:flex items-center">

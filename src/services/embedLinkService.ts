@@ -35,8 +35,11 @@ export interface EmbedData {
 }
 
 function preprocessCode(s: string) {
+  const before = s.startsWith('\n') ? '\n' : '';
+  // const after = s.endsWith('\n') ? '\n' : '';
+  const after = '\n';
   s = s.trim();
-  return s ? s + '\n' : s;
+  return s ? `${before}${s}${after}` : s;
 }
 
 export function parseEmbedLink(path: string): EmbedData {

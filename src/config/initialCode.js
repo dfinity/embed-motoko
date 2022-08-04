@@ -8,6 +8,6 @@ actor Main {
 };
 
 // await Main.hello();
-`;
+`.trim();
 
 export default initialCode;

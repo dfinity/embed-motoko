@@ -34,6 +34,9 @@ export default function Embed() {
         setMessage('Your code is too long to fit into a URL!');
       } else {
         copy(link);
+        if (link !== window.location.href) {
+          window.history.pushState?.({}, null, link);
+        }
         setMessage(
           'Copied link to clipboard.\n\nPaste into a Medium post to embed this code snippet!',
         );
@@ -51,11 +54,11 @@ export default function Embed() {
       <CodeEditor
         value={code}
         onChange={setCode}
-        height={`calc(100vh - ${outputHeight}px)`}
+        height={`calc(100% - ${outputHeight}px)`}
       />
       {!isMobile() && (
-        <>
-          <div className="flex-grow p-3 absolute right-0 top-0">
+        <div className="relative">
+          <div className="flex-grow p-3 absolute right-0 bottom-0">
             <div
               className={classNames(
                 'button-wrapper flex justify-center items-center',
@@ -72,7 +75,7 @@ export default function Embed() {
               </div>
             </div>
           </div>
-        </>
+        </div>
       )}
       <div
         className="output"
