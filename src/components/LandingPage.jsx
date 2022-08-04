@@ -102,6 +102,9 @@ export default function LandingPage() {
               Medium article:
             </h2>
             <pre className="block p-4 bg-[#FFF] rounded-lg drop-shadow-lg">
+              <span className="float-right text-lg text-green-700 font-bold opacity-50 select-none">
+                Coming soon!
+              </span>
               https://embed.smartcontracts.org
             </pre>
             <p className="text-xl mt-4 text-[#555360]">
