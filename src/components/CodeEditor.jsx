@@ -1,41 +1,53 @@
-import MonacoEditor from '@monaco-editor/react';
 import React from 'react';
-import { configureMonaco } from '../config/configureMonaco';
+import '../utils/patchGlobal';
+import Editor from 'react-simple-code-editor';
+import hljs from 'highlight.js/lib/core';
+import 'highlight.js/styles/github.css';
+import configureHighlightJS from '../config/configureHighlightJS';
 import isMobile from '../utils/isMobile';
+
+configureHighlightJS(hljs);
 
 export const EDITOR_FONT_SIZE = isMobile() ? 14 : 16;
 
-// export interface CodeEditorProps {
-//   /*  extends EditorProps */
-//   value: string;
-//   onChange: (value: string) => void;
-//   readOnly: boolean;
-//   options: any;
-// }
+const hightlightWithLineNumbers = (input, language) => {
+  return hljs
+    .highlight(input, { language })
+    .value.split('\n')
+    .map((line, i) => `<span class='line-number'>${i + 1}</span>${line}`)
+    .join('\n');
+};
 
 export default function CodeEditor({
   value,
   onChange,
   readOnly,
   options,
+  style,
   ...others
 }) {
+  const editorRef = (ref) => {
+    if (!ref) {
+      return;
+    }
+    const el = ref._input;
+    el.style.width = `${el.parentElement.scrollWidth}px`;
+  };
+
   return (
-    <MonacoEditor
-      theme="motoko-theme"
-      defaultLanguage="motoko"
-      beforeMount={configureMonaco}
+    <Editor
+      ref={editorRef}
       value={value}
-      onChange={(newValue) => onChange?.(newValue)}
-      options={{
-        tabSize: 2,
-        minimap: { enabled: false },
-        wordWrap: 'off',
-        // wrappingIndent: 'indent',
-        scrollBeyondLastLine: false,
+      onValueChange={(value) => onChange?.(value)}
+      highlight={(code) => hightlightWithLineNumbers(code, 'motoko')}
+      padding={10}
+      textareaClassName="code-area"
+      className="code-editor font-mono bg-white"
+      style={{
         fontSize: EDITOR_FONT_SIZE,
-        readOnly: readOnly || isMobile(),
-        ...options,
+        minHeight: '100%',
+        minWidth: '100%',
+        ...style,
       }}
       {...others}
     />

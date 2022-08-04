@@ -123,3 +123,32 @@ body {
 // ::selection {
 //   background: #555;
 // }
+
+.code-editor {
+  counter-reset: line;
+  overflow-x: auto !important;
+
+  .code-area {
+    outline: none;
+    padding-left: 50px !important;
+  }
+
+  pre {
+    padding-left: 50px !important;
+  }
+
+  .code-area,
+  pre {
+    white-space: pre !important;
+    word-wrap: normal !important;
+  }
+
+  .line-number {
+    position: absolute;
+    left: 0px;
+    color: #cccccc;
+    text-align: right;
+    width: 30px;
+    font-weight: 100;
+  }
+}

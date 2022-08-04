@@ -53,11 +53,12 @@ export default function Embed() {
 
   return (
     <div className="relative w-full h-full">
-      <CodeEditor
-        value={code}
-        onChange={setCode}
-        height={`calc(100% - ${outputHeight}px)`}
-      />
+      <div
+        className="h-full overflow-auto"
+        style={{ height: `calc(100% - ${outputHeight}px)` }}
+      >
+        <CodeEditor value={code} onChange={setCode} />
+      </div>
       {!isMobile() && (
         <>
           <div className="flex-grow p-3 absolute right-0 top-0">
