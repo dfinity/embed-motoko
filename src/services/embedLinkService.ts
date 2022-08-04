@@ -42,11 +42,14 @@ function preprocessCode(s: string) {
   return s ? `${before}${s}${after}` : s;
 }
 
-export function parseEmbedLink(path: string): EmbedData {
-  if (path.startsWith('/')) {
-    path = path.substring(1);
+export function parseEmbedLink(link: string): EmbedData {
+  if (link.startsWith(EMBED_LINK_BASE)) {
+    link = link.substring(EMBED_LINK_BASE.length);
   }
-  const [language = 'motoko', symbol = '', payload = ''] = path.split('/');
+  if (link.startsWith('/')) {
+    link = link.substring(1);
+  }
+  const [language = 'motoko', symbol = '', payload = ''] = link.split('/');
   if (!symbol) {
     // return { language, code: initialCodeMap.get(language) || '' };
     return { language: 'motoko', code: preprocessCode(initialCode) };

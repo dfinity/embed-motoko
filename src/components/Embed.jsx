@@ -4,7 +4,7 @@ import { Motoko } from 'motoko';
 import copy from 'copy-to-clipboard';
 import CodeEditor, { EDITOR_FONT_SIZE } from './CodeEditor';
 import useCodeState from '../hooks/useCodeState';
-import { getEmbedLink } from '../services/embedLinkService';
+import { getEmbedLink, parseEmbedLink } from '../services/embedLinkService';
 import useChangedState from '../hooks/useChangedState';
 import classNames from 'classnames';
 import isMobile from '../utils/isMobile';
@@ -37,6 +37,8 @@ export default function Embed() {
         if (link !== window.location.href) {
           window.history.pushState?.({}, null, link);
         }
+        const result = parseEmbedLink(link);
+        setCode(result.code);
         setMessage(
           'Copied link to clipboard.\n\nPaste into a Medium post to embed this code snippet!',
         );
