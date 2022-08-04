@@ -6,6 +6,8 @@ export function configureHighlightJS(hljs) {
   });
 }
 
+// TODO: use 'motoko/contrib/hljs'
+
 export default function register(hljs) {
   var string = {
     className: 'string',

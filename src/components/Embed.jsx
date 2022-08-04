@@ -8,6 +8,7 @@ import { getEmbedLink, parseEmbedLink } from '../services/embedLinkService';
 import useChangedState from '../hooks/useChangedState';
 import classNames from 'classnames';
 import isMobile from '../utils/isMobile';
+import preprocessMotoko from '../utils/preprocessMotoko';
 
 const language = 'motoko'; // TODO: refactor
 
@@ -18,9 +19,13 @@ export default function Embed() {
 
   const output = useMemo(() => {
     try {
+      let result = preprocessMotoko(code || '');
+
+      console.log(result.code); ///
+
       setMessage('');
-      Motoko.saveFile('Main.mo', code || '');
-      return Motoko.run([], 'Main.mo');
+      Motoko.saveFile('__embed__.mo', result.code);
+      return Motoko.run([], '__embed__.mo');
     } catch (err) {
       console.error(err);
       return { stderr: err.message || String(err) };
