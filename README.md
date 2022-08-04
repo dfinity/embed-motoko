@@ -1,4 +1,4 @@
-# [embed.smartcontracts.org](https://embed.smartcontracts.org) (beta)
+# [Embed Motoko](https://embed.smartcontracts.org) (beta)
 
 > #### Embed interactive Motoko code snippets in your Medium article or website.
 
