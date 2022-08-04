@@ -1,3 +1,4 @@
+import React from 'react';
 import '../utils/patchGlobal';
 import Editor from 'react-simple-code-editor';
 import hljs from 'highlight.js/lib/core';
