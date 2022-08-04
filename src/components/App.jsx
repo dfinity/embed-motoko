@@ -8,7 +8,13 @@ export default function App() {
   return (
     <>
       <ReactTooltip />
-      {isEmbedded() ? <Embed /> : <LandingPage />}
+      {isEmbedded() ? (
+        <div className="h-screen">
+          <Embed />
+        </div>
+      ) : (
+        <LandingPage />
+      )}
     </>
   );
 }

@@ -4,7 +4,7 @@ import { Motoko } from 'motoko';
 import copy from 'copy-to-clipboard';
 import CodeEditor, { EDITOR_FONT_SIZE } from './CodeEditor';
 import useCodeState from '../hooks/useCodeState';
-import { getEmbedLink } from '../services/embedLinkService';
+import { getEmbedLink, parseEmbedLink } from '../services/embedLinkService';
 import useChangedState from '../hooks/useChangedState';
 import classNames from 'classnames';
 import isMobile from '../utils/isMobile';
@@ -34,6 +34,11 @@ export default function Embed() {
         setMessage('Your code is too long to fit into a URL!');
       } else {
         copy(link);
+        if (link !== window.location.href) {
+          window.history.pushState?.({}, null, link);
+        }
+        const result = parseEmbedLink(link);
+        setCode(result.code);
         setMessage(
           'Copied link to clipboard.\n\nPaste into a Medium post to embed this code snippet!',
         );
@@ -47,11 +52,11 @@ export default function Embed() {
   const outputHeight = 100;
 
   return (
-    <>
+    <div className="relative w-full h-full">
       <CodeEditor
         value={code}
         onChange={setCode}
-        height={`calc(100vh - ${outputHeight}px)`}
+        height={`calc(100% - ${outputHeight}px)`}
       />
       {!isMobile() && (
         <>
@@ -111,6 +116,6 @@ export default function Embed() {
           </>
         )}
       </div>
-    </>
+    </div>
   );
 }
