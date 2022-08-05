@@ -2,11 +2,11 @@ const TAB = '  ';
 const LINE_COMMENT = '//';
 const ANNOTATION = '@';
 
-const prelude =
-  `
-import {debugPrint = print} "mo:⛔";
-
-`.trim() + '\n';
+// const prelude =
+//   `
+// import {debugPrint = print} "mo:⛔";
+// ();
+// `.trim() + '\n';
 
 export interface Attribute {
   key: string;
@@ -21,7 +21,7 @@ export interface PreprocessResult {
 export default function preprocessMotoko(code): PreprocessResult {
   code = code.replace(/\t/g, TAB);
 
-  code = `${prelude}${code}`;
+  // code = `${prelude}${code}`;
 
   const attributes: Attribute[] = [];
 
