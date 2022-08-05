@@ -37,6 +37,7 @@ export default function CodeEditor({
   return (
     <Editor
       ref={editorRef}
+      placeholder="Write some Motoko..."
       value={value}
       onValueChange={(value) => onChange?.(value)}
       highlight={(code) => hightlightWithLineNumbers(code, 'motoko')}

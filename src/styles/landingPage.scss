@@ -1,0 +1,26 @@
+.main-title {
+  opacity: 0.8;
+
+  &:hover {
+    opacity: 0.9;
+    color: transparent;
+    background: $ic-gradient;
+    background-clip: text;
+
+    .hover-hide {
+      display: none;
+    }
+
+    .hover-show {
+      display: inline-block;
+    }
+  }
+
+  .hover-hide {
+    display: inline-block;
+  }
+
+  .hover-show {
+    display: none;
+  }
+}
