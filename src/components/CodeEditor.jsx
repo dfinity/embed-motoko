@@ -1,6 +1,5 @@
 import React from 'react';
-import '../utils/patchGlobal';
-import Editor from 'react-simple-code-editor';
+import Editor from './utils/Editor';
 import hljs from 'highlight.js/lib/core';
 // import 'highlight.js/styles/github.css';
 import configureHighlightJS from '../config/configureHighlightJS';
