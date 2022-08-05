@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useCallback, useEffect } from 'react';
-import { FaCode, FaPlay } from 'react-icons/fa';
+import { FaCode, FaPause, FaPlay } from 'react-icons/fa';
 import mo, { Motoko } from 'motoko';
 import copy from 'copy-to-clipboard';
 import CodeEditor, { EDITOR_FONT_SIZE } from './CodeEditor';
@@ -128,11 +128,16 @@ export default function Embed() {
               <FaCode />
             </Button>
             <Button
-              tooltip="Load packages"
-              className={classNames('mt-2', (autoRun || !changed) && 'hidden')}
-              onClick={updatePackages}
+              tooltip={autoRun ? 'Pause' : 'Load packages and evaluate'}
+              className={classNames(
+                'mt-2',
+                (attributes.length === 0 /* TODO: detect latency */ ||
+                  !changed) &&
+                  'hidden',
+              )}
+              onClick={() => (autoRun ? setAutoRun(false) : updatePackages())}
             >
-              <FaPlay className="translate-x-[2px]" />
+              {autoRun ? <FaPause /> : <FaPlay className="translate-x-[2px]" />}
             </Button>
           </div>
         </>
