@@ -1,19 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
 
-@import 'embed.scss';
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-$ic-gradient: linear-gradient(
-  to top,
-  #f15a24 0%,
-  #fbb03b 25%,
-  #ed1e79 50%,
-  #522785 75%,
-  #f15a24 100%
-);
+@import 'partials/variables';
+@import 'partials/hljs';
+
+@import 'landingPage';
 
 $button-size: 44px;
 $button-border-width: 3px;
@@ -24,33 +18,6 @@ $embed-button-emphasized-color: darken(#29abe2, 5);
 html,
 body {
   font-family: 'Nunito';
-}
-
-.main-title {
-  opacity: 0.8;
-
-  &:hover {
-    opacity: 0.9;
-    color: transparent;
-    background: $ic-gradient;
-    background-clip: text;
-
-    .hover-hide {
-      display: none;
-    }
-
-    .hover-show {
-      display: inline-block;
-    }
-  }
-
-  .hover-hide {
-    display: inline-block;
-  }
-
-  .hover-show {
-    display: none;
-  }
 }
 
 .output {

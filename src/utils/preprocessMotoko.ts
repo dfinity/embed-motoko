@@ -1,9 +1,29 @@
 const TAB = '  ';
+const LINE_COMMENT = '//';
+const ANNOTATION = '@';
 
-export default function preprocessMotoko(code) {
+// const prelude =
+//   `
+// import {debugPrint = print} "mo:⛔";
+// ();
+// `.trim() + '\n';
+
+export interface Attribute {
+  key: string;
+  value: string | undefined;
+}
+
+export interface PreprocessResult {
+  code: string;
+  attributes: Attribute[];
+}
+
+export default function preprocessMotoko(code): PreprocessResult {
   code = code.replace(/\t/g, TAB);
 
-  const annotations = [];
+  // code = `${prelude}${code}`;
+
+  const attributes: Attribute[] = [];
 
   // infer semicolons
 
@@ -13,7 +33,24 @@ export default function preprocessMotoko(code) {
     .reverse()
     .map((line: string) => {
       const trimmedLine = line.trim();
-      if (!trimmedLine || trimmedLine.startsWith('//')) {
+      if (!trimmedLine) {
+        return line;
+      }
+      if (trimmedLine.startsWith(LINE_COMMENT)) {
+        const comment = trimmedLine.substring(LINE_COMMENT.length).trim();
+        if (comment.startsWith(ANNOTATION)) {
+          const [key, ...valueParts] = comment
+            .substring(ANNOTATION.length)
+            .trim()
+            .split(' ')
+            .map((s) => s.trim());
+          if (key) {
+            attributes.push({
+              key,
+              value: valueParts.join(' ').trim() || undefined,
+            });
+          }
+        }
         return line;
       }
 
@@ -25,6 +62,10 @@ export default function preprocessMotoko(code) {
       if (
         indent === nextIndent &&
         !trimmedLine.endsWith(';') &&
+        !trimmedLine.endsWith(',') &&
+        !trimmedLine.endsWith('{') &&
+        !trimmedLine.endsWith('(') &&
+        !trimmedLine.endsWith('[') &&
         !(trimmedLine.startsWith('/*') && trimmedLine.endsWith('*/'))
       ) {
         line += ';';
@@ -37,7 +78,7 @@ export default function preprocessMotoko(code) {
     .join('\n');
 
   return {
-    annotations,
     code,
+    attributes,
   };
 }
