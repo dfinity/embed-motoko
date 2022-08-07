@@ -509,44 +509,51 @@ export default class Editor extends React.Component<Props, State> {
           });
         }
       } else {
-        const lineStart = value.lastIndexOf('\n', selectionStart - 1) + 1;
-        let lineEnd = value.indexOf('\n', selectionEnd);
-        if (lineEnd === -1) {
-          lineEnd = value.length;
+        const firstLineStart = value.lastIndexOf('\n', selectionStart - 1) + 1;
+        let lastLineEnd = value.indexOf('\n', selectionEnd);
+        if (lastLineEnd === -1) {
+          lastLineEnd = value.length;
         }
 
-        const commentRegex = () =>
-          new RegExp(`\n *${LINE_COMMENT_START} ?`, 'g');
-        const noCommentRegex = () =>
-          new RegExp(`\n(?!( *${LINE_COMMENT_START}| *\n))`, 'g');
+        const commentRegex = (flags = 'g') =>
+          new RegExp(`\n *${LINE_COMMENT_START} ?`, flags);
+        const noCommentRegex = (flags = 'g') =>
+          new RegExp(`\n(?!( *${LINE_COMMENT_START}| *(\n|$)))`, flags);
 
-        const original = value.substring(lineStart, lineEnd);
+        const original = value.substring(firstLineStart, lastLineEnd);
         if (noCommentRegex().test('\n' + original)) {
           // Add line comment(s)
           const result = ('\n' + original)
-            .replace(/\n(?! *\n)/g, '\n' + LINE_COMMENT_START + ' ')
+            .replace(/\n(?! *(\n|$))/g, '\n' + LINE_COMMENT_START + ' ')
             .substring(1);
           this._applyEdits({
             value:
-              value.substring(0, lineStart) + result + value.substring(lineEnd),
+              value.substring(0, firstLineStart) +
+              result +
+              value.substring(lastLineEnd),
             selectionStart: selectionStart + LINE_COMMENT_START.length + 1,
             selectionEnd: selectionEnd + result.length - original.length,
           });
         } else {
           // Remove line comment(s)
-          const result = ('\n' + original)
+          let result = ('\n' + original)
             .replace(commentRegex(), '\n')
             .substring(1);
+
+          // Get selection offset from start
+          const match = commentRegex('').exec(
+            '\n' + original.slice(0, original.indexOf('\n') + 1),
+          );
+          const startOffset = match ? match[0].length - 1 : 0;
+
           this._applyEdits({
             value:
-              value.substring(0, lineStart) + result + value.substring(lineEnd),
-            selectionStart:
-              selectionStart +
-              original.substring(selectionStart, original.indexOf('\n') + 1)
-                .length -
-              result.substring(selectionStart, result.indexOf('\n') + 1).length,
+              value.substring(0, firstLineStart) +
+              result +
+              value.substring(lastLineEnd),
+            selectionStart: selectionStart - startOffset,
             selectionEnd: Math.max(
-              lineStart,
+              firstLineStart,
               selectionEnd + result.length - original.length,
             ),
           });
