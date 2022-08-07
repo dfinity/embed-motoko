@@ -56,13 +56,7 @@ const KEYCODE_BACKSPACE = 8;
 const KEYCODE_Y = 89;
 const KEYCODE_Z = 90;
 const KEYCODE_M = 77;
-const KEYCODE_PARENS = 57;
-const KEYCODE_BRACKETS = 219;
-const KEYCODE_QUOTE = 222;
-const KEYCODE_BACK_QUOTE = 192;
 const KEYCODE_ESCAPE = 27;
-// TEMP
-/* eslint-disable @typescript-eslint/no-unused-vars */
 const KEYCODE_COMMENT = 191;
 
 // TODO: pass as component props
@@ -72,6 +66,9 @@ const BLOCK_COMMENT_END = '*/';
 
 const HISTORY_LIMIT = 100;
 const HISTORY_TIME_GAP = 3000;
+
+// eslint-disable-next-line quotes
+const pairs = ['()', '{}', '[]', '""', "''"];
 
 const isWindows = 'navigator' in window && /Win/i.test(navigator.platform);
 const isMacLike =
@@ -269,6 +266,8 @@ export default class Editor extends React.Component<Props, State> {
 
     const tabCharacter = (insertSpaces ? ' ' : '\t').repeat(tabSize);
 
+    let openedPair = false;
+
     if (e.keyCode === KEYCODE_TAB && !ignoreTabKey && this.state.capture) {
       // Prevent focus change
       e.preventDefault();
@@ -368,6 +367,24 @@ export default class Editor extends React.Component<Props, State> {
           selectionStart: updatedSelection,
           selectionEnd: updatedSelection,
         });
+      } else if (
+        this._openedPair &&
+        selectionStart === selectionEnd &&
+        pairs.some(
+          (p) =>
+            p.charAt(0) === value.charAt(selectionStart - 1) &&
+            p.charAt(1) === value.charAt(selectionEnd),
+        )
+      ) {
+        // Remove open/close characters
+        const updatedSelection = selectionStart;
+        this._applyEdits({
+          value:
+            value.substring(0, selectionStart) +
+            value.substring(selectionEnd + 1),
+          selectionStart: updatedSelection,
+          selectionEnd: updatedSelection,
+        });
       }
     } else if (e.keyCode === KEYCODE_ENTER) {
       // Ignore selections
@@ -376,101 +393,196 @@ export default class Editor extends React.Component<Props, State> {
         const line = this._getLines(value, selectionStart).pop();
         const matches = line?.match(/^\s+/);
 
-        if (matches?.[0]) {
-          e.preventDefault();
+        e.preventDefault();
 
-          // Preserve indentation on inserting a new line
-          const indent = '\n' + matches[0];
-          const updatedSelection = selectionStart + indent.length;
-
-          this._applyEdits({
-            // Insert indentation character at caret
-            value:
-              value.substring(0, selectionStart) +
-              indent +
-              value.substring(selectionEnd),
-            // Update caret position
-            selectionStart: updatedSelection,
-            selectionEnd: updatedSelection,
-          });
+        // Preserve indentation on inserting a new line
+        let indent = '\n' + (matches?.[0] || '');
+        const openBlock =
+          value.charAt(selectionStart - 1) === '{' &&
+          value.charAt(selectionEnd) === '}';
+        const updatedSelection =
+          selectionStart +
+          indent.length +
+          (openBlock ? tabCharacter.length : 0);
+        if (openBlock) {
+          console.log(1234);
+          indent += `${tabCharacter}${indent}`;
         }
+
+        this._applyEdits({
+          // Insert indentation character at caret
+          value:
+            value.substring(0, selectionStart) +
+            indent +
+            value.substring(selectionEnd),
+          // Update caret position
+          selectionStart: updatedSelection,
+          selectionEnd: updatedSelection,
+        });
       }
-    } else if (
-      e.keyCode === KEYCODE_PARENS ||
-      e.keyCode === KEYCODE_BRACKETS ||
-      e.keyCode === KEYCODE_QUOTE ||
-      e.keyCode === KEYCODE_BACK_QUOTE
-    ) {
-      let chars;
+    } else if (pairs.some((k) => k.includes(e.key))) {
+      let [start, end] = pairs.find((k) => k.includes(e.key))?.split('') ?? [];
 
-      if (e.keyCode === KEYCODE_PARENS && e.shiftKey) {
-        chars = ['(', ')'];
-      } else if (e.keyCode === KEYCODE_BRACKETS) {
-        if (e.shiftKey) {
-          chars = ['{', '}'];
-        } else {
-          chars = ['[', ']'];
-        }
-      } else if (e.keyCode === KEYCODE_QUOTE) {
-        if (e.shiftKey) {
-          chars = ['"', '"'];
-        } else {
-          // eslint-disable-next-line quotes
-          chars = ["'", "'"];
-        }
-      }
-      // else if (e.keyCode === KEYCODE_BACK_QUOTE && !e.shiftKey) {
-      //   chars = ['`', '`'];
-      // }
-
-      // If text is selected, wrap them in the characters
       const hasSelection = selectionStart !== selectionEnd;
       if (
-        chars &&
-        (hasSelection ||
-          // (/* chars[0] === '{' && */
-          // value.substring(selectionStart, selectionEnd + 1) !== chars[1]))
-          false)
+        !hasSelection &&
+        e.key === end &&
+        value.charAt(selectionStart) === end
       ) {
         e.preventDefault();
 
+        // Move caret forward without editing
+        this._applyEdits({
+          value,
+          selectionStart: selectionStart + 1,
+          selectionEnd: selectionEnd + 1,
+        });
+      } else if (
+        e.key ===
+        start /* &&(hasSelection || value.charAt(selectionEnd) !== end) */
+      ) {
+        e.preventDefault();
+
+        // Wrap with open/close characters
         this._applyEdits({
           value:
             value.substring(0, selectionStart) +
-            chars[0] +
+            start +
             value.substring(selectionStart, selectionEnd) +
-            chars[1] +
+            end +
             value.substring(selectionEnd),
           // Update caret position
           selectionStart: hasSelection ? selectionStart : selectionStart + 1,
           selectionEnd: hasSelection ? selectionEnd + 2 : selectionEnd + 1,
         });
+        openedPair = true;
       }
-      //     } else if (
-      //       (isMacLike
-      //         ? // Trigger undo with ⌘+Z on Mac
-      //           e.metaKey && e.keyCode === KEYCODE_COMMENT
-      //         : // Trigger undo with Ctrl+Z on other platforms
-      //           e.ctrlKey && e.keyCode === KEYCODE_COMMENT) &&
-      //       !e.altKey
-      //     ) {
-      //       e.preventDefault();
+    } else if (
+      (isMacLike
+        ? e.metaKey && e.keyCode === KEYCODE_COMMENT
+        : e.ctrlKey && e.keyCode === KEYCODE_COMMENT) &&
+      !e.altKey
+    ) {
+      e.preventDefault();
 
-      // if(e.shiftKey){
-      //   !e.shiftKey &&
-      // }else {
-      //   this._applyEdits({
-      //     value:
-      //       value.substring(0, selectionStart) +
-      //       chars[0] +
-      //       value.substring(selectionStart, selectionEnd) +
-      //       chars[1] +
-      //       value.substring(selectionEnd),
-      //     // Update caret position
-      //     selectionStart: hasSelection ? selectionStart : selectionStart + 1,
-      //     selectionEnd: hasSelection ? selectionEnd + 2 : selectionEnd + 1,
-      //   });
-      // }
+      if (e.shiftKey) {
+        if (
+          selectionEnd > selectionStart &&
+          value.substring(
+            selectionStart,
+            selectionStart + BLOCK_COMMENT_START.length,
+          ) === BLOCK_COMMENT_START &&
+          value.substring(
+            selectionEnd - BLOCK_COMMENT_END.length,
+            selectionEnd,
+          ) === BLOCK_COMMENT_END
+        ) {
+          // Remove block comment
+          this._applyEdits({
+            value:
+              value.substring(0, selectionStart) +
+              value.substring(
+                selectionStart + BLOCK_COMMENT_START.length,
+                selectionEnd - BLOCK_COMMENT_END.length,
+              ) +
+              value.substring(selectionEnd),
+            selectionStart: selectionStart,
+            selectionEnd:
+              selectionEnd -
+              BLOCK_COMMENT_START.length -
+              BLOCK_COMMENT_END.length,
+          });
+        } else {
+          // Add block comment
+          this._applyEdits({
+            value:
+              value.substring(0, selectionStart) +
+              BLOCK_COMMENT_START +
+              value.substring(selectionStart, selectionEnd) +
+              BLOCK_COMMENT_END +
+              value.substring(selectionEnd),
+            selectionStart: selectionStart,
+            selectionEnd:
+              selectionEnd +
+              BLOCK_COMMENT_START.length +
+              BLOCK_COMMENT_END.length,
+          });
+        }
+      } else {
+        const lineStart = value.lastIndexOf('\n', selectionStart - 1) + 1;
+        let lineEnd = value.indexOf('\n', selectionEnd);
+        if (lineEnd === -1) {
+          lineEnd = value.length;
+        }
+
+        const commentRegex = () =>
+          new RegExp(`\n *${LINE_COMMENT_START} ?`, 'g');
+        const noCommentRegex = () =>
+          new RegExp(`\n(?!( *${LINE_COMMENT_START}| *\n))`, 'g');
+
+        const original = value.substring(lineStart, lineEnd);
+        if (noCommentRegex().test('\n' + original)) {
+          // Add line comments
+          const result = ('\n' + original)
+            .replace(noCommentRegex(), '\n' + LINE_COMMENT_START + ' ')
+            .substring(1);
+          this._applyEdits({
+            value:
+              value.substring(0, lineStart) + result + value.substring(lineEnd),
+            selectionStart:
+              selectionStart +
+              result.substring(0, selectionStart).length -
+              original.substring(0, selectionStart).length,
+            selectionEnd: selectionEnd + result.length - original.length,
+          });
+        } else {
+          // Remove line comments
+          const result = ('\n' + original)
+            .replace(commentRegex(), '\n')
+            .substring(1);
+          this._applyEdits({
+            value:
+              value.substring(0, lineStart) + result + value.substring(lineEnd),
+            selectionStart: Math.max(
+              lineStart,
+              selectionStart +
+                result.substring(0, selectionStart).length -
+                original.substring(0, selectionStart).length,
+            ),
+            selectionEnd: Math.max(
+              lineStart,
+              selectionEnd + result.length - original.length,
+            ),
+          });
+        }
+
+        // if (value.substring(lineStart).startsWith(LINE_COMMENT_START)) {
+        //   let amount =
+        //     LINE_COMMENT_START.length +
+        //     (value.charAt(lineStart + LINE_COMMENT_START.length + 1) === ' '
+        //       ? 1
+        //       : 0);
+        //   // Remove line comment
+        //   this._applyEdits({
+        //     value:
+        //       value.substring(0, lineStart) +
+        //       value.substring(lineStart + amount),
+        //     selectionStart: selectionStart - amount,
+        //     selectionEnd: selectionEnd - amount,
+        //   });
+        // } else {
+        //   // Add line comment
+        //   this._applyEdits({
+        //     value:
+        //       value.substring(0, lineStart) +
+        //       LINE_COMMENT_START +
+        //       ' ' +
+        //       value.substring(lineStart),
+        //     selectionStart: selectionStart + LINE_COMMENT_START.length + 1,
+        //     selectionEnd: selectionEnd + LINE_COMMENT_START.length + 1,
+        //   });
+        // }
+      }
     } else if (
       (isMacLike
         ? // Trigger undo with ⌘+Z on Mac
@@ -509,6 +621,8 @@ export default class Editor extends React.Component<Props, State> {
         capture: !state.capture,
       }));
     }
+
+    this._openedPair = openedPair;
   };
 
   private _handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -532,6 +646,8 @@ export default class Editor extends React.Component<Props, State> {
   };
 
   private _input: HTMLTextAreaElement | null = null;
+
+  private _openedPair = false;
 
   get session() {
     return {
