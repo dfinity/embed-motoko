@@ -7,7 +7,6 @@ import useCodeState from '../hooks/useCodeState';
 import { getEmbedLink, parseEmbedLink } from '../services/embedLinkService';
 import useChangedState from '../hooks/useChangedState';
 import classNames from 'classnames';
-import isMobile from '../utils/isMobile';
 import preprocessMotoko from '../utils/preprocessMotoko';
 import Button from './Button';
 
@@ -117,31 +116,26 @@ export default function Embed() {
       >
         <CodeEditor value={inputCode} onChange={setInputCode} />
       </div>
-      {!isMobile() && (
-        <>
-          <div className="flex-grow p-3 absolute right-0 top-0">
-            <Button
-              tooltip="Embed this code snippet"
-              className={classNames(changed && 'emphasized')}
-              onClick={copyEmbedLink}
-            >
-              <FaCode />
-            </Button>
-            <Button
-              tooltip={autoRun ? 'Pause' : 'Load packages and evaluate'}
-              className={classNames(
-                'mt-2',
-                (attributes.length === 0 /* TODO: detect latency */ ||
-                  !changed) &&
-                  'hidden',
-              )}
-              onClick={() => (autoRun ? setAutoRun(false) : updatePackages())}
-            >
-              {autoRun ? <FaPause /> : <FaPlay className="translate-x-[2px]" />}
-            </Button>
-          </div>
-        </>
-      )}
+      <div className="flex-grow p-3 absolute right-0 bottom-[100px] sm:top-0 opacity-50 sm:opacity-100">
+        <Button
+          tooltip="Embed this code snippet"
+          className={classNames(changed && 'emphasized')}
+          onClick={copyEmbedLink}
+        >
+          <FaCode />
+        </Button>
+        <Button
+          tooltip={autoRun ? 'Pause' : 'Load packages and evaluate'}
+          className={classNames(
+            'mt-2',
+            (attributes.length === 0 /* TODO: detect latency */ || !changed) &&
+              'hidden',
+          )}
+          onClick={() => (autoRun ? setAutoRun(false) : updatePackages())}
+        >
+          {autoRun ? <FaPause /> : <FaPlay className="translate-x-[2px]" />}
+        </Button>
+      </div>
       <div
         className="output"
         style={{
