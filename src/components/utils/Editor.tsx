@@ -542,7 +542,7 @@ export default class Editor extends React.Component<Props, State> {
 
           // Get selection offset from start
           const match = commentRegex('').exec(
-            '\n' + original.slice(0, original.indexOf('\n') + 1),
+            '\n' + original.slice(0, original.indexOf('\n')),
           );
           const startOffset = match ? match[0].length - 1 : 0;
 
@@ -558,33 +558,6 @@ export default class Editor extends React.Component<Props, State> {
             ),
           });
         }
-
-        // if (value.substring(lineStart).startsWith(LINE_COMMENT_START)) {
-        //   let amount =
-        //     LINE_COMMENT_START.length +
-        //     (value.charAt(lineStart + LINE_COMMENT_START.length + 1) === ' '
-        //       ? 1
-        //       : 0);
-        //   // Remove line comment
-        //   this._applyEdits({
-        //     value:
-        //       value.substring(0, lineStart) +
-        //       value.substring(lineStart + amount),
-        //     selectionStart: selectionStart - amount,
-        //     selectionEnd: selectionEnd - amount,
-        //   });
-        // } else {
-        //   // Add line comment
-        //   this._applyEdits({
-        //     value:
-        //       value.substring(0, lineStart) +
-        //       LINE_COMMENT_START +
-        //       ' ' +
-        //       value.substring(lineStart),
-        //     selectionStart: selectionStart + LINE_COMMENT_START.length + 1,
-        //     selectionEnd: selectionEnd + LINE_COMMENT_START.length + 1,
-        //   });
-        // }
       }
     } else if (
       (isMacLike
