@@ -385,6 +385,7 @@ export default class Editor extends React.Component<Props, State> {
           selectionStart: updatedSelection,
           selectionEnd: updatedSelection,
         });
+        openedPair = true;
       }
     } else if (e.keyCode === KEYCODE_ENTER) {
       // Ignore selections
@@ -405,7 +406,6 @@ export default class Editor extends React.Component<Props, State> {
           indent.length +
           (openBlock ? tabCharacter.length : 0);
         if (openBlock) {
-          console.log(1234);
           indent += `${tabCharacter}${indent}`;
         }
 
@@ -522,33 +522,29 @@ export default class Editor extends React.Component<Props, State> {
 
         const original = value.substring(lineStart, lineEnd);
         if (noCommentRegex().test('\n' + original)) {
-          // Add line comments
+          // Add line comment(s)
           const result = ('\n' + original)
-            .replace(noCommentRegex(), '\n' + LINE_COMMENT_START + ' ')
+            .replace(/\n(?! *\n)/g, '\n' + LINE_COMMENT_START + ' ')
             .substring(1);
           this._applyEdits({
             value:
               value.substring(0, lineStart) + result + value.substring(lineEnd),
-            selectionStart:
-              selectionStart +
-              result.substring(0, selectionStart).length -
-              original.substring(0, selectionStart).length,
+            selectionStart: selectionStart + LINE_COMMENT_START.length + 1,
             selectionEnd: selectionEnd + result.length - original.length,
           });
         } else {
-          // Remove line comments
+          // Remove line comment(s)
           const result = ('\n' + original)
             .replace(commentRegex(), '\n')
             .substring(1);
           this._applyEdits({
             value:
               value.substring(0, lineStart) + result + value.substring(lineEnd),
-            selectionStart: Math.max(
-              lineStart,
+            selectionStart:
               selectionStart +
-                result.substring(0, selectionStart).length -
-                original.substring(0, selectionStart).length,
-            ),
+              original.substring(selectionStart, original.indexOf('\n') + 1)
+                .length -
+              result.substring(selectionStart, result.indexOf('\n') + 1).length,
             selectionEnd: Math.max(
               lineStart,
               selectionEnd + result.length - original.length,
