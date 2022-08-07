@@ -521,17 +521,29 @@ export default class Editor extends React.Component<Props, State> {
           new RegExp(`\n(?!( *${LINE_COMMENT_START}| *(\n|$)))`, flags);
 
         const original = value.substring(firstLineStart, lastLineEnd);
-        if (noCommentRegex().test('\n' + original)) {
+        const singleLine = !value
+          .substring(selectionStart, selectionEnd)
+          .includes('\n');
+        if (
+          singleLine
+            ? !commentRegex().test('\n' + original)
+            : noCommentRegex().test('\n' + original)
+        ) {
           // Add line comment(s)
-          const result = ('\n' + original)
-            .replace(/\n(?! *(\n|$))/g, '\n' + LINE_COMMENT_START + ' ')
-            .substring(1);
+          const result = singleLine
+            ? `${LINE_COMMENT_START} ${original}`
+            : ('\n' + original)
+                .replace(/\n(?! *(\n|$))/g, `\n${LINE_COMMENT_START} `)
+                .substring(1);
           this._applyEdits({
             value:
               value.substring(0, firstLineStart) +
               result +
               value.substring(lastLineEnd),
-            selectionStart: selectionStart + LINE_COMMENT_START.length + 1,
+            selectionStart: Math.max(
+              firstLineStart,
+              selectionStart + LINE_COMMENT_START.length + 1,
+            ),
             selectionEnd: selectionEnd + result.length - original.length,
           });
         } else {
