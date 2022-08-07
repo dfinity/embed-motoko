@@ -23,16 +23,6 @@ export default function Embed() {
     return preprocessMotoko(inputCode || '');
   }, [inputCode]);
 
-  // Attribute data for comparison
-  const attributeData = JSON.stringify(attributes);
-
-  useMemo(() => {
-    if (autoRun && attributes.length) {
-      setAutoRun(false);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [attributeData]);
-
   const output = useMemo(() => {
     if (!autoRun) {
       return {};
@@ -48,25 +38,37 @@ export default function Embed() {
     }
   }, [code, autoRun]);
 
+  const packages = useMemo(() => {
+    return attributes
+      .filter((a) => a.key === 'package' && a.value?.includes(' '))
+      .map((a) =>
+        a.value
+          .split(' ')
+          .map((s) => s.trim())
+          .filter((s) => s),
+      )
+      .filter((kv) => kv.length === 2);
+  }, [attributes]);
+
+  // Package string for memoization
+  const packageData = JSON.stringify(packages);
+
+  useMemo(() => {
+    if (autoRun && packages.length) {
+      setAutoRun(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [packageData]);
+
   const updatePackages = useCallback(() => {
     if (loading) {
       return;
     }
 
-    const packages = Object.fromEntries(
-      attributes
-        .filter((a) => a.key === 'package' && a.value?.includes(' '))
-        .map((a) =>
-          a.value
-            .split(' ')
-            .map((s) => s.trim())
-            .filter((s) => s),
-        ),
-    );
     console.log('Loading packages:', packages);
     mo.clearPackages();
     setLoading(true);
-    mo.loadPackages(packages)
+    mo.loadPackages(Object.fromEntries(packages))
       .then(() => setAutoRun(true))
       .catch((err) => {
         // setUpdated(false);
@@ -74,7 +76,7 @@ export default function Embed() {
         setMessage(`Error: ${err.message || err}`);
       })
       .finally(() => setLoading(false));
-  }, [attributes, loading]);
+  }, [packages, loading]);
 
   const copyEmbedLink = useCallback(() => {
     try {
@@ -100,11 +102,11 @@ export default function Embed() {
 
   useEffect(() => {
     if (!autoRun) {
-      if (!changed || attributes.length === 0) {
+      if (!changed || packages.length === 0) {
         updatePackages();
       }
     }
-  }, [changed, autoRun, attributes.length, updatePackages]);
+  }, [changed, autoRun, packages.length, updatePackages]);
 
   const outputHeight = 100;
 
@@ -128,7 +130,7 @@ export default function Embed() {
           tooltip={autoRun ? 'Pause' : 'Load packages and evaluate'}
           className={classNames(
             'mt-2',
-            (attributes.length === 0 /* TODO: detect latency */ || !changed) &&
+            (packages.length === 0 /* TODO: detect latency */ || !changed) &&
               'hidden',
           )}
           onClick={() => (autoRun ? setAutoRun(false) : updatePackages())}
