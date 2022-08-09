@@ -50,11 +50,12 @@ export function parseEmbedLink(link: string): EmbedData {
     link = link.substring(1);
   }
   const [language = 'motoko', symbol = '', payload = ''] = link.split('/');
-  if (!symbol) {
-    // return { language, code: initialCodeMap.get(language) || '' };
-    return { language: 'motoko', code: preprocessCode(initialCode) };
+  if (!initialCode.hasOwnProperty(language)) {
+    return { language: 'motoko', code: preprocessCode(initialCode.motoko) };
+  } else if (!symbol) {
+    return { language, code: preprocessCode(initialCode[language]) };
   } else if (!payload) {
-    return { language: 'motoko', code: '' };
+    return { language, code: '' };
   } else {
     const format = formats.find((format) => format.symbol === symbol);
     if (format) {

@@ -3,28 +3,43 @@ import { FaCode, FaPause, FaPlay } from 'react-icons/fa';
 import mo from 'motoko';
 import copy from 'copy-to-clipboard';
 import CodeEditor, { EDITOR_FONT_SIZE } from './CodeEditor';
-import useCodeState from '../hooks/useCodeState';
+import useCodeInfoState from '../hooks/useCodeInfoState';
 import { getEmbedLink, parseEmbedLink } from '../services/embedLinkService';
 import useChangedState from '../hooks/useChangedState';
 import classNames from 'classnames';
 import preprocessMotoko from '../utils/preprocessMotoko';
 import Button from './Button';
-
-const language = 'motoko'; // TODO: refactor
+import transpileKusanagi from '../utils/transpileKusanagi';
 
 export default function Embed() {
-  const [inputCode, setInputCode] = useCodeState();
+  const [codeInfo, setCodeInfo] = useCodeInfoState();
   const [changed] = useChangedState();
   const [message, setMessage] = useState('');
   const [autoRun, setAutoRun] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const { code, attributes } = useMemo(() => {
-    return preprocessMotoko(inputCode || '');
-  }, [inputCode]);
+  const { language, code: inputCode } = codeInfo;
+
+  const { code, attributes, transpileError } = useMemo(() => {
+    let code = inputCode || '';
+    if (language === 'kusanagi') {
+      try {
+        code = transpileKusanagi(code);
+      } catch (err) {
+        return {
+          code,
+          attributes: [],
+          transpileError: err.message || err,
+        };
+      }
+    }
+    return preprocessMotoko(code, language === 'motoko');
+  }, [language, inputCode]);
 
   const output = useMemo(() => {
-    if (!autoRun) {
+    if (transpileError) {
+      return { stderr: transpileError };
+    } else if (!autoRun) {
       return {};
     }
     try {
@@ -36,7 +51,7 @@ export default function Embed() {
       console.error(err);
       return { stderr: err.message || String(err) };
     }
-  }, [code, autoRun]);
+  }, [transpileError, autoRun, code]);
 
   const packages = useMemo(() => {
     return attributes
@@ -90,7 +105,7 @@ export default function Embed() {
           window.history.pushState?.({}, null, link);
         }
         const result = parseEmbedLink(link);
-        setInputCode(result.code);
+        setCodeInfo(result);
         setMessage(
           'Copied link to clipboard.\n\nPaste into a Medium post to embed this code snippet!',
         );
@@ -99,7 +114,7 @@ export default function Embed() {
       console.error(err);
       setMessage(`Error: ${err.message || err}`);
     }
-  }, [inputCode, setInputCode]);
+  }, [language, inputCode, setCodeInfo]);
 
   useEffect(() => {
     if (!autoRun) {
@@ -110,11 +125,11 @@ export default function Embed() {
   }, [changed, autoRun, packages.length, updatePackages]);
 
   const handleChange = useCallback(
-    (value) => {
-      setInputCode(value);
+    (code) => {
+      setCodeInfo({ ...codeInfo, code });
       setLoading(false);
     },
-    [setInputCode],
+    [codeInfo, setCodeInfo],
   );
 
   const outputHeight = 100;
