@@ -29,6 +29,12 @@ describe('embedLinkService', () => {
       code: `${initialCode.motoko.trim()}\n`,
     });
   });
+  it('parses an invalid language', () => {
+    expect(parseEmbedLink('invalidlanguage/g/')).toStrictEqual({
+      language: 'motoko',
+      code: `${initialCode.motoko.trim()}\n`,
+    });
+  });
   it('parses a Kusanagi snippet', () => {
     expect(
       parseEmbedLink(

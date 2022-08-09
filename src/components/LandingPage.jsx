@@ -8,6 +8,7 @@ import motokoFlatImage from '../assets/motoko-flat.png?width=144&height=144&webp
 import motokoColorImage from '../assets/motoko-color.png?width=144&height=144&webp';
 import dfinityImage from '../assets/icp.png?webp';
 import Embed from './Embed';
+import useCodeInfoState from '../hooks/useCodeInfoState';
 
 const iframeText = `
 <iframe
@@ -19,9 +20,17 @@ const iframeText = `
 />
 `.trim();
 
+function capitalize(string) {
+  return string[0].toUpperCase() + string.substring(1);
+}
+
 export default function LandingPage() {
   // hotfix, TODO: split landing page into separate bundle
   document.body.style.backgroundColor = '#F5F5F5';
+
+  const [{ language }] = useCodeInfoState();
+
+  let languageName = capitalize(language || 'motoko');
 
   return (
     <>
@@ -51,7 +60,7 @@ export default function LandingPage() {
                   rel="noreferrer"
                 />
               ))}
-              Motoko
+              {languageName}
             </h1>
           </a>
           <hr className="w-full mb-3" />
@@ -77,7 +86,7 @@ export default function LandingPage() {
             <div className="sm:flex items-center">
               <div className="flex-grow flex sm:block justify-center">
                 <p className="text-lg sm:text-2xl opacity-75 inline-block">
-                  Embed a custom Motoko code snippet
+                  Embed a custom {languageName} code snippet
                   <br />
                   in a Medium article, blog, or webapp.
                 </p>
