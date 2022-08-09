@@ -1,6 +1,4 @@
-const initialCode = {};
-
-initialCode['motoko'] = `
+const motoko = `
 // A simple Motoko smart contract.
 
 actor Main {
@@ -12,7 +10,7 @@ actor Main {
 // await Main.hello();
 `.trim();
 
-initialCode['kusanagi'] = `
+const kusanagi = `
 /* A community-created Motoko dialect:
   (https://github.com/DanielXMoore/kusanagi) */
 
@@ -22,5 +20,10 @@ actor Main
 
 // await Main.hello()
 `.trim();
+
+const initialCode = {
+  motoko,
+  kusanagi,
+};
 
 export default initialCode;

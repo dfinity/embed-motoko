@@ -26,7 +26,17 @@ describe('embedLinkService', () => {
   it('parses an invalid link', () => {
     expect(parseEmbedLink('')).toStrictEqual({
       language: 'motoko',
-      code: `${initialCode.trim()}\n`,
+      code: `${initialCode.motoko.trim()}\n`,
+    });
+  });
+  it('parses a Kusanagi snippet', () => {
+    expect(
+      parseEmbedLink(
+        'kusanagi/g/3j9Kp4pFfTmqL1qPG1vN1NXxVgY6UV49bnDuJYd9sMMjEBB',
+      ),
+    ).toStrictEqual({
+      language: 'kusanagi',
+      code: 'module\n  public let a = 5\n',
     });
   });
   it('generates a text link', () => {
