@@ -1,5 +1,5 @@
-window.global = window;
-const { parse } = require('kusanagi');
+import './ensureNodeGlobal';
+import { parse } from 'kusanagi';
 
 const generate = (node) => {
   const gen = (item) => generate(item);
@@ -15,7 +15,7 @@ const generate = (node) => {
   return `<UNKNOWN ${JSON.stringify(node)} >`;
 };
 
-export default function transpileKusanagi(input) {
+export default function transpileKusanagi(input: string): string {
   const node = parse(input);
   return generate(node);
 }

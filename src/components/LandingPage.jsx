@@ -60,7 +60,7 @@ export default function LandingPage() {
                   rel="noreferrer"
                 />
               ))}
-              {languageName}
+              Motoko
             </h1>
           </a>
           <hr className="w-full mb-3" />
