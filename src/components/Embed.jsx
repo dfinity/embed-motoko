@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { FaCode, FaPause, FaPlay } from 'react-icons/fa';
-import mo, { Motoko } from 'motoko';
+import mo from 'motoko';
 import copy from 'copy-to-clipboard';
 import CodeEditor, { EDITOR_FONT_SIZE } from './CodeEditor';
 import useCodeState from '../hooks/useCodeState';
@@ -29,9 +29,9 @@ export default function Embed() {
     }
     try {
       setMessage('');
-      const path = 'Embed.mo';
-      Motoko.saveFile(path, code);
-      return Motoko.run([], path);
+      const file = mo.file('Embed.mo');
+      file.write(code);
+      return file.run();
     } catch (err) {
       console.error(err);
       return { stderr: err.message || String(err) };
@@ -66,16 +66,17 @@ export default function Embed() {
     }
 
     console.log('Loading packages:', packages);
-    mo.clearPackages();
     setLoading(true);
+    mo.clearPackages();
     mo.loadPackages(Object.fromEntries(packages))
-      .then(() => setAutoRun(true))
+      .then(() => {
+        setAutoRun(true);
+        setLoading(false);
+      })
       .catch((err) => {
-        // setUpdated(false);
         console.error(err);
         setMessage(`Error: ${err.message || err}`);
-      })
-      .finally(() => setLoading(false));
+      });
   }, [packages, loading]);
 
   const copyEmbedLink = useCallback(() => {
@@ -108,6 +109,14 @@ export default function Embed() {
     }
   }, [changed, autoRun, packages.length, updatePackages]);
 
+  const handleChange = useCallback(
+    (value) => {
+      setInputCode(value);
+      setLoading(false);
+    },
+    [setInputCode],
+  );
+
   const outputHeight = 100;
 
   return (
@@ -116,7 +125,7 @@ export default function Embed() {
         className="h-full overflow-auto"
         style={{ height: `calc(100% - ${outputHeight}px)` }}
       >
-        <CodeEditor value={inputCode} onChange={setInputCode} />
+        <CodeEditor value={inputCode} onChange={handleChange} />
       </div>
       <div className="flex-grow p-3 absolute right-0 bottom-[100px] sm:top-0 opacity-50 sm:opacity-100">
         <Button
