@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { FaCode, FaPause, FaPlay } from 'react-icons/fa';
-import mo from 'motoko';
+import mo from 'motoko/interpreter';
 import copy from 'copy-to-clipboard';
 import CodeEditor, { EDITOR_FONT_SIZE } from './CodeEditor';
 import useCodeInfoState from '../hooks/useCodeInfoState';
