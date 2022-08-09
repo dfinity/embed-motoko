@@ -1,5 +1,5 @@
 window.global = window;
-const { parse } = await import('kusanagi');
+const { parse } = require('kusanagi');
 
 const generate = (node) => {
   const gen = (item) => generate(item);
