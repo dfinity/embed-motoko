@@ -34,7 +34,7 @@ export interface EmbedData {
   code: string;
 }
 
-function preprocessCode(s: string) {
+function preprocessCode(s: string): string {
   const before = s.startsWith('\n') ? '\n' : '';
   // const after = s.endsWith('\n') ? '\n' : '';
   const after = '\n';
