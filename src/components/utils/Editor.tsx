@@ -467,7 +467,7 @@ export default class Editor extends React.Component<Props, State> {
 
       if (e.shiftKey) {
         if (
-          selectionEnd > selectionStart &&
+          selectionStart !== selectionEnd &&
           value.substring(
             selectionStart,
             selectionStart + BLOCK_COMMENT_START.length,
@@ -563,7 +563,10 @@ export default class Editor extends React.Component<Props, State> {
               value.substring(0, firstLineStart) +
               result +
               value.substring(lastLineEnd),
-            selectionStart: selectionStart - startOffset,
+            selectionStart: Math.max(
+              firstLineStart,
+              selectionStart - startOffset,
+            ),
             selectionEnd: Math.max(
               firstLineStart,
               selectionEnd + result.length - original.length,
