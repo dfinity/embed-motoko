@@ -1,2 +1,3 @@
 /api/* /.netlify/functions/:splat 200
 /motoko* /index.html 200
+/kusanagi* /index.html 200
