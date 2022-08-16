@@ -3,8 +3,8 @@ import { useEffect } from 'react';
 type Listener = () => any;
 type Options = any;
 
-type AddListener = (string, Listener, Options?) => any;
-type RemoveListener = (string, Listener) => any;
+type AddListener = (key: string, listener: Listener, options?: Options) => any;
+type RemoveListener = (key: string, listener: Listener) => any;
 
 type ListenerTarget =
   | { addEventListener: AddListener; removeEventListener: RemoveListener }
