@@ -149,7 +149,11 @@ export default function Embed() {
           )}
           onClick={() => (autoRun ? setAutoRun(false) : updatePackages())}
         >
-          {autoRun ? <FaPause /> : <FaPlay className="translate-x-[2px]" />}
+          {autoRun ? (
+            <FaPause />
+          ) : (
+            <FaPlay className="translate-x-[2px] text-green-600" />
+          )}
         </Button>
       </div>
       <div
