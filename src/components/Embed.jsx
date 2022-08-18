@@ -39,7 +39,7 @@ export default function Embed() {
   }, [code, autoRun]);
 
   const packages = useMemo(() => {
-    return attributes
+    const packages = attributes
       .filter((a) => a.key === 'package' && a.value?.includes(' '))
       .map((a) =>
         a.value
@@ -48,7 +48,12 @@ export default function Embed() {
           .filter((s) => s),
       )
       .filter((kv) => kv.length === 2);
-  }, [attributes]);
+
+    if (code.includes('"mo:base/')) {
+      packages.unshift(['base', 'dfinity/motoko-base/master/src']); // TODO: keep this?
+    }
+    return packages;
+  }, [attributes, code]);
 
   // Package string for memoization
   const packageData = JSON.stringify(packages);
