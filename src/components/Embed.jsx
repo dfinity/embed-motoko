@@ -144,8 +144,8 @@ export default function Embed() {
           tooltip={autoRun ? 'Pause' : 'Load packages and evaluate'}
           className={classNames(
             'mt-2',
-            (packages.length === 0 /* TODO: detect latency */ || !changed) &&
-              'hidden',
+            (packages.length === 0 || !changed) && 'hidden',
+            !autoRun && '!bg-green-600',
           )}
           onClick={() => (autoRun ? setAutoRun(false) : updatePackages())}
         >
