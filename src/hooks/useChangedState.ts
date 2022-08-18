@@ -1,5 +1,5 @@
 import makeObservable from '../utils/makeObservable';
-import { CODE_STORE } from './useCodeState';
+import { CODE_STORE } from './useCodeInfoState';
 import useObservableState from './utils/useObservableState';
 
 export const CHANGED_STORE = makeObservable(false);

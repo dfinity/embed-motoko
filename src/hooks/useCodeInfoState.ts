@@ -4,13 +4,13 @@ import useObservableState from './utils/useObservableState';
 
 const initial = parseEmbedLink(window.location.pathname);
 
-export const CODE_STORE = makeObservable(initial.code);
+export const CODE_STORE = makeObservable(initial);
 
 window.addEventListener('popstate', () => {
   const next = parseEmbedLink(window.location.pathname);
-  CODE_STORE.set(next.code);
+  CODE_STORE.set(next);
 });
 
-export default function useCodeState() {
+export default function useCodeInfoState() {
   return useObservableState(CODE_STORE);
 }

@@ -8,10 +8,12 @@ import motokoFlatImage from '../assets/motoko-flat.png?width=144&height=144&webp
 import motokoColorImage from '../assets/motoko-color.png?width=144&height=144&webp';
 import dfinityImage from '../assets/icp.png?webp';
 import Embed from './Embed';
+import useCodeInfoState from '../hooks/useCodeInfoState';
 
-const iframeText = `
+const iframeText = (languagePath) =>
+  `
 <iframe
-  src="https://embed.smartcontracts.org"
+  src="https://embed.smartcontracts.org${languagePath}"
   width="100%"
   height="500"
   style="border:0"
@@ -19,9 +21,18 @@ const iframeText = `
 />
 `.trim();
 
+function capitalize(string) {
+  return string[0].toUpperCase() + string.substring(1);
+}
+
 export default function LandingPage() {
   // hotfix, TODO: split landing page into separate bundle
   document.body.style.backgroundColor = '#F5F5F5';
+
+  const [{ language }] = useCodeInfoState();
+
+  const languageName = capitalize(language || 'motoko');
+  const languagePath = !language || language === 'motoko' ? '' : `/${language}`;
 
   return (
     <>
@@ -77,7 +88,7 @@ export default function LandingPage() {
             <div className="sm:flex items-center">
               <div className="flex-grow flex sm:block justify-center">
                 <p className="text-lg sm:text-2xl opacity-75 inline-block">
-                  Embed a custom Motoko code snippet
+                  Embed a custom {languageName} code snippet
                   <br />
                   in a Medium article, blog, or webapp.
                 </p>
@@ -104,11 +115,11 @@ export default function LandingPage() {
             <p className="ml-3 mt-3 text-lg text-green-700 font-bold opacity-50 select-none block sm:hidden">
               Coming soon! {/* temp */}
             </p>
-            <pre className="block p-4 bg-[#FFF] rounded-lg drop-shadow-lg">
+            <pre className="block p-4 bg-[#FFF] rounded-lg drop-shadow-lg overflow-y-auto">
               <p className="float-right text-lg text-green-700 opacity-50 select-none hidden sm:block">
                 Coming soon! {/* temp */}
               </p>
-              https://embed.smartcontracts.org
+              https://embed.smartcontracts.org{languagePath}
             </pre>
             <p className="text-xl mt-4 text-[#555360]">
               Use the
@@ -128,7 +139,7 @@ export default function LandingPage() {
               customStyle={{ background: 'white', padding: '1rem' }}
               className="rounded-lg drop-shadow-lg"
             >
-              {iframeText}
+              {iframeText(languagePath)}
             </SyntaxHighlighter>
           </div>
           <hr className="w-full my-8" />
