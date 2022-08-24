@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useCallback, useEffect } from 'react';
-import { FaCode, FaPause, FaPlay } from 'react-icons/fa';
+import { FaCode, FaPaperclip, FaPause, FaPlay } from 'react-icons/fa';
 import mo from 'motoko/interpreter';
 import copy from 'copy-to-clipboard';
 import CodeEditor, { EDITOR_FONT_SIZE } from './CodeEditor';
@@ -10,7 +10,18 @@ import classNames from 'classnames';
 import preprocessMotoko from '../utils/preprocessMotoko';
 import Button from './Button';
 
-const language = 'motoko'; // TODO: refactor
+const defaultLanguage = 'motoko'; // TODO: refactor
+
+export const iframeText = (src) =>
+  `
+<iframe
+  src="${src || 'https://embed.smartcontracts.org'}"
+  width="100%"
+  height="500"
+  style="border:0"
+  title="Code snippet"
+/>
+`.trim();
 
 export default function Embed() {
   const [inputCode, setInputCode] = useCodeState();
@@ -84,27 +95,46 @@ export default function Embed() {
       });
   }, [packages, loading]);
 
-  const copyEmbedLink = useCallback(() => {
-    try {
-      const link = getEmbedLink({ language, code: inputCode });
-      if (link.length >= 2000) {
-        setMessage('Your code is too long to fit into a URL!');
-      } else {
-        copy(link);
-        if (link !== window.location.href) {
-          window.history.pushState?.({}, null, link);
+  const handleCopy = useCallback(
+    (fn) => {
+      try {
+        const link = getEmbedLink({
+          language: defaultLanguage,
+          code: inputCode,
+        });
+        if (link.length >= 2000) {
+          setMessage('Your code is too long to fit into a URL!');
+        } else {
+          const message = fn(link);
+          if (link !== window.location.href) {
+            window.history.pushState?.({}, null, link);
+          }
+          const result = parseEmbedLink(link);
+          setInputCode(result.code);
+          setMessage(message);
         }
-        const result = parseEmbedLink(link);
-        setInputCode(result.code);
-        setMessage(
-          'Copied link to clipboard.\n\nPaste into a Medium post to embed this code snippet!',
-        );
+      } catch (err) {
+        console.error(err);
+        setMessage(`Error: ${err.message || err}`);
       }
-    } catch (err) {
-      console.error(err);
-      setMessage(`Error: ${err.message || err}`);
-    }
-  }, [inputCode, setInputCode]);
+    },
+    [inputCode, setInputCode],
+  );
+
+  const copyEmbedLink = useCallback(() => {
+    handleCopy((link) => {
+      copy(link);
+      // return 'Copied link to clipboard. Paste into a Medium post to embed this code snippet!'
+      return 'Copied link to clipboard. Paste into a Medium article (coming soon!)';
+    });
+  }, [handleCopy]);
+
+  const copyFrameSnippet = useCallback(() => {
+    handleCopy((link) => {
+      copy(iframeText(link).replace(/\s+/g, ' '));
+      return 'Copied iframe embed code to clipboard.';
+    });
+  }, [handleCopy]);
 
   useEffect(() => {
     if (!autoRun) {
@@ -132,18 +162,25 @@ export default function Embed() {
       >
         <CodeEditor value={inputCode} onChange={handleChange} />
       </div>
-      <div className="flex-grow p-3 absolute right-0 bottom-[100px] sm:top-0 opacity-50 sm:opacity-100">
+      <div className="flex-grow flex flex-col space-y-2 p-3 absolute right-0 bottom-[100px] sm:top-0 opacity-50 sm:opacity-100">
         <Button
-          tooltip="Embed this code snippet"
+          tooltip="Copy permalink"
           className={classNames(changed && 'emphasized')}
           onClick={copyEmbedLink}
+        >
+          <FaPaperclip />
+        </Button>
+        <Button
+          // tooltip="Embed this code snippet"
+          tooltip="Copy embed snippet"
+          className={classNames(changed && 'emphasized')}
+          onClick={copyFrameSnippet}
         >
           <FaCode />
         </Button>
         <Button
           tooltip={autoRun ? 'Pause' : 'Load packages and evaluate'}
           className={classNames(
-            'mt-2',
             (packages.length === 0 || !changed) && 'hidden',
             !autoRun && '!bg-green-600',
           )}

@@ -7,17 +7,7 @@ import { SiMedium, SiWordpress } from 'react-icons/si';
 import motokoFlatImage from '../assets/motoko-flat.png?width=144&height=144&webp';
 import motokoColorImage from '../assets/motoko-color.png?width=144&height=144&webp';
 import dfinityImage from '../assets/icp.png?webp';
-import Embed from './Embed';
-
-const iframeText = `
-<iframe
-  src="https://embed.smartcontracts.org"
-  width="100%"
-  height="500"
-  style="border:0"
-  title="Code snippet"
-/>
-`.trim();
+import Embed, { iframeText } from './Embed';
 
 export default function LandingPage() {
   // hotfix, TODO: split landing page into separate bundle
@@ -128,7 +118,7 @@ export default function LandingPage() {
               customStyle={{ background: 'white', padding: '1rem' }}
               className="rounded-lg drop-shadow-lg"
             >
-              {iframeText}
+              {iframeText()}
             </SyntaxHighlighter>
           </div>
           <hr className="w-full my-8" />
