@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useCallback, useEffect } from 'react';
-import { FaCode, FaPaperclip, FaPause, FaPlay } from 'react-icons/fa';
+import { FaCode, FaLink, FaPause, FaPlay } from 'react-icons/fa';
 import mo from 'motoko/interpreter';
 import copy from 'copy-to-clipboard';
 import CodeEditor, { EDITOR_FONT_SIZE } from './CodeEditor';
@@ -168,7 +168,7 @@ export default function Embed() {
           className={classNames(changed && 'emphasized')}
           onClick={copyEmbedLink}
         >
-          <FaPaperclip />
+          <FaLink />
         </Button>
         <Button
           // tooltip="Embed this code snippet"
