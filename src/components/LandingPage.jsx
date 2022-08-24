@@ -2,12 +2,12 @@ import React from 'react';
 import classNames from 'classnames';
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import { githubGist as syntaxStyle } from 'react-syntax-highlighter/dist/esm/styles/hljs';
-import { FaCode } from 'react-icons/fa';
+import { FaCode, FaPaperclip } from 'react-icons/fa';
 import { SiMedium, SiWordpress } from 'react-icons/si';
 import motokoFlatImage from '../assets/motoko-flat.png?width=144&height=144&webp';
 import motokoColorImage from '../assets/motoko-color.png?width=144&height=144&webp';
 import dfinityImage from '../assets/icp.png?webp';
-import Embed, { iframeText } from './Embed';
+import Embed, { getEmbedSnippet } from './Embed';
 
 export default function LandingPage() {
   // hotfix, TODO: split landing page into separate bundle
@@ -102,8 +102,8 @@ export default function LandingPage() {
             </pre>
             <p className="text-xl mt-4 text-[#555360]">
               Use the
-              <FaCode className="inline-block mx-2 border-[3px] border-[#555360] w-10 h-10 p-[10px] rounded-full" />
-              button to embed your custom code snippet.
+              <FaPaperclip className="inline-block mx-2 border-[3px] border-[#555360] w-10 h-10 p-[10px] rounded-full" />
+              button for your custom embed link.
             </p>
           </div>
           <hr className="w-full my-8" />
@@ -118,8 +118,13 @@ export default function LandingPage() {
               customStyle={{ background: 'white', padding: '1rem' }}
               className="rounded-lg drop-shadow-lg"
             >
-              {iframeText()}
+              {getEmbedSnippet()}
             </SyntaxHighlighter>
+            <p className="text-xl mt-4 text-[#555360]">
+              Use the
+              <FaCode className="inline-block mx-2 border-[3px] border-[#555360] w-10 h-10 p-[10px] rounded-full" />
+              button for your custom code snippet.
+            </p>
           </div>
           <hr className="w-full my-8" />
         </div>

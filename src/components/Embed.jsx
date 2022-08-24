@@ -12,7 +12,7 @@ import Button from './Button';
 
 const defaultLanguage = 'motoko'; // TODO: refactor
 
-export const iframeText = (src) =>
+export const getEmbedSnippet = (src) =>
   `
 <iframe
   src="${src || 'https://embed.smartcontracts.org'}"
@@ -131,7 +131,7 @@ export default function Embed() {
 
   const copyFrameSnippet = useCallback(() => {
     handleCopy((link) => {
-      copy(iframeText(link).replace(/\s+/g, ' '));
+      copy(getEmbedSnippet(link).replace(/\s+/g, ' '));
       return 'Copied iframe embed code to clipboard.';
     });
   }, [handleCopy]);
