@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+// import { useEffect } from 'react';
 import ReactTooltip from 'react-tooltip';
 
 // let timeout: NodeJS.Timeout | undefined;
@@ -10,14 +10,6 @@ export default function useReactTooltip(): typeof ReactTooltip {
   //     ReactTooltip.rebuild();
   //   });
   // }
-
-  useEffect(() => {
-    return () => {
-      setTimeout(() => {
-        ReactTooltip.rebuild();
-      });
-    };
-  });
 
   return ReactTooltip;
 }
