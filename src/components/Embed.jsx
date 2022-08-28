@@ -132,7 +132,7 @@ export default function Embed() {
   const copyFrameSnippet = useCallback(() => {
     handleCopy((link) => {
       copy(getEmbedSnippet(link).replace(/\s+/g, ' '));
-      return 'Copied iframe embed code to clipboard.';
+      return 'Copied iframe embed tag to clipboard.';
     });
   }, [handleCopy]);
 
