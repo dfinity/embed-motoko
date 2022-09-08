@@ -162,10 +162,10 @@ export default function Embed() {
       >
         <CodeEditor value={inputCode} onChange={handleChange} />
       </div>
-      <div className="flex-grow flex flex-col space-y-2 p-3 absolute right-0 bottom-[100px] sm:top-0 opacity-50 sm:opacity-100 pointer-events-none">
+      <div className="flex-grow flex flex-col space-y-2 p-3 absolute right-0 bottom-[100px] sm:top-0 opacity-50 sm:opacity-100 pointer-events-none [&>*]:pointer-events-auto">
         <Button
           tooltip="Copy permalink"
-          className={classNames('pointer-events-auto', changed && 'emphasized')}
+          className={classNames(changed && 'emphasized')}
           onClick={copyEmbedLink}
         >
           <FaLink />
@@ -173,7 +173,7 @@ export default function Embed() {
         <Button
           // tooltip="Embed this code snippet"
           tooltip="Copy embed snippet"
-          className={classNames('pointer-events-auto', changed && 'emphasized')}
+          className={classNames(changed && 'emphasized')}
           onClick={copyFrameSnippet}
         >
           <FaCode />
@@ -181,16 +181,15 @@ export default function Embed() {
         <Button
           tooltip={autoRun ? 'Pause' : 'Load packages and evaluate'}
           className={classNames(
-            'pointer-events-auto',
             (packages.length === 0 || !changed) && 'hidden',
             !autoRun && '!bg-green-600',
           )}
           onClick={() => (autoRun ? setAutoRun(false) : updatePackages())}
         >
           {autoRun ? (
-            <FaPause className="pointer-events-auto" />
+            <FaPause />
           ) : (
-            <FaPlay className="pointer-events-auto translate-x-[2px] text-green-600" />
+            <FaPlay className="translate-x-[2px] text-green-600" />
           )}
         </Button>
       </div>
