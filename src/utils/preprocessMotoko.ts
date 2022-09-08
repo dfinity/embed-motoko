@@ -61,12 +61,15 @@ export default function preprocessMotoko(code): PreprocessResult {
 
       if (
         indent === nextIndent &&
-        !trimmedLine.endsWith(';') &&
-        !trimmedLine.endsWith(',') &&
-        !trimmedLine.endsWith('{') &&
-        !trimmedLine.endsWith('(') &&
-        !trimmedLine.endsWith('[') &&
-        !(trimmedLine.startsWith('/*') && trimmedLine.endsWith('*/'))
+        !(
+          trimmedLine.endsWith(';') ||
+          trimmedLine.endsWith(',') ||
+          trimmedLine.endsWith('{') ||
+          trimmedLine.endsWith('(') ||
+          trimmedLine.endsWith('[') ||
+          ((trimmedLine.startsWith('/*') || !trimmedLine.includes('/*')) &&
+            trimmedLine.endsWith('*/'))
+        )
       ) {
         line += ';';
       }
