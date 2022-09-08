@@ -162,7 +162,7 @@ export default function Embed() {
       >
         <CodeEditor value={inputCode} onChange={handleChange} />
       </div>
-      <div className="flex-grow flex flex-col space-y-2 p-3 absolute right-0 bottom-[100px] sm:top-0 opacity-50 sm:opacity-100">
+      <div className="flex-grow flex flex-col space-y-2 p-3 absolute right-0 bottom-[100px] sm:top-0 opacity-50 sm:opacity-100 pointer-events-none [&>*]:pointer-events-auto">
         <Button
           tooltip="Copy permalink"
           className={classNames(changed && 'emphasized')}
