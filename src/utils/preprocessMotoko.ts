@@ -28,10 +28,9 @@ export default function preprocessMotoko(code): PreprocessResult {
   // infer semicolons
 
   let nextIndent = 0;
-  code = code
-    .split('\n')
-    .reverse()
-    .map((line: string) => {
+  const reversedLines = code.split('\n').reverse();
+  code = reversedLines
+    .map((line: string, i: number) => {
       const trimmedLine = line.trim();
       if (!trimmedLine) {
         return line;
@@ -59,6 +58,9 @@ export default function preprocessMotoko(code): PreprocessResult {
         indent++;
       }
 
+      const nextTrimmedLine = (reversedLines[i - 1] || '').trim();
+      // const previousTrimmedLine = (lines[i + 1] || '').trim();
+
       if (
         indent === nextIndent &&
         !(
@@ -68,7 +70,8 @@ export default function preprocessMotoko(code): PreprocessResult {
           trimmedLine.endsWith('(') ||
           trimmedLine.endsWith('[') ||
           ((trimmedLine.startsWith('/*') || !trimmedLine.includes('/*')) &&
-            trimmedLine.endsWith('*/'))
+            trimmedLine.endsWith('*/')) ||
+          /^(else|catch)([^a-zA-Z0-9_]|$)/.test(nextTrimmedLine)
         )
       ) {
         line += ';';
