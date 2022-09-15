@@ -12,6 +12,8 @@ import Button from './Button';
 
 const defaultLanguage = 'motoko'; // TODO: refactor
 
+const motokoBasePackage = ['base', 'dfinity/motoko-base/master/src'];
+
 export const getEmbedSnippet = (src) =>
   `
 <iframe
@@ -34,21 +36,6 @@ export default function Embed() {
     return preprocessMotoko(inputCode || '');
   }, [inputCode]);
 
-  const output = useMemo(() => {
-    if (!autoRun) {
-      return {};
-    }
-    try {
-      setMessage('');
-      const file = mo.file('Embed.mo');
-      file.write(code);
-      return file.run();
-    } catch (err) {
-      console.error(err);
-      return { stderr: err.message || String(err) };
-    }
-  }, [code, autoRun]);
-
   const packages = useMemo(() => {
     const packages = attributes
       .filter((a) => a.key === 'package' && a.value?.includes(' '))
@@ -61,20 +48,13 @@ export default function Embed() {
       .filter((kv) => kv.length === 2);
 
     if (code.includes('"mo:base/')) {
-      packages.unshift(['base', 'dfinity/motoko-base/master/src']); // TODO: keep this?
+      packages.unshift(motokoBasePackage);
     }
     return packages;
   }, [attributes, code]);
 
   // Package string for memoization
   const packageData = JSON.stringify(packages);
-
-  useMemo(() => {
-    if (autoRun && packages.length) {
-      setAutoRun(false);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [packageData]);
 
   const updatePackages = useCallback(() => {
     if (loading) {
@@ -94,6 +74,31 @@ export default function Embed() {
         setMessage(`Error: ${err.message || err}`);
       });
   }, [packages, loading]);
+
+  useMemo(() => {
+    if (autoRun && packages.length) {
+      setAutoRun(false);
+      if (packages.length === 1 && packages[0] === motokoBasePackage) {
+        updatePackages();
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [packageData]);
+
+  const output = useMemo(() => {
+    if (!autoRun) {
+      return {};
+    }
+    try {
+      setMessage('');
+      const file = mo.file('Embed.mo');
+      file.write(code);
+      return file.run();
+    } catch (err) {
+      console.error(err);
+      return { stderr: err.message || String(err) };
+    }
+  }, [code, autoRun]);
 
   const handleCopy = useCallback(
     (fn) => {
