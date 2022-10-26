@@ -12,6 +12,10 @@ const generate = (node) => {
   if (node === undefined || node === null) {
     return '';
   }
+  if (node.$loc) {
+    return generate(node.token);
+  }
+  console.log('Unknown Kusanagi output:', node);
   return `<UNKNOWN ${JSON.stringify(node)} >`;
 };
 
