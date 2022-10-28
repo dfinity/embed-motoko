@@ -1,7 +1,6 @@
 import './ensureNodeGlobal';
-import { parse, generate } from 'kusanagi';
+import { compile } from 'kusanagi';
 
 export default function transpileKusanagi(input: string): string {
-  const node = parse(input);
-  return generate(node);
+  return compile(input);
 }
