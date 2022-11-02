@@ -129,8 +129,7 @@ export default function Embed() {
   const copyEmbedLink = useCallback(() => {
     handleCopy((link) => {
       copy(link);
-      // return 'Copied link to clipboard. Paste into a Medium post to embed this code snippet!'
-      return 'Copied link to clipboard.\nPaste into a Medium article (coming soon!)';
+      return 'Copied link to clipboard. Paste into a Medium post to embed this code snippet!';
     });
   }, [handleCopy]);
 

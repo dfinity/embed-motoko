@@ -91,13 +91,7 @@ export default function LandingPage() {
               <SiMedium className="inline ml-1 mr-3 translate-y-[-2px]" />
               Medium article:
             </h2>
-            <p className="ml-3 mt-3 text-lg text-green-700 font-bold opacity-50 select-none block sm:hidden">
-              Coming soon! {/* temp */}
-            </p>
             <pre className="block p-4 bg-[#FFF] rounded-lg drop-shadow-lg">
-              <p className="float-right text-lg text-green-700 opacity-50 select-none hidden sm:block">
-                Coming soon! {/* temp */}
-              </p>
               https://embed.smartcontracts.org
             </pre>
             <p className="text-xl mt-4 text-[#555360]">
