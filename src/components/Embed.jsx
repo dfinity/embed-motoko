@@ -64,7 +64,7 @@ export default function Embed() {
     console.log('Loading packages:', packages);
     setLoading(true);
     mo.clearPackages();
-    mo.loadPackages(Object.fromEntries(packages))
+    mo.installPackages(Object.fromEntries(packages))
       .then(() => {
         setAutoRun(true);
         setLoading(false);
