@@ -32,7 +32,7 @@ export default function Embed({ limitHeight }) {
   const [autoRun, setAutoRun] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const { code, attributes, lineCount } = useMemo(() => {
+  const { code, attributes /* , lineCount */ } = useMemo(() => {
     return preprocessMotoko(inputCode || '');
   }, [inputCode]);
 
@@ -165,10 +165,10 @@ export default function Embed({ limitHeight }) {
   return (
     <div
       className="relative w-full h-full"
-      style={{ maxHeight: !!limitHeight && getEmbedHeight(lineCount) }}
+      // style={{ maxHeight: !!limitHeight && getEmbedHeight(lineCount) }}
     >
       <div
-        className="h-full overflow-auto"
+        className="overflow-auto"
         style={{ height: `calc(100% - ${outputHeight}px)` }}
       >
         <CodeEditor value={inputCode} onChange={handleChange} />
