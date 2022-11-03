@@ -46,6 +46,9 @@ export function parseEmbedLink(link: string): EmbedData {
   if (link.startsWith(EMBED_LINK_BASE)) {
     link = link.substring(EMBED_LINK_BASE.length);
   }
+  if (link.includes('?')) {
+    link = link.substring(link.indexOf('?'));
+  }
   if (link.startsWith('/')) {
     link = link.substring(1);
   }
@@ -80,10 +83,15 @@ export function parseEmbedLink(link: string): EmbedData {
 
 export function getEmbedLink({ language, code }: EmbedData): string {
   code = preprocessCode(code);
-
+  let lineCount = 1;
+  for (let i = 0; i < code.length; i++) {
+    if (code[i] === '\n') {
+      lineCount++;
+    }
+  }
   const format =
     formats.find((format) => format.shouldClaim(code)) || formats[0];
   const data = format.encode(code);
   const payload = bs58.encode(data);
-  return `${EMBED_LINK_BASE}/${language}/${format.symbol}/${payload}`;
+  return `${EMBED_LINK_BASE}/${language}/${format.symbol}/${payload}?lines=${lineCount}`;
 }

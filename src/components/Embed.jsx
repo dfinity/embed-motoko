@@ -1,25 +1,27 @@
-import React, { useState, useMemo, useCallback, useEffect } from 'react';
-import { FaCode, FaLink, FaPause, FaPlay } from 'react-icons/fa';
-import mo from 'motoko/interpreter';
+import classNames from 'classnames';
 import copy from 'copy-to-clipboard';
-import CodeEditor, { EDITOR_FONT_SIZE } from './CodeEditor';
+import mo from 'motoko/interpreter';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { FaCode, FaLink, FaPause, FaPlay } from 'react-icons/fa';
+import useChangedState from '../hooks/useChangedState';
 import useCodeState from '../hooks/useCodeState';
 import { getEmbedLink, parseEmbedLink } from '../services/embedLinkService';
-import useChangedState from '../hooks/useChangedState';
-import classNames from 'classnames';
+import { getEmbedHeight, getOutputHeight } from '../utils/getEmbedHeight';
 import preprocessMotoko from '../utils/preprocessMotoko';
 import Button from './Button';
+import CodeEditor, { EDITOR_FONT_SIZE } from './CodeEditor';
 
 const defaultLanguage = 'motoko'; // TODO: refactor
 
 const motokoBasePackage = ['base', 'dfinity/motoko-base/master/src'];
 
+// TODO: use `getEmbedHeight()`
 export const getEmbedSnippet = (src) =>
   `
 <iframe
   src="${src || 'https://embed.smartcontracts.org'}"
   width="100%"
-  height="500"
+  height="${getEmbedHeight(+/[?&]lines=([0-9]+)/.exec(src)?.[1])}px"
   style="border:0"
   title="Code snippet"
 />
@@ -32,7 +34,7 @@ export default function Embed() {
   const [autoRun, setAutoRun] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const { code, attributes } = useMemo(() => {
+  const { code, attributes, lineCount } = useMemo(() => {
     return preprocessMotoko(inputCode || '');
   }, [inputCode]);
 
@@ -64,7 +66,7 @@ export default function Embed() {
     console.log('Loading packages:', packages);
     setLoading(true);
     mo.clearPackages();
-    mo.loadPackages(Object.fromEntries(packages))
+    mo.installPackages(Object.fromEntries(packages))
       .then(() => {
         setAutoRun(true);
         setLoading(false);
@@ -129,8 +131,7 @@ export default function Embed() {
   const copyEmbedLink = useCallback(() => {
     handleCopy((link) => {
       copy(link);
-      // return 'Copied link to clipboard. Paste into a Medium post to embed this code snippet!'
-      return 'Copied link to clipboard.\nPaste into a Medium article (coming soon!)';
+      return 'Copied link to clipboard. Paste into a Medium post to embed this code snippet!';
     });
   }, [handleCopy]);
 
@@ -157,10 +158,13 @@ export default function Embed() {
     [setInputCode],
   );
 
-  const outputHeight = 100;
+  const outputHeight = getOutputHeight();
 
   return (
-    <div className="relative w-full h-full">
+    <div
+      className="relative w-full"
+      style={{ height: getEmbedHeight(lineCount) }}
+    >
       <div
         className="h-full overflow-auto"
         style={{ height: `calc(100% - ${outputHeight}px)` }}

@@ -14,9 +14,18 @@ exports.handler = async (event, context) => {
       body: 'Invalid embed link',
     };
   }
-  const width = +query.maxwidth || 800;
-  const height = +query.maxheight || 500;
   const format = query.format;
+  const width = +query.maxwidth || 800;
+  let height = +query.maxheight || 500;
+  try {
+    const match = /[?&]lines=([0-9]+)/.exec(url);
+    if (match) {
+      const [, lineCount] = match;
+      height = Math.max(120 + lineCount * 24, height);
+    }
+  } catch (err) {
+    console.error(err);
+  }
 
   const result = {
     version: '1.0',
