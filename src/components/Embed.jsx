@@ -25,7 +25,7 @@ export const getEmbedSnippet = (src) =>
 />
 `.trim();
 
-export default function Embed() {
+export default function Embed({ limitHeight }) {
   const [inputCode, setInputCode] = useCodeState();
   const [changed] = useChangedState();
   const [message, setMessage] = useState('');
@@ -164,8 +164,8 @@ export default function Embed() {
 
   return (
     <div
-      className="relative w-full"
-      style={{ height: getEmbedHeight(lineCount) }}
+      className="relative w-full h-full"
+      style={{ maxHeight: !!limitHeight && getEmbedHeight(lineCount) }}
     >
       <div
         className="h-full overflow-auto"
