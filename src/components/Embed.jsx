@@ -15,13 +15,12 @@ const defaultLanguage = 'motoko'; // TODO: refactor
 
 const motokoBasePackage = ['base', 'dfinity/motoko-base/master/src'];
 
-// TODO: use `getEmbedHeight()`
 export const getEmbedSnippet = (src) =>
   `
 <iframe
   src="${src || 'https://embed.smartcontracts.org'}"
   width="100%"
-  height="${getEmbedHeight(+/[?&]lines=([0-9]+)/.exec(src)?.[1])}px"
+  height="${getEmbedHeight(+/[?&]lines=([0-9]+)/.exec(src)?.[1])}"
   style="border:0"
   title="Code snippet"
 />
@@ -220,7 +219,7 @@ export default function Embed() {
             {!!output?.stdout && (
               <pre
                 style={{
-                  color: '#29E249',
+                  color: output.stdout === '() : ()\n' ? '#FFF5' : '#29E249',
                 }}
               >
                 {output.stdout}

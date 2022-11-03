@@ -21,7 +21,7 @@ exports.handler = async (event, context) => {
     const match = /[?&]lines=([0-9]+)/.exec(url);
     if (match) {
       const [, lineCount] = match;
-      height = Math.max(120 + lineCount * 24, height);
+      height = Math.min(120 + lineCount * 24, height);
     }
   } catch (err) {
     console.error(err);
