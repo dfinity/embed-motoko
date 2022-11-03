@@ -6,8 +6,6 @@
 
 ## Medium Articles
 
-> #### Note: this feature is coming soon!
-
 Paste the following link into your Medium article:
 
 ```
