@@ -219,7 +219,7 @@ export default function Embed() {
             {!!output?.stdout && (
               <pre
                 style={{
-                  color: '#29E249',
+                  color: output.stdout === '() : ()\n' ? '#FFF5' : '#29E249',
                 }}
               >
                 {output.stdout}
