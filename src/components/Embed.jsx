@@ -133,7 +133,7 @@ export default function Embed({ limitHeight }) {
   const copyEmbedLink = useCallback(() => {
     handleCopy((link) => {
       copy(link);
-      return 'Copied link to clipboard. Paste into a Medium post to embed this code snippet!';
+      return 'Copied link to clipboard. Paste into a Medium article to embed this code snippet!';
     });
   }, [handleCopy]);
 
