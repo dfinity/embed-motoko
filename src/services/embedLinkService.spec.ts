@@ -35,7 +35,7 @@ describe('embedLinkService', () => {
         language: 'motoko',
         code: '// TEST',
       }),
-    ).toBe('http://localhost:3000/motoko/t/8tkCLb2vFUV');
+    ).toBe('http://localhost:3000/motoko/t/8tkCLb2vFUV?lines=2');
   });
   it('generates a gzip link', () => {
     expect(
@@ -43,6 +43,8 @@ describe('embedLinkService', () => {
         language: 'motoko',
         code: '// TEST\n'.repeat(20),
       }),
-    ).toBe('http://localhost:3000/motoko/g/P5gNeDqSDZ68NgTNboVTayQJXz');
+    ).toBe(
+      'http://localhost:3000/motoko/g/P5gNeDqSDZ68NgTNboVTayQJXz?lines=21',
+    );
   });
 });
