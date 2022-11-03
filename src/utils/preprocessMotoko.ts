@@ -16,6 +16,7 @@ export interface Attribute {
 export interface PreprocessResult {
   code: string;
   attributes: Attribute[];
+  lineCount: number;
 }
 
 export default function preprocessMotoko(code): PreprocessResult {
@@ -29,6 +30,7 @@ export default function preprocessMotoko(code): PreprocessResult {
 
   let nextIndent = 0;
   const reversedLines = code.split('\n').reverse();
+  const lineCount = reversedLines.length;
   code = reversedLines
     .map((line: string, i: number) => {
       const trimmedLine = line.trim();
@@ -86,5 +88,6 @@ export default function preprocessMotoko(code): PreprocessResult {
   return {
     code,
     attributes,
+    lineCount,
   };
 }

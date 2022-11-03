@@ -55,7 +55,7 @@ export default function LandingPage() {
               src={window.location.href}
             /> */}
             <div
-              className="h-[500px] mx-auto rounded overflow-hidden"
+              className="mx-auto rounded overflow-hidden"
               style={{
                 boxShadow: '0 0 20px #CCC',
               }}
