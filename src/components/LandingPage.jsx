@@ -60,7 +60,7 @@ export default function LandingPage() {
                 boxShadow: '0 0 20px #CCC',
               }}
             >
-              <Embed />
+              <Embed limitHeight={true} />
             </div>
           </div>
           <div className="mt-4 sm:px-4 w-full">
