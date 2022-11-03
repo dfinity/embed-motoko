@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import copy from 'copy-to-clipboard';
 import mo from 'motoko/interpreter';
+import motokoBasePackage from 'motoko/packages/latest/base.json';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { FaCode, FaLink, FaPause, FaPlay } from 'react-icons/fa';
 import useChangedState from '../hooks/useChangedState';
@@ -12,8 +13,6 @@ import Button from './Button';
 import CodeEditor, { EDITOR_FONT_SIZE } from './CodeEditor';
 
 const defaultLanguage = 'motoko'; // TODO: refactor
-
-const motokoBasePackage = ['base', 'dfinity/motoko-base/master/src'];
 
 export const getEmbedSnippet = (src) =>
   `
@@ -47,12 +46,8 @@ export default function Embed() {
           .filter((s) => s),
       )
       .filter((kv) => kv.length === 2);
-
-    if (code.includes('"mo:base/')) {
-      packages.unshift(motokoBasePackage);
-    }
     return packages;
-  }, [attributes, code]);
+  }, [attributes]);
 
   // Package string for memoization
   const packageData = JSON.stringify(packages);
@@ -65,6 +60,7 @@ export default function Embed() {
     console.log('Loading packages:', packages);
     setLoading(true);
     mo.clearPackages();
+    mo.loadPackage(motokoBasePackage);
     mo.installPackages(Object.fromEntries(packages))
       .then(() => {
         setAutoRun(true);
