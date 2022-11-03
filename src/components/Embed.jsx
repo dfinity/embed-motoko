@@ -90,7 +90,14 @@ export default function Embed() {
       setMessage('');
       const file = mo.file('Embed.mo');
       file.write(code);
-      return file.run();
+      const { stdout, stderr } = file.run();
+      const unitValueString = '() : ()\n';
+      return {
+        stdout: stdout.endsWith(unitValueString)
+          ? stdout.slice(0, -unitValueString.length)
+          : stdout,
+        stderr,
+      };
     } catch (err) {
       console.error(err);
       return { stderr: err.message || String(err) };
@@ -212,16 +219,7 @@ export default function Embed() {
           <pre style={{ color: 'white' }}>&gt; {message}</pre>
         ) : (
           <>
-            {!!output?.stdout && (
-              <pre
-                style={{
-                  color: output.stdout === '() : ()\n' ? '#FFF5' : '#29E249',
-                }}
-              >
-                {output.stdout}
-              </pre>
-            )}
-            {!!output?.stderr && (
+            {output?.stderr ? (
               <pre
                 style={{
                   color: '#F15A24',
@@ -230,6 +228,16 @@ export default function Embed() {
               >
                 {output.stderr}
               </pre>
+            ) : (
+              typeof output?.stdout === 'string' && (
+                <pre
+                  style={{
+                    color: !output.stdout ? '#FFF5' : '#29E249',
+                  }}
+                >
+                  {output.stdout || '()'}
+                </pre>
+              )
             )}
           </>
         )}
