@@ -47,7 +47,7 @@ export function parseEmbedLink(link: string): EmbedData {
     link = link.substring(EMBED_LINK_BASE.length);
   }
   if (link.includes('?')) {
-    link = link.substring(link.indexOf('?'));
+    link = link.substring(0, link.indexOf('?'));
   }
   if (link.startsWith('/')) {
     link = link.substring(1);

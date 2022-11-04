@@ -17,6 +17,16 @@ describe('embedLinkService', () => {
       code: 'import Prim "mo:⛔";\n',
     });
   });
+  it('parses a link with a query parameter', () => {
+    expect(
+      parseEmbedLink(
+        '/motoko/g/RAiRxx8net2ByM3QCJ9XXhrjaGZEn7Uv9JsTH1Ln7?lines=2',
+      ),
+    ).toStrictEqual({
+      language: 'motoko',
+      code: 'import Prim "mo:⛔";\n',
+    });
+  });
   it('parses an empty gzip payload', () => {
     expect(parseEmbedLink('motoko/g/')).toStrictEqual({
       language: 'motoko',
