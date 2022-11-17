@@ -164,16 +164,57 @@ export default function Embed({ limitHeight }) {
 
   return (
     <div
-      className="relative w-full h-full"
+      className="relative w-full h-full flex"
       // style={{ maxHeight: !!limitHeight && getEmbedHeight(lineCount) }}
     >
-      <div
-        className="overflow-auto"
-        style={{ height: `calc(100% - ${outputHeight}px)` }}
-      >
-        <CodeEditor value={inputCode} onChange={handleChange} />
+      <div className="w-full h-full">
+        <div
+          className="overflow-auto"
+          style={{ height: `calc(100% - ${outputHeight}px)` }}
+        >
+          <CodeEditor value={inputCode} onChange={handleChange} />
+        </div>
+        <div
+          className="output bg-inverted"
+          style={{
+            fontSize: EDITOR_FONT_SIZE,
+            padding: '14px',
+            paddingBottom: 0,
+            textAlign: 'left',
+            maxWidth: '100vw',
+            height: outputHeight,
+            overflowY: 'auto',
+          }}
+        >
+          {message ? (
+            <pre style={{ color: 'white' }}>&gt; {message}</pre>
+          ) : (
+            <>
+              {output?.stderr ? (
+                <pre
+                  style={{
+                    color: '#F15A24',
+                    opacity: 0.8,
+                  }}
+                >
+                  {output.stderr}
+                </pre>
+              ) : (
+                typeof output?.stdout === 'string' && (
+                  <pre
+                    style={{
+                      color: !output.stdout ? '#FFF5' : '#29E249',
+                    }}
+                  >
+                    {output.stdout || '()'}
+                  </pre>
+                )
+              )}
+            </>
+          )}
+        </div>
       </div>
-      <div className="flex-grow flex flex-col space-y-2 p-2 absolute right-0 bottom-[100px] text-sm sm:top-0 pointer-events-none [&>*]:pointer-events-auto z-10">
+      <div className="toolbar flex-grow flex flex-col space-y-2 p-2 text-sm sm:top-0 pointer-events-none [&>*]:pointer-events-auto z-10">
         <Button
           tooltip="Copy permalink"
           className={classNames(changed && 'emphasized')}
@@ -203,45 +244,6 @@ export default function Embed({ limitHeight }) {
             <FaPlay className="translate-x-[2px] text-green-600" />
           )}
         </Button>
-      </div>
-      <div
-        className="output"
-        style={{
-          fontSize: EDITOR_FONT_SIZE,
-          padding: '14px',
-          paddingBottom: 0,
-          textAlign: 'left',
-          maxWidth: '100vw',
-          height: outputHeight,
-          overflowY: 'auto',
-        }}
-      >
-        {message ? (
-          <pre style={{ color: 'white' }}>&gt; {message}</pre>
-        ) : (
-          <>
-            {output?.stderr ? (
-              <pre
-                style={{
-                  color: '#F15A24',
-                  opacity: 0.8,
-                }}
-              >
-                {output.stderr}
-              </pre>
-            ) : (
-              typeof output?.stdout === 'string' && (
-                <pre
-                  style={{
-                    color: !output.stdout ? '#FFF5' : '#29E249',
-                  }}
-                >
-                  {output.stdout || '()'}
-                </pre>
-              )
-            )}
-          </>
-        )}
       </div>
     </div>
   );
