@@ -15,7 +15,8 @@ exports.handler = async (event, context) => {
     };
   }
   const format = query.format;
-  const width = +query.maxwidth || 800;
+  const defaultWidth = 800;
+  const width = +query.maxwidth || defaultWidth;
   let height = +query.maxheight || 500;
   try {
     const match = /[?&]lines=([0-9]+)/.exec(url);
@@ -26,6 +27,7 @@ exports.handler = async (event, context) => {
   } catch (err) {
     console.error(err);
   }
+  height = Math.round(height * (defaultWidth / width)); // Fix iframe height in Medium articles
 
   const result = {
     version: '1.0',
