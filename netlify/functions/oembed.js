@@ -23,7 +23,7 @@ exports.handler = async (event, context) => {
     if (match) {
       const [, lineCount] = match;
       // height = Math.min(120 + lineCount * 24, height);
-      height = Math.min(140 + lineCount * 28, height);
+      height = Math.min(150 + lineCount * 27, height);
     }
   } catch (err) {
     console.error(err);
