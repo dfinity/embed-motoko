@@ -208,7 +208,8 @@ export default function Embed({ limitHeight }) {
         className="output"
         style={{
           fontSize: EDITOR_FONT_SIZE,
-          padding: '15px 15px',
+          padding: '14px',
+          paddingBottom: 0,
           textAlign: 'left',
           maxWidth: '100vw',
           height: outputHeight,
