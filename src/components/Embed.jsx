@@ -88,7 +88,7 @@ export default function Embed({ limitHeight }) {
     }
     try {
       setMessage('');
-      const file = mo.file('Embed.mo');
+      const file = mo.file('mo');
       file.write(code);
       const { stdout, stderr } = file.run();
       const unitValueString = '() : ()\n';
@@ -173,7 +173,7 @@ export default function Embed({ limitHeight }) {
       >
         <CodeEditor value={inputCode} onChange={handleChange} />
       </div>
-      <div className="flex-grow flex flex-col space-y-2 p-3 absolute right-0 bottom-[100px] sm:top-0 opacity-50 sm:opacity-100 pointer-events-none [&>*]:pointer-events-auto">
+      <div className="flex-grow flex flex-col space-y-2 p-2 absolute right-0 bottom-[100px] text-sm sm:top-0 pointer-events-none [&>*]:pointer-events-auto z-10">
         <Button
           tooltip="Copy permalink"
           className={classNames(changed && 'emphasized')}
