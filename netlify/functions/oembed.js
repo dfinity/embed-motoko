@@ -22,12 +22,12 @@ exports.handler = async (event, context) => {
     const match = /[?&]lines=([0-9]+)/.exec(url);
     if (match) {
       const [, lineCount] = match;
-      height = Math.min(120 + lineCount * 24, height);
+      // height = Math.min(120 + lineCount * 24, height);
+      height = Math.min(140 + lineCount * 26, height);
     }
   } catch (err) {
     console.error(err);
   }
-  height = Math.round(height * (defaultWidth / width)); // Fix iframe height in Medium articles
 
   const result = {
     version: '1.0',
