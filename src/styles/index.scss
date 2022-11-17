@@ -9,7 +9,7 @@
 
 @import 'landingPage';
 
-$button-size: 44px;
+$button-size: 40px;
 $button-border-width: 3px;
 
 $embed-button-color: #555360;
@@ -18,11 +18,6 @@ $embed-button-emphasized-color: darken(#29abe2, 5);
 html,
 body {
   font-family: 'Nunito';
-}
-
-.toolbar {
-  background-color: #404040;
-  color: white;
 }
 
 .output {
