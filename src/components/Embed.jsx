@@ -140,7 +140,7 @@ export default function Embed({ limitHeight }) {
   const copyFrameSnippet = useCallback(() => {
     handleCopy((link) => {
       copy(getEmbedSnippet(link).replace(/\s+/g, ' '));
-      return 'Copied iframe embed tag to clipboard.';
+      return 'Copied <iframe /> embed tag to clipboard.';
     });
   }, [handleCopy]);
 
