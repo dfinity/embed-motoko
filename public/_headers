@@ -1,0 +1,4 @@
+# Cache static assets for a week
+/assets/*
+  Cache-Control: public
+  Cache-Control: max-age=604800
