@@ -12,7 +12,7 @@ Paste the following link into your Medium article:
 https://embed.smartcontracts.org
 ```
 
-Customize your code snippet by heading to [embed.smartcontracts.org](https://embed.smartcontracts.org) and using the "Embed this code snippet" button. 
+Customize your code snippet by heading to [embed.smartcontracts.org](https://embed.smartcontracts.org) and using the "Copy embed snippet" button. 
 
 ## Websites & Blogs
 
