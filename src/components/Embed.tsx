@@ -19,7 +19,7 @@ export const getEmbedSnippet = (src) =>
 <iframe
   src="${src || 'https://embed.smartcontracts.org'}"
   width="100%"
-  height="${getEmbedHeight(+/[?&]lines=([0-9]+)/.exec(src)?.[1])}"
+  height="${getEmbedHeight(Number(/[?&]lines=([0-9]+)/.exec(src)?.[1]))}"
   style="border:0"
   title="Code snippet"
 />
@@ -40,8 +40,8 @@ export default function Embed({ limitHeight }) {
     const packages = attributes
       .filter((a) => a.key === 'package' && a.value?.includes(' '))
       .map((a) =>
-        a.value
-          .split(' ')
+        a
+          .value!.split(' ')
           .map((s) => s.trim())
           .filter((s) => s),
       )
@@ -75,9 +75,9 @@ export default function Embed({ limitHeight }) {
   useMemo(() => {
     if (autoRun && packages.length) {
       setAutoRun(false);
-      if (packages.length === 1 && packages[0] === motokoBasePackage) {
-        updatePackages();
-      }
+      // if (packages.length === 1 && packages[0] === motokoBasePackage) {
+      //   updatePackages();
+      // }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [packageData]);
@@ -105,7 +105,7 @@ export default function Embed({ limitHeight }) {
   }, [code, autoRun]);
 
   const handleCopy = useCallback(
-    (fn) => {
+    (fn: (link: string) => string) => {
       try {
         const link = getEmbedLink({
           language: defaultLanguage,
@@ -116,7 +116,7 @@ export default function Embed({ limitHeight }) {
         } else {
           const message = fn(link);
           if (link !== window.location.href) {
-            window.history.pushState?.({}, null, link);
+            window.history.pushState?.({}, '', link);
           }
           const result = parseEmbedLink(link);
           setInputCode(result.code);
@@ -153,7 +153,7 @@ export default function Embed({ limitHeight }) {
   }, [changed, autoRun, packages.length, updatePackages]);
 
   const handleChange = useCallback(
-    (value) => {
+    (value: string) => {
       setInputCode(value);
       setLoading(false);
     },
