@@ -9,13 +9,21 @@ configureHighlightJS(hljs);
 
 export const EDITOR_FONT_SIZE = isMobile() ? 14 : 16;
 
-const hightlightWithLineNumbers = (input, language) => {
+const hightlightWithLineNumbers = (input: string, language: string) => {
   return hljs
     .highlight(input, { language })
     .value.split('\n')
     .map((line, i) => `<span class='line-number'>${i + 1}</span>${line}`)
     .join('\n');
 };
+
+interface CodeEditorProps {
+  value: string;
+  onChange(value: string): void;
+  readOnly?: boolean;
+  options?: object;
+  style?: React.CSSProperties;
+}
 
 export default function CodeEditor({
   value,
@@ -24,7 +32,7 @@ export default function CodeEditor({
   options,
   style,
   ...others
-}) {
+}: CodeEditorProps) {
   const editorRef = (ref) => {
     if (!ref) {
       return;
