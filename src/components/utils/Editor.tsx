@@ -438,8 +438,8 @@ export default class Editor extends React.Component<Props, State> {
           selectionEnd: selectionEnd + 1,
         });
       } else if (
-        e.key ===
-        start /* &&(hasSelection || value.charAt(selectionEnd) !== end) */
+        e.key === start &&
+        (hasSelection || !/\S/.test(value.charAt(selectionStart)))
       ) {
         e.preventDefault();
 
