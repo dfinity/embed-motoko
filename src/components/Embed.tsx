@@ -21,7 +21,7 @@ export const getEmbedSnippet = (src) =>
   width="100%"
   height="${getEmbedHeight(Number(/[?&]lines=([0-9]+)/.exec(src)?.[1]))}"
   style="border:0"
-  title="Code snippet"
+  title="Motoko code snippet"
 />
 `.trim();
 
