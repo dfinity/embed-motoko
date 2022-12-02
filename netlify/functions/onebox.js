@@ -1,4 +1,5 @@
-// Generic oEmbed API endpoint (currently used by Embed.ly)
+// oEmbed API endpoint for Discourse `onebox`
+// TODO: DRY
 
 const BASE_URL = 'https://embed.smartcontracts.org';
 
@@ -24,8 +25,8 @@ exports.handler = async (event, context) => {
     const match = /[?&]lines=([0-9]+)/.exec(url);
     if (match) {
       const [, lineCount] = match;
-      // height = Math.min(120 + lineCount * 24, height);
-      height = Math.min(140 + lineCount * 28, height);
+      height = Math.min(120 + lineCount * 24, height);
+      // height = Math.min(140 + lineCount * 28, height);
     }
   } catch (err) {
     console.error(err);
