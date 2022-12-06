@@ -36,7 +36,9 @@ export default function Embed() {
   const [message, setMessage] = useState('');
   const [autoRun, setAutoRun] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [_output, setOutput] = useState<typeof mo.run>({});
+  const [_output, setOutput] = useState<Partial<ReturnType<typeof mo.run>>>({});
+
+  const output = autoRun ? _output : {};
 
   const { code, attributes /* , lineCount */ } = useMemo(() => {
     return preprocessMotoko(inputCode || '');
@@ -113,8 +115,6 @@ export default function Embed() {
       }
     }, 100);
   }, [code, autoRun]);
-
-  const output = autoRun ? _output : {};
 
   const handleCopy = useCallback(
     (fn: (link: string) => string) => {
