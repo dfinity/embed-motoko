@@ -17,6 +17,7 @@
   "dependencies": {
     "bs58": "5.0.0",
     "classnames": "2.3.1",
+    "comlink": "^4.3.1",
     "copy-to-clipboard": "3.3.1",
     "highlight.js": "11.6.0",
     "motoko": "3.1.3",

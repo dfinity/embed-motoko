@@ -1,7 +1,5 @@
 import classNames from 'classnames';
 import copy from 'copy-to-clipboard';
-import mo from 'motoko/interpreter';
-import motokoBasePackage from 'motoko/packages/latest/base.json';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { FaCode, FaLink, FaPause, FaPlay } from 'react-icons/fa';
 import useChangedState from '../hooks/useChangedState';
@@ -12,8 +10,15 @@ import preprocessMotoko from '../utils/preprocessMotoko';
 import Button from './Button';
 import CodeEditor, { EDITOR_FONT_SIZE } from './CodeEditor';
 import isMobile from '../utils/isMobile';
+import { wrap } from 'comlink';
 
-mo.setRunStepLimit(100_000);
+const motokoWorker = wrap(
+  // @ts-ignore
+  new (await import('../workers/motoko.worker?worker')).default(),
+);
+console.log(motokoWorker); ///
+
+console.log(motokoWorker.abc123());
 
 const defaultLanguage = 'motoko'; // TODO: refactor
 
@@ -36,7 +41,9 @@ export default function Embed() {
   const [message, setMessage] = useState('');
   const [autoRun, setAutoRun] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [_output, setOutput] = useState<Partial<ReturnType<typeof mo.run>>>({});
+  const [_output, setOutput] = useState<
+    Partial<{ stderr: string; stdout: string }>
+  >({});
 
   const output = autoRun ? _output : {};
 
@@ -67,17 +74,10 @@ export default function Embed() {
 
     console.log('Loading packages:', packages);
     setLoading(true);
-    mo.clearPackages();
-    mo.loadPackage(motokoBasePackage);
-    mo.installPackages(Object.fromEntries(packages))
-      .then(() => {
-        setAutoRun(true);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error(err);
-        setMessage(`Error: ${err.message || err}`);
-      });
+    motokoWorker.updatePackages(Object.fromEntries(packages)).catch((err) => {
+      console.error(err);
+      setOutput({ stderr: err.message || String(err) });
+    });
   }, [packages, loading]);
 
   useMemo(() => {
@@ -96,12 +96,10 @@ export default function Embed() {
       return;
     }
     clearTimeout(runDebounce);
-    runDebounce = setTimeout(() => {
+    runDebounce = setTimeout(async () => {
       try {
         setMessage('');
-        const file = mo.file('mo');
-        file.write(code);
-        const { stdout, stderr } = file.run();
+        const { stdout, stderr } = await motokoWorker.run(code);
         const unitValueString = '() : ()\n';
         setOutput({
           stdout: stdout.endsWith(unitValueString)
