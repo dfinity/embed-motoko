@@ -11,6 +11,7 @@ import { getEmbedHeight, getOutputHeight } from '../utils/getEmbedHeight';
 import preprocessMotoko from '../utils/preprocessMotoko';
 import Button from './Button';
 import CodeEditor, { EDITOR_FONT_SIZE } from './CodeEditor';
+import isMobile from '../utils/isMobile';
 
 mo.setRunStepLimit(100_000);
 
@@ -27,7 +28,7 @@ export const getEmbedSnippet = (src) =>
 />
 `.trim();
 
-export default function Embed({ limitHeight }) {
+export default function Embed() {
   const [inputCode, setInputCode] = useCodeState();
   const [changed] = useChangedState();
   const [message, setMessage] = useState('');
@@ -170,8 +171,12 @@ export default function Embed({ limitHeight }) {
       // style={{ maxHeight: !!limitHeight && getEmbedHeight(lineCount) }}
     >
       <div
-        className="overflow-auto"
-        style={{ height: `calc(100% - ${outputHeight}px)` }}
+        // className="overflow-y-auto"
+        style={
+          isMobile()
+            ? {}
+            : { height: `calc(100% - ${outputHeight}px)`, overflowY: 'auto' }
+        }
       >
         <CodeEditor value={inputCode} onChange={handleChange} />
       </div>
