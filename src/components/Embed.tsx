@@ -28,12 +28,15 @@ export const getEmbedSnippet = (src) =>
 />
 `.trim();
 
+let runDebounce: ReturnType<typeof setTimeout>;
+
 export default function Embed() {
   const [inputCode, setInputCode] = useCodeState();
   const [changed] = useChangedState();
   const [message, setMessage] = useState('');
   const [autoRun, setAutoRun] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [_output, setOutput] = useState<typeof mo.run>({});
 
   const { code, attributes /* , lineCount */ } = useMemo(() => {
     return preprocessMotoko(inputCode || '');
@@ -85,27 +88,33 @@ export default function Embed() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [packageData]);
 
-  const output = useMemo(() => {
+  useEffect(() => {
     if (!autoRun) {
-      return {};
+      // return {};
+      return;
     }
-    try {
-      setMessage('');
-      const file = mo.file('mo');
-      file.write(code);
-      const { stdout, stderr } = file.run();
-      const unitValueString = '() : ()\n';
-      return {
-        stdout: stdout.endsWith(unitValueString)
-          ? stdout.slice(0, -unitValueString.length)
-          : stdout,
-        stderr,
-      };
-    } catch (err) {
-      console.error(err);
-      return { stderr: err.message || String(err) };
-    }
+    clearTimeout(runDebounce);
+    runDebounce = setTimeout(() => {
+      try {
+        setMessage('');
+        const file = mo.file('mo');
+        file.write(code);
+        const { stdout, stderr } = file.run();
+        const unitValueString = '() : ()\n';
+        setOutput({
+          stdout: stdout.endsWith(unitValueString)
+            ? stdout.slice(0, -unitValueString.length)
+            : stdout,
+          stderr,
+        });
+      } catch (err) {
+        console.error(err);
+        setOutput({ stderr: err.message || String(err) });
+      }
+    }, 100);
   }, [code, autoRun]);
+
+  const output = autoRun ? _output : {};
 
   const handleCopy = useCallback(
     (fn: (link: string) => string) => {
