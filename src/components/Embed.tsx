@@ -12,7 +12,7 @@ import preprocessMotoko from '../utils/preprocessMotoko';
 import Button from './Button';
 import CodeEditor, { EDITOR_FONT_SIZE } from './CodeEditor';
 
-mo.setRunStepLimit(1_000_000);
+mo.setRunStepLimit(100_000);
 
 const defaultLanguage = 'motoko'; // TODO: refactor
 
