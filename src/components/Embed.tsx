@@ -36,7 +36,9 @@ export default function Embed() {
   const [message, setMessage] = useState('');
   const [autoRun, setAutoRun] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [_output, setOutput] = useState<typeof mo.run>({});
+  const [_output, setOutput] = useState<Partial<ReturnType<typeof mo.run>>>({});
+
+  const output = autoRun ? _output : {};
 
   const { code, attributes /* , lineCount */ } = useMemo(() => {
     return preprocessMotoko(inputCode || '');
@@ -114,8 +116,6 @@ export default function Embed() {
     }, 100);
   }, [code, autoRun]);
 
-  const output = autoRun ? _output : {};
-
   const handleCopy = useCallback(
     (fn: (link: string) => string) => {
       try {
@@ -180,16 +180,12 @@ export default function Embed() {
       // style={{ maxHeight: !!limitHeight && getEmbedHeight(lineCount) }}
     >
       <div
-        // className="overflow-y-auto"
-        style={
-          isMobile()
-            ? {}
-            : { height: `calc(100% - ${outputHeight}px)`, overflowY: 'auto' }
-        }
+        className="overflow-y-auto"
+        style={isMobile() ? {} : { height: `calc(100% - ${outputHeight}px)` }}
       >
         <CodeEditor value={inputCode} onChange={handleChange} />
       </div>
-      <div className="space-y-2 p-2 absolute right-0 bottom-[100px] text-sm sm:top-0 pointer-events-none [&>*]:pointer-events-auto z-10">
+      <div className="space-y-2 p-2 absolute right-0 bottom-[100px] text-sm hidden sm:block top-0 pointer-events-none [&>*]:pointer-events-auto z-10">
         <Button
           tooltip="Copy permalink"
           className={classNames(changed && 'emphasized')}
