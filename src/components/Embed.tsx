@@ -151,7 +151,7 @@ export default function Embed() {
   const copyEmbedLink = useCallback(() => {
     handleCopy((link) => {
       copy(link);
-      return 'Copied link to clipboard. Paste into a Medium article to embed this code snippet!';
+      return 'Copied link to clipboard.\nPaste into a Medium article to embed this code snippet!';
     });
   }, [handleCopy]);
 
@@ -215,7 +215,7 @@ export default function Embed() {
         ) : (
           <>
             <Button
-              tooltip="Copy permalink"
+              tooltip="Copy embed link"
               className={classNames(changed && 'emphasized')}
               onClick={copyEmbedLink}
             >
@@ -223,7 +223,7 @@ export default function Embed() {
             </Button>
             <Button
               // tooltip="Embed this code snippet"
-              tooltip="Copy embed snippet"
+              tooltip="Copy HTML snippet"
               className={classNames(changed && 'emphasized')}
               onClick={copyFrameSnippet}
             >
