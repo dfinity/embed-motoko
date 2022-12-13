@@ -190,7 +190,7 @@ export default function Embed() {
       </div>
       <div
         className={classNames(
-          'space-y-2 p-2 md:pr-4 absolute right-0 bottom-[100px] text-sm top-0 pointer-events-none [&>*]:pointer-events-auto z-10',
+          'space-y-2 p-2 sm:pr-4 absolute right-0 bottom-[100px] text-sm top-0 pointer-events-none [&>*]:pointer-events-auto z-10',
           // isEmbedded() && 'hidden sm:block',
         )}
       >
