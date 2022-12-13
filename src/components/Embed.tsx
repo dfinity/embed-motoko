@@ -198,7 +198,8 @@ export default function Embed() {
       </div>
       <div
         className={classNames(
-          'space-y-2 p-2 absolute right-0 bottom-[100px] text-sm top-0 pointer-events-none [&>*]:pointer-events-auto z-10',
+          'space-y-2 p-2 absolute right-0 text-sm pointer-events-none [&>*]:pointer-events-auto z-10',
+          showPreview ? 'bottom-1' : 'bottom-[100px] sm:top-0',
           isEmbedded() && !isMobile() && 'sm:pr-6', // Fix buttons overlapping with scrollbar
         )}
       >
