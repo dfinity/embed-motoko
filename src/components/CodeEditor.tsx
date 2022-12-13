@@ -23,6 +23,7 @@ interface CodeEditorProps {
   readOnly?: boolean;
   options?: object;
   style?: React.CSSProperties;
+  extraWidth?: number;
 }
 
 export default function CodeEditor({
@@ -31,6 +32,7 @@ export default function CodeEditor({
   readOnly,
   options,
   style,
+  extraWidth,
   ...others
 }: CodeEditorProps) {
   const editorRef = (ref) => {
@@ -38,7 +40,7 @@ export default function CodeEditor({
       return;
     }
     const el = ref._input;
-    el.style.width = `${el.parentElement.scrollWidth}px`;
+    el.style.width = `${el.parentElement.scrollWidth + (extraWidth || 0)}px`;
   };
 
   return (
