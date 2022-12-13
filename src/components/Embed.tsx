@@ -183,9 +183,14 @@ export default function Embed() {
         className="overflow-y-auto"
         style={isMobile() ? {} : { height: `calc(100% - ${outputHeight}px)` }}
       >
-        <CodeEditor value={inputCode} onChange={handleChange} />
+        <CodeEditor value={inputCode} onChange={handleChange} extraWidth={12} />
       </div>
-      <div className="space-y-2 p-2 absolute right-0 bottom-[100px] text-sm hidden sm:block top-0 pointer-events-none [&>*]:pointer-events-auto z-10">
+      <div
+        className={classNames(
+          'space-y-2 p-2 absolute right-0 bottom-[100px] text-sm top-0 pointer-events-none [&>*]:pointer-events-auto z-10',
+          // isEmbedded() && 'hidden sm:block',
+        )}
+      >
         <Button
           tooltip="Copy permalink"
           className={classNames(changed && 'emphasized')}
