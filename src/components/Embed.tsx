@@ -185,7 +185,7 @@ export default function Embed() {
   const outputHeight = getOutputHeight();
 
   return (
-    <div className={classNames('relative w-full h-full overflow-hidden')}>
+    <div className="relative w-full h-full overflow-hidden">
       <div
         className="overflow-hidden sm:overflow-y-auto"
         style={
@@ -199,7 +199,7 @@ export default function Embed() {
       <div
         className={classNames(
           'space-y-2 p-2 absolute right-0 text-sm pointer-events-none [&>*]:pointer-events-auto z-10',
-          showPreview ? 'bottom-1' : 'bottom-[100px] sm:top-0',
+          showPreview ? 'bottom-1' : 'bottom-[100px] top-0',
           isEmbedded() && !isMobile() && 'sm:pr-6', // Fix buttons overlapping with scrollbar
         )}
       >
