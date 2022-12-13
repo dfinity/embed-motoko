@@ -3,15 +3,16 @@ import copy from 'copy-to-clipboard';
 import mo from 'motoko/interpreter';
 import motokoBasePackage from 'motoko/packages/latest/base.json';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { FaCode, FaLink, FaPause, FaPlay } from 'react-icons/fa';
+import { FaCode, FaLink, FaPause, FaPencilAlt, FaPlay } from 'react-icons/fa';
 import useChangedState from '../hooks/useChangedState';
 import useCodeState from '../hooks/useCodeState';
 import { getEmbedLink, parseEmbedLink } from '../services/embedLinkService';
 import { getEmbedHeight, getOutputHeight } from '../utils/getEmbedHeight';
+import isEmbedded from '../utils/isEmbedded';
+import isMobile from '../utils/isMobile';
 import preprocessMotoko from '../utils/preprocessMotoko';
 import Button from './Button';
 import CodeEditor, { EDITOR_FONT_SIZE } from './CodeEditor';
-import isMobile from '../utils/isMobile';
 
 mo.setRunStepLimit(100_000);
 
@@ -191,35 +192,49 @@ export default function Embed() {
           // isEmbedded() && 'hidden sm:block',
         )}
       >
-        <Button
-          tooltip="Copy permalink"
-          className={classNames(changed && 'emphasized')}
-          onClick={copyEmbedLink}
-        >
-          <FaLink />
-        </Button>
-        <Button
-          // tooltip="Embed this code snippet"
-          tooltip="Copy embed snippet"
-          className={classNames(changed && 'emphasized')}
-          onClick={copyFrameSnippet}
-        >
-          <FaCode />
-        </Button>
-        <Button
-          tooltip={autoRun ? 'Pause' : 'Load packages and evaluate'}
-          className={classNames(
-            (packages.length === 0 || !changed) && 'hidden',
-            !autoRun && '!bg-green-600',
-          )}
-          onClick={() => (autoRun ? setAutoRun(false) : updatePackages())}
-        >
-          {autoRun ? (
-            <FaPause />
-          ) : (
-            <FaPlay className="translate-x-[2px] text-green-600" />
-          )}
-        </Button>
+        {isEmbedded() && isMobile() ? (
+          <>
+            <Button
+              tooltip="Edit and run"
+              className=""
+              onClick={() => window.open(window.location.href)}
+            >
+              <FaPencilAlt />
+            </Button>
+          </>
+        ) : (
+          <>
+            <Button
+              tooltip="Copy permalink"
+              className={classNames(changed && 'emphasized')}
+              onClick={copyEmbedLink}
+            >
+              <FaLink />
+            </Button>
+            <Button
+              // tooltip="Embed this code snippet"
+              tooltip="Copy embed snippet"
+              className={classNames(changed && 'emphasized')}
+              onClick={copyFrameSnippet}
+            >
+              <FaCode />
+            </Button>
+            <Button
+              tooltip={autoRun ? 'Pause' : 'Load packages and evaluate'}
+              className={classNames(
+                (packages.length === 0 || !changed) && 'hidden',
+                !autoRun && '!bg-green-600',
+              )}
+              onClick={() => (autoRun ? setAutoRun(false) : updatePackages())}
+            >
+              {autoRun ? (
+                <FaPause />
+              ) : (
+                <FaPlay className="translate-x-[2px] text-green-600" />
+              )}
+            </Button>
+          </>
+        )}
       </div>
       <div
         className="output"
