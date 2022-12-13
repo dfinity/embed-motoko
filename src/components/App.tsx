@@ -15,6 +15,13 @@ export default function App() {
       ) : (
         <LandingPage />
       )}
+      <iframe
+        src="http://localhost:3000"
+        width="100%"
+        height="100"
+        style={{ border: 0 }}
+        title="Motoko code snippet"
+      />
     </>
   );
 }
