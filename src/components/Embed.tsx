@@ -185,10 +185,7 @@ export default function Embed() {
   const outputHeight = getOutputHeight();
 
   return (
-    <div
-      className={classNames('relative w-full h-full overflow-hidden')}
-      // style={{ maxHeight: !!limitHeight && getEmbedHeight(lineCount) }}
-    >
+    <div className={classNames('relative w-full h-full overflow-hidden')}>
       <div
         className="overflow-hidden sm:overflow-y-auto"
         style={
