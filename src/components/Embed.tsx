@@ -3,7 +3,7 @@ import copy from 'copy-to-clipboard';
 import mo from 'motoko/interpreter';
 import motokoBasePackage from 'motoko/packages/latest/base.json';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { FaCode, FaExpandAlt, FaLink, FaPause, FaPlay } from 'react-icons/fa';
+import { FaCode, FaLink, FaPause, FaPlay } from 'react-icons/fa';
 import useChangedState from '../hooks/useChangedState';
 import useCodeState from '../hooks/useCodeState';
 import { getEmbedLink, parseEmbedLink } from '../services/embedLinkService';
@@ -39,7 +39,9 @@ export default function Embed() {
   const [loading, setLoading] = useState(false);
   const [_output, setOutput] = useState<Partial<ReturnType<typeof mo.run>>>({});
 
-  const output = autoRun ? _output : {};
+  const showPreview = isEmbedded() && isMobile();
+
+  const output = autoRun && !showPreview ? _output : {};
 
   const { code, attributes /* , lineCount */ } = useMemo(() => {
     return preprocessMotoko(inputCode || '');
@@ -118,7 +120,7 @@ export default function Embed() {
   }, [code, autoRun]);
 
   const handleCopy = useCallback(
-    (fn: (link: string) => string) => {
+    (fn?: (link: string) => string): string | undefined => {
       try {
         const link = getEmbedLink({
           language: defaultLanguage,
@@ -127,13 +129,16 @@ export default function Embed() {
         if (link.length >= 2000) {
           setMessage('Your code is too long to fit into a URL!');
         } else {
-          const message = fn(link);
-          if (link !== window.location.href) {
-            window.history.pushState?.({}, '', link);
+          if (fn) {
+            const message = fn(link);
+            if (link !== window.location.href) {
+              window.history.pushState?.({}, '', link);
+            }
+            const result = parseEmbedLink(link);
+            setInputCode(result.code);
+            setMessage(message);
           }
-          const result = parseEmbedLink(link);
-          setInputCode(result.code);
-          setMessage(message);
+          return link;
         }
       } catch (err) {
         console.error(err);
@@ -146,7 +151,7 @@ export default function Embed() {
   const copyEmbedLink = useCallback(() => {
     handleCopy((link) => {
       copy(link);
-      return 'Copied link to clipboard. Paste into a Medium article to embed this code snippet!';
+      return 'Copied link to clipboard.\nPaste into a Medium article to embed this code snippet!';
     });
   }, [handleCopy]);
 
@@ -173,18 +178,21 @@ export default function Embed() {
     [setInputCode],
   );
 
+  const openFromPreview = () => {
+    window.open(handleCopy() || window.location.href);
+  };
+
   const outputHeight = getOutputHeight();
 
-  const showEditButton = isEmbedded() && isMobile();
-
   return (
-    <div
-      className={classNames('relative w-full h-full overflow-hidden')}
-      // style={{ maxHeight: !!limitHeight && getEmbedHeight(lineCount) }}
-    >
+    <div className={classNames('relative w-full h-full overflow-hidden')}>
       <div
         className="overflow-hidden sm:overflow-y-auto"
-        style={isMobile() ? {} : { height: `calc(100% - ${outputHeight}px)` }}
+        style={
+          isMobile()
+            ? { height: '100%' }
+            : { height: `calc(100% - ${outputHeight}px)` }
+        }
       >
         <CodeEditor value={inputCode} onChange={handleChange} />
       </div>
@@ -194,20 +202,20 @@ export default function Embed() {
           isEmbedded() && !isMobile() && 'sm:pr-6', // Fix buttons overlapping with scrollbar
         )}
       >
-        {showEditButton ? (
+        {showPreview ? (
           <>
             <Button
-              tooltip="Open in new tab"
+              tooltip="Run code snippet"
               className=""
-              onClick={() => window.open(window.location.href)}
+              onClick={openFromPreview}
             >
-              <FaExpandAlt />
+              <FaPlay className="translate-x-[1px]" />
             </Button>
           </>
         ) : (
           <>
             <Button
-              tooltip="Copy permalink"
+              tooltip="Copy embed link"
               className={classNames(changed && 'emphasized')}
               onClick={copyEmbedLink}
             >
@@ -215,7 +223,7 @@ export default function Embed() {
             </Button>
             <Button
               // tooltip="Embed this code snippet"
-              tooltip="Copy embed snippet"
+              tooltip="Copy HTML snippet"
               className={classNames(changed && 'emphasized')}
               onClick={copyFrameSnippet}
             >
@@ -232,52 +240,55 @@ export default function Embed() {
               {autoRun ? (
                 <FaPause />
               ) : (
-                <FaPlay className="translate-x-[2px] text-green-600" />
+                <FaPlay className="translate-x-[1px] text-green-600" />
               )}
             </Button>
           </>
         )}
       </div>
-      <div
-        className="output"
-        style={{
-          fontSize: EDITOR_FONT_SIZE,
-          padding: '14px',
-          paddingBottom: 0,
-          textAlign: 'left',
-          maxWidth: '100vw',
-          height: outputHeight,
-          overflowY: 'auto',
-        }}
-      >
-        {message ? (
-          <pre style={{ color: 'white' }}>&gt; {message}</pre>
-        ) : (
-          <>
-            {output?.stderr ? (
-              <pre
-                style={{
-                  color: '#F15A24',
-                  opacity: 0.8,
-                }}
-              >
-                {output.stderr}
-              </pre>
-            ) : (
-              typeof output?.stdout === 'string' && (
+      {!!showPreview ? (
+        <div className="partial-view" />
+      ) : (
+        <div
+          className="output"
+          style={{
+            fontSize: EDITOR_FONT_SIZE,
+            padding: '14px',
+            paddingBottom: 0,
+            textAlign: 'left',
+            maxWidth: '100vw',
+            height: outputHeight,
+            overflowY: 'auto',
+          }}
+        >
+          {message ? (
+            <pre style={{ color: 'white' }}>&gt; {message}</pre>
+          ) : (
+            <>
+              {output?.stderr ? (
                 <pre
                   style={{
-                    color: !output.stdout ? '#FFF5' : '#29E249',
+                    color: '#F15A24',
+                    opacity: 0.8,
                   }}
                 >
-                  {output.stdout || '()'}
+                  {output.stderr}
                 </pre>
-              )
-            )}
-          </>
-        )}
-      </div>
-      {showEditButton && <div className="partial-view" />}
+              ) : (
+                typeof output?.stdout === 'string' && (
+                  <pre
+                    style={{
+                      color: !output.stdout ? '#FFF5' : '#29E249',
+                    }}
+                  >
+                    {output.stdout || '()'}
+                  </pre>
+                )
+              )}
+            </>
+          )}
+        </div>
+      )}
     </div>
   );
 }
