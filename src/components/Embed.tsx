@@ -206,7 +206,7 @@ export default function Embed() {
           <>
             <Button
               tooltip="Run code snippet"
-              className=""
+              className={classNames(changed && 'emphasized')}
               onClick={openFromPreview}
             >
               <FaPlay className="translate-x-[1px]" />
