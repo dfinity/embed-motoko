@@ -175,19 +175,18 @@ export default function Embed() {
 
   const outputHeight = getOutputHeight();
 
-  // Encourage the user to navigate to a full-page version of the snippet
   const showEditButton = isEmbedded() && isMobile();
 
   return (
     <div
-      className={classNames('relative w-full h-full')}
+      className={classNames('relative w-full h-full overflow-hidden')}
       // style={{ maxHeight: !!limitHeight && getEmbedHeight(lineCount) }}
     >
       <div
-        className="overflow-y-auto"
+        className="overflow-hidden sm:overflow-y-auto"
         style={isMobile() ? {} : { height: `calc(100% - ${outputHeight}px)` }}
       >
-        <CodeEditor value={inputCode} onChange={handleChange} extraWidth={12} />
+        <CodeEditor value={inputCode} onChange={handleChange} />
       </div>
       <div
         className={classNames(
