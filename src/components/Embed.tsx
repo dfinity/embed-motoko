@@ -3,7 +3,7 @@ import copy from 'copy-to-clipboard';
 import mo from 'motoko/interpreter';
 import motokoBasePackage from 'motoko/packages/latest/base.json';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { FaCode, FaLink, FaPause, FaPencilAlt, FaPlay } from 'react-icons/fa';
+import { FaCode, FaExpandAlt, FaLink, FaPause, FaPlay } from 'react-icons/fa';
 import useChangedState from '../hooks/useChangedState';
 import useCodeState from '../hooks/useCodeState';
 import { getEmbedLink, parseEmbedLink } from '../services/embedLinkService';
@@ -197,11 +197,11 @@ export default function Embed() {
         {showEditButton ? (
           <>
             <Button
-              tooltip="Edit and run"
+              tooltip="Open in new tab"
               className=""
               onClick={() => window.open(window.location.href)}
             >
-              <FaPencilAlt />
+              <FaExpandAlt />
             </Button>
           </>
         ) : (
