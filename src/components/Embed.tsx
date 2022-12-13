@@ -175,9 +175,12 @@ export default function Embed() {
 
   const outputHeight = getOutputHeight();
 
+  // Encourage the user to navigate to a full-page version of the snippet
+  const showEditButton = isEmbedded() && isMobile();
+
   return (
     <div
-      className="relative w-full h-full"
+      className={classNames('relative w-full h-full')}
       // style={{ maxHeight: !!limitHeight && getEmbedHeight(lineCount) }}
     >
       <div
@@ -192,7 +195,7 @@ export default function Embed() {
           // isEmbedded() && 'hidden sm:block',
         )}
       >
-        {isEmbedded() && isMobile() ? (
+        {showEditButton ? (
           <>
             <Button
               tooltip="Edit and run"
@@ -275,6 +278,7 @@ export default function Embed() {
           </>
         )}
       </div>
+      {showEditButton && <div className="partial-view" />}
     </div>
   );
 }
