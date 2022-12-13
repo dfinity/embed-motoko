@@ -191,7 +191,11 @@ export default function Embed() {
     >
       <div
         className="overflow-hidden sm:overflow-y-auto"
-        style={isMobile() ? {} : { height: `calc(100% - ${outputHeight}px)` }}
+        style={
+          isMobile()
+            ? { height: '100%' }
+            : { height: `calc(100% - ${outputHeight}px)` }
+        }
       >
         <CodeEditor value={inputCode} onChange={handleChange} />
       </div>
