@@ -1,6 +1,6 @@
 # [Embed Motoko](https://embed.smartcontracts.org) &middot; [![GitHub license](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) [![Tests](https://img.shields.io/github/actions/workflow/status/dfinity/embed-motoko/tests.yml?branch=main&logo=github)](https://github.com/dfinity/embed-motoko/actions?query=workflow:"Tests") [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/dfinity/prettier-plugin-motoko/issues)
 
-> #### Embed interactive Motoko code snippets in your Medium article or website.
+> #### Embed interactive [Motoko](https://github.com/dfinity/motoko#readme) code snippets in your Medium article or website.
 
 ---
 
