@@ -18,7 +18,7 @@ exports.handler = async (event, context) => {
     };
   }
   const format = query.format;
-  const defaultWidth = 800;
+  const defaultWidth = 695; // DFINITY Dev Forum iframe width
   const width = +query.maxwidth || defaultWidth;
   let height = +query.maxheight || 500;
   try {
