@@ -1,7 +1,7 @@
-import { configure } from 'motoko/contrib/hljs';
+import defineMotoko from 'highlightjs-motoko';
 
 export default function configureHighlightJS(hljs: any) {
-  configure(hljs);
+  defineMotoko(hljs);
   hljs.configure({
     ignoreUnescapedHTML: true,
     languages: ['motoko', 'candid'],
