@@ -4,8 +4,11 @@ import SyntaxHighlighter from 'react-syntax-highlighter';
 import { githubGist as syntaxStyle } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import { FaCode, FaLink } from 'react-icons/fa';
 import { SiMedium, SiWordpress } from 'react-icons/si';
+// @ts-ignore
 import motokoFlatImage from '../assets/motoko-flat.png?width=144&height=144&webp';
+// @ts-ignore
 import motokoColorImage from '../assets/motoko-color.png?width=144&height=144&webp';
+// @ts-ignore
 import dfinityImage from '../assets/icp.png?webp';
 import Embed, { getEmbedSnippet } from './Embed';
 
