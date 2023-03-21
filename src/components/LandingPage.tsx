@@ -38,7 +38,6 @@ export default function LandingPage() {
                     className,
                   )}
                   alt=""
-                  rel="noreferrer"
                 />
               ))}
               Motoko
@@ -60,7 +59,7 @@ export default function LandingPage() {
                 boxShadow: '0 0 20px #CCC',
               }}
             >
-              <Embed limitHeight={true} />
+              <Embed />
             </div>
           </div>
           <div className="mt-4 sm:px-4 w-full">

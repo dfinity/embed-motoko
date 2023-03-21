@@ -18,12 +18,12 @@ mo.setRunStepLimit(100_000);
 
 const defaultLanguage = 'motoko'; // TODO: refactor
 
-export const getEmbedSnippet = (src) =>
+export const getEmbedSnippet = (src?: string | undefined) =>
   `
 <iframe
   src="${src || 'https://embed.smartcontracts.org'}"
   width="100%"
-  height="${getEmbedHeight(Number(/[?&]lines=([0-9]+)/.exec(src)?.[1]))}"
+  height="${getEmbedHeight(Number(/[?&]lines=([0-9]+)/.exec(src || '')?.[1]))}"
   style="border:0"
   title="Motoko code snippet"
 />
