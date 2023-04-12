@@ -266,7 +266,20 @@ export default function Embed() {
             <pre style={{ color: 'white' }}>&gt; {message}</pre>
           ) : (
             <>
-              {output?.stderr ? (
+              {!!output?.stdout && typeof output?.stdout === 'string' && (
+                <pre
+                  style={{
+                    color: output?.stderr
+                      ? '#DDD'
+                      : !output.stdout
+                      ? '#FFF5'
+                      : '#29E249',
+                  }}
+                >
+                  {output.stdout || '()'}
+                </pre>
+              )}
+              {!!output?.stderr && (
                 <pre
                   style={{
                     color: '#F15A24',
@@ -275,16 +288,6 @@ export default function Embed() {
                 >
                   {output.stderr}
                 </pre>
-              ) : (
-                typeof output?.stdout === 'string' && (
-                  <pre
-                    style={{
-                      color: !output.stdout ? '#FFF5' : '#29E249',
-                    }}
-                  >
-                    {output.stdout || '()'}
-                  </pre>
-                )
               )}
             </>
           )}
