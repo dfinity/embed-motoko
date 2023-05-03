@@ -57,9 +57,11 @@ export default function LandingPage() {
               src={window.location.href}
             /> */}
             <div
-              className="mx-auto rounded overflow-hidden"
+              className="min-w-full min-h-[360px] rounded overflow-auto sm:resize"
               style={{
                 boxShadow: '0 0 20px #CCC',
+                marginLeft: '50%',
+                transform: 'translateX(-50%)',
               }}
             >
               <Embed />
