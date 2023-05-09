@@ -57,7 +57,7 @@ export default function LandingPage() {
               src={window.location.href}
             /> */}
             <div
-              className="min-w-full min-h-[360px] rounded overflow-auto sm:resize"
+              className="min-w-full min-h-[140px] rounded overflow-auto sm:resize"
               style={{
                 boxShadow: '0 0 20px #CCC',
                 marginLeft: '50%',
