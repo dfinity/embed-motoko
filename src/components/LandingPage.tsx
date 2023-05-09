@@ -48,14 +48,6 @@ export default function LandingPage() {
           </a>
           <hr className="w-full mb-3" />
           <div className="w-full py-4">
-            {/* <iframe
-              title="Embed Motoko"
-              className="w-full h-[480px] max-h-screen border-0 mx-auto rounded"
-              style={{
-                boxShadow: '0 0 20px #CCC',
-              }}
-              src={window.location.href}
-            /> */}
             <div
               className="min-w-full min-h-[140px] rounded overflow-auto sm:resize"
               style={{
