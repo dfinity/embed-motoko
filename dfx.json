@@ -1,0 +1,17 @@
+{
+  "canisters": {
+    "frontend": {
+      "dependencies": ["backend"],
+      "type": "assets",
+      "frontend": {
+        "entrypoint": "dist/index.html"
+      },
+      "source": ["dist/"]
+    }
+  },
+  "defaults": {
+    "build": {
+      "packtool": "npm run --silent sources"
+    }
+  }
+}
