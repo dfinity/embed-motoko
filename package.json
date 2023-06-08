@@ -8,6 +8,7 @@
     "start": "run-p frontend backend",
     "frontend": "vite --port 3000",
     "backend": "mo-dev --generate --deploy -y",
+    "build": "vite build",
     "test": "vitest run && mo-test",
     "test:watch": "vitest",
     "sources": "mops sources",
