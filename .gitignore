@@ -24,3 +24,9 @@ yarn-error.log*
 
 # local Netlify folder
 .netlify
+
+# canisters
+/src/declarations
+.dfx
+.vessel
+.mops
