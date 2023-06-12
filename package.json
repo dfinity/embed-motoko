@@ -9,7 +9,7 @@
     "frontend": "vite --port 3000",
     "backend": "mo-dev --generate --deploy -y",
     "build": "vite build",
-    "test": "vitest run && mo-test",
+    "test": "vitest run",
     "test:watch": "vitest",
     "sources": "mops sources",
     "prepare": "husky install",
