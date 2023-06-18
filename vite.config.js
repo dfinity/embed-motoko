@@ -3,6 +3,7 @@ import { defineConfig } from 'vite';
 import environment from 'vite-plugin-environment';
 import dotenv from 'dotenv';
 import { imagetools } from 'vite-imagetools';
+
 dotenv.config();
 
 export default defineConfig({
@@ -33,4 +34,11 @@ export default defineConfig({
     environment({ BACKEND_CANISTER_ID: '' }),
     imagetools(),
   ],
+  test: {
+    environment: 'jsdom',
+    setupFiles: './src/setupTests.ts',
+    coverage: {
+      reporter: ['text', 'json', 'html'],
+    },
+  },
 });
