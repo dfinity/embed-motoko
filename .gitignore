@@ -30,3 +30,10 @@ yarn-error.log*
 .dfx
 .vessel
 .mops
+
+# environment variables
+.env
+.env.local
+.env.development
+.env.test
+.env.production
