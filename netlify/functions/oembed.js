@@ -1,6 +1,6 @@
 // Generic oEmbed API endpoint (currently used by Embed.ly)
 
-const BASE_URL = 'https://embed.smartcontracts.org';
+const BASE_URL = 'https://embed.motoko.org';
 
 exports.handler = async (event, context) => {
   const query = event.queryStringParameters;
@@ -34,7 +34,7 @@ exports.handler = async (event, context) => {
   const result = {
     version: '1.0',
     provider_name: 'Embed Motoko',
-    provider_url: 'https://embed.smartcontracts.org',
+    provider_url: 'https://embed.motoko.org',
     type: 'rich',
     width,
     height,
