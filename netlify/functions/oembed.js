@@ -1,15 +1,21 @@
 // Generic oEmbed API endpoint (currently used by Embed.ly)
 
-const BASE_URL = 'https://embed.motoko.org';
+const BASE_URLS = [
+  'https://embed.motoko.org',
+  'https://embed.smartcontracts.org',
+];
 
 exports.handler = async (event, context) => {
   const query = event.queryStringParameters;
   const url = decodeURIComponent(query.url || '');
   if (
     !url ||
-    !url.startsWith(BASE_URL) ||
-    url.startsWith(`${BASE_URL}/api`) ||
-    url.includes('.', BASE_URL.length)
+    BASE_URLS.every(
+      (baseUrl) =>
+        !url.startsWith(baseUrl) ||
+        url.startsWith(`${baseUrl}/api`) ||
+        url.includes('.', baseUrl.length),
+    )
   ) {
     return {
       statusCode: 400,
