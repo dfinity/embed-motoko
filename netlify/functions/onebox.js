@@ -39,9 +39,9 @@ exports.handler = async (event, context) => {
     type: 'rich',
     width,
     height,
-    html: `<iframe src=${JSON.stringify(
+    html: `<iframe src="${encodeXML(
       url,
-    )} width="${width}" height="${height}" style="border:0" />`,
+    )}" width="${width}" height="${height}" style="border:0" />`,
   };
   return {
     statusCode: 200,
