@@ -1,21 +1,15 @@
 // Generic oEmbed API endpoint (currently used by Embed.ly)
 
-const BASE_URLS = [
-  'https://embed.motoko.org',
-  'https://embed.smartcontracts.org',
-];
+const BASE_URL = 'https://embed.motoko.org';
 
 exports.handler = async (event, context) => {
   const query = event.queryStringParameters;
   const url = decodeURIComponent(query.url || '');
   if (
     !url ||
-    BASE_URLS.every(
-      (baseUrl) =>
-        !url.startsWith(baseUrl) ||
-        url.startsWith(`${baseUrl}/api`) ||
-        url.includes('.', baseUrl.length),
-    )
+    !url.startsWith(BASE_URL) ||
+    url.startsWith(`${BASE_URL}/api`) ||
+    url.includes('.', BASE_URL.length)
   ) {
     return {
       statusCode: 400,
@@ -40,13 +34,13 @@ exports.handler = async (event, context) => {
   const result = {
     version: '1.0',
     provider_name: 'Embed Motoko',
-    provider_url: 'https://embed.smartcontracts.org',
+    provider_url: 'https://embed.motoko.org',
     type: 'rich',
     width,
     height,
-    html: `<iframe src=${JSON.stringify(
+    html: `<iframe src="${encodeXML(
       url,
-    )} width="${width}" height="${height}" style="border:0" />`,
+    )}" width="${width}" height="${height}" style="border:0" />`,
   };
   return {
     statusCode: 200,
