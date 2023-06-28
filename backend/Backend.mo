@@ -80,7 +80,7 @@ shared ({ caller = installer }) actor class Backend() {
     let width = Option.get(do ? { Nat.fromText(maxWidthParam!)! }, defaultWidth);
 
     let defaultHeight = Option.get(do ? { baseHeight + Nat.fromText(linesParam!)! * lineHeight }, 500);
-    let height = Option.get(do ? { Nat.min(Nat.fromText(maxWidthParam!)!, defaultHeight) }, defaultHeight);
+    let height = Option.get(do ? { Nat.min(Nat.fromText(maxHeightParam!)!, defaultHeight) }, defaultHeight);
 
     let widthText = Nat.toText(width);
     let heightText = Nat.toText(height);
