@@ -100,8 +100,8 @@ shared ({ caller = installer }) actor class Backend() {
             "<provider_name>Embed Motoko</provider_name>" #
             "<provider_url>https://embed.smartcontracts.org</provider_url>" #
             "<type>rich</type>" #
-            "<width>" # Utils.escapeXml(widthText) # "</width>" #
-            "<height>" # Utils.escapeXml(heightText) # "</height>" #
+            "<width>" # widthText # "</width>" #
+            "<height>" # heightText # "</height>" #
             "<html>" # iframeHtml # "</html>"
           ) #
           "</oembed>"
