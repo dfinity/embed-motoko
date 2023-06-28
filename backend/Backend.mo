@@ -1,5 +1,6 @@
-import Server "mo:server";
 import Text "mo:base/Text";
+import Server "mo:server";
+
 import Utils "./Utils";
 
 shared ({ caller = installer }) actor class Backend() {
