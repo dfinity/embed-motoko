@@ -87,10 +87,10 @@ shared ({ caller = installer }) actor class Backend() {
 
     let iframeHtml = (
       "<iframe" #
-      " src=" # Utils.escapeXml(url) #
-      " width=" # Utils.escapeXml(widthText) #
-      " height=" # Utils.escapeXml(heightText) #
-      " style=" # Utils.escapeXml("border:0") #
+      " src=" # Utils.escapeXmlAttr(url) #
+      " width=" # Utils.escapeXmlAttr(widthText) #
+      " height=" # Utils.escapeXmlAttr(heightText) #
+      " style=" # Utils.escapeXmlAttr("border:0") #
       " />"
     );
 
@@ -103,9 +103,9 @@ shared ({ caller = installer }) actor class Backend() {
             "<provider_name>Embed Motoko</provider_name>" #
             "<provider_url>https://embed.smartcontracts.org</provider_url>" #
             "<type>rich</type>" #
-            "<width>" # widthText # "</width>" #
-            "<height>" # heightText # "</height>" #
-            "<html>" # iframeHtml # "</html>"
+            "<width>" # Utils.escapeXml(widthText) # "</width>" #
+            "<height>" # Utils.escapeXml(heightText) # "</height>" #
+            "<html>" # Utils.escapeXml(iframeHtml) # "</html>"
           ) #
           "</oembed>"
         );
