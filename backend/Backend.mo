@@ -17,11 +17,11 @@ shared ({ caller = installer }) actor class Backend() {
     "https://embed.smartcontracts.org",
   ];
 
+  let cacheStrategy = #noCache;
+
   stable var serializedEntries : Server.SerializedEntries = ([], [], [installer]);
 
   var server = Server.Server({ serializedEntries });
-
-  let cacheStrategy = #default;
 
   func error(res : Server.ResponseClass, message : Text) : Response {
     res.send({
