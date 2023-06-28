@@ -120,8 +120,8 @@ shared ({ caller = installer }) actor class Backend() {
           ("provider_name", #String "Embed Motoko"),
           ("provider_url", #String "https://embed.smartcontracts.org"),
           ("type", #String "rich"),
-          ("width", #Number(width)),
-          ("height", #Number(height)),
+          ("width", #Number width),
+          ("height", #Number height),
           ("html", #String iframeHtml),
         ]);
         res.send({
