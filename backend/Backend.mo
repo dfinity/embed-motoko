@@ -1,11 +1,11 @@
 import Nat "mo:base/Nat";
-import Text "mo:base/Text";
 import Option "mo:base/Option";
-import Server "mo:server";
+import Text "mo:base/Text";
 import Json "mo:json/JSON";
+import Server "mo:server";
 
-import Utils "./Utils";
 import Types "./Types";
+import Utils "./Utils";
 
 shared ({ caller = installer }) actor class Backend() {
   type Response = Server.Response;
@@ -84,11 +84,12 @@ shared ({ caller = installer }) actor class Backend() {
     let heightText = Nat.toText(height);
 
     let iframeHtml = (
-      "<iframe " #
+      "<iframe" #
       " src=" # Utils.escapeXml(url) #
       " width=" # Utils.escapeXml(widthText) #
       " height=" # Utils.escapeXml(heightText) #
-      " style=\"border:0\" />"
+      " style=" # Utils.escapeXml("border:0") #
+      "/>"
     );
 
     switch format {
@@ -119,8 +120,8 @@ shared ({ caller = installer }) actor class Backend() {
           ("provider_name", #String "Embed Motoko"),
           ("provider_url", #String "https://embed.smartcontracts.org"),
           ("type", #String "rich"),
-          ("width", #Number width),
-          ("height", #Number height),
+          ("width", #Number(width)),
+          ("height", #Number(height)),
           ("html", #String iframeHtml),
         ]);
         res.send({
