@@ -23,39 +23,4 @@ module {
     t := Text.replace(t, #char '\'', "&apos;");
     "\"" # t # "\"";
   };
-
-  /// Finds a query parameter in a URI.
-  public func findQueryParam(uri : Text, param : Text) : ?Text {
-    // TODO: optimize with new Text and Array helper functions
-    let chars = param.chars();
-    var next = chars.next();
-    label main while true {
-      let ?nextChar = next else return null;
-      if (nextChar == '?' or nextChar == '&') {
-        // Check query parameter name
-        for (c in param.chars()) {
-          next := chars.next();
-          if (next != ?c) {
-            continue main;
-          };
-        };
-        // Check equals sign
-        if (chars.next() != ?'=') {
-          continue main;
-        };
-        return ?Text.fromIter({
-          next = func() : ?Char {
-            next := chars.next();
-            switch (next) {
-              case (?'&') null;
-              case c c;
-            };
-          };
-        });
-      };
-
-      next := chars.next();
-    };
-    null;
-  };
 };

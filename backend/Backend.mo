@@ -1,4 +1,6 @@
+import Nat "mo:base/Nat";
 import Text "mo:base/Text";
+import Option "mo:base/Option";
 import Server "mo:server";
 
 import Utils "./Utils";
@@ -12,32 +14,54 @@ shared ({ caller = installer }) actor class Backend() {
 
   var server = Server.Server({ serializedEntries });
 
+  func error(res : Server.ResponseClass, message : Text) : Response {
+    res.send({
+      status_code = 400;
+      headers = [("Content-Type", "text/plain")];
+      body = Text.encodeUtf8(message);
+      streaming_strategy = null;
+      cache_strategy = #default;
+    });
+  };
+
   func handleRequest(
     req : Server.Request,
     res : Server.ResponseClass,
-    width : Nat,
+    defaultWidth : Nat,
     baseHeight : Nat,
     lineHeight : Nat,
   ) : Response {
+    let ?urlParam = req.url.queryObj.get("key") else return error(res, "Expected `url` parameter");
+    let formatParam = req.url.queryObj.get("format");
+
+    let url = Utils.decodeUriComponent(urlParam);
+    let format = switch formatParam {
+      case (?"xml") #xml;
+      case (?"json") #json;
+      case _ return error(res, "Invalid response format");
+    };
+
+    let maxWidthParam = req.url.queryObj.get("maxwidth");
+    let maxHeightParam = req.url.queryObj.get("maxheight");
+    let linesParam = req.url.queryObj.get("lines");
+
+    let width = Option.get(do ? { Nat.fromText(maxWidthParam!)! }, defaultWidth);
+
+    let defaultHeight = Option.get(do ? { baseHeight + Nat.fromText(linesParam!)! * lineHeight }, 500);
+    let height = Option.get(do ? { Nat.max(Nat.fromText(maxWidthParam!)!, defaultHeight) }, defaultHeight);
+
+    let widthText = Nat.toText(width);
+    let heightText = Nat.toText(height);
+
     let body = (
-      "<!DOCTYPE html>" #
-      "<html lang=\"en\">" #
-      "<head>" #
-      "<meta charset=\"UTF-8\">" #
-      "<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">" #
-      "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">" #
-      "<title>Motoko Server SSR</title>" #
-      "<meta name=\"description\" content=\"Placeholder\">" #
-      "</head>" #
-      "  <body>" #
-      "    <h1>Hello, world!</h1>" #
-      "  </body>" #
-      "</html>"
+      "\nURL: " # url #
+      "\nWIDTH: " # widthText #
+      "\nHEIGHT: " #heightText
     );
 
     res.send({
       status_code = 200;
-      headers = [("Content-Type", "text/html")];
+      headers = [("Content-Type", "text/plain")];
       body = Text.encodeUtf8(body);
       streaming_strategy = null;
       cache_strategy = #default;
