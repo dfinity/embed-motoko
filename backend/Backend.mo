@@ -17,11 +17,12 @@ shared ({ caller = installer }) actor class Backend() {
     "https://embed.smartcontracts.org",
   ];
 
-  var serializedEntries : Server.SerializedEntries = ([], [], [installer]);
+  stable var serializedEntries : Server.SerializedEntries = ([], [], [installer]);
 
   var server = Server.Server({ serializedEntries });
 
-  let cacheStrategy = #default;
+  // let cacheStrategy = #default;
+  let cacheStrategy = #noCache;
 
   func error(res : Server.ResponseClass, message : Text) : Response {
     res.send({
@@ -159,15 +160,12 @@ shared ({ caller = installer }) actor class Backend() {
   public func http_request_update(req : HttpRequest) : async HttpResponse {
     server.http_request_update(req);
   };
-
   public func invalidate_cache() : async () {
     server.empty_cache();
   };
-
   system func preupgrade() {
     serializedEntries := server.entries();
   };
-
   system func postupgrade() {
     ignore server.cache.pruneAll();
   };
