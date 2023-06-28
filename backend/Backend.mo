@@ -82,30 +82,30 @@ shared ({ caller = installer }) actor class Backend() {
     let widthText = Nat.toText(width);
     let heightText = Nat.toText(height);
 
-    let body = (
-      "<oembed>" #
-      "<version>1.0</version>" #
-      "<provider_name>Embed Motoko</provider_name>" #
-      "<provider_url>https://embed.smartcontracts.org</provider_url>" #
-      "<type>rich</type>" #
-      "<width>" # Utils.escapeXml(widthText) # "</width>" #
-      "<height>" # Utils.escapeXml(heightText) # "</height>" #
-      "<html>" # (
-        "<iframe src=" #
-        Utils.escapeXml(url) #
-        " width=" #
-        Utils.escapeXml(widthText) #
-        " height=" #
-        Utils.escapeXml(heightText) #
-        " style=\"border:0\" />"
-      ) # "</html>" #
+    let xml = (
+      "<oembed>" # (
+        "<version>1.0</version>" #
+        "<provider_name>Embed Motoko</provider_name>" #
+        "<provider_url>https://embed.smartcontracts.org</provider_url>" #
+        "<type>rich</type>" #
+        "<width>" # Utils.escapeXml(widthText) # "</width>" #
+        "<height>" # Utils.escapeXml(heightText) # "</height>" #
+        "<html>" # (
+          "<iframe " #
+          " src=" # Utils.escapeXml(url) #
+          " width=" # Utils.escapeXml(widthText) #
+          " height=" # Utils.escapeXml(heightText) #
+          " style=\"border:0\" />"
+        ) #
+        "</html>"
+      ) #
       "</oembed>"
     );
 
     res.send({
       status_code = 200;
-      headers = [("Content-Type", "text/plain")];
-      body = Text.encodeUtf8(body);
+      headers = [("Content-Type", "text/xml")];
+      body = Text.encodeUtf8(xml);
       streaming_strategy = null;
       cache_strategy = #default;
     });
