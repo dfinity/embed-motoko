@@ -77,9 +77,10 @@ shared ({ caller = installer }) actor class Backend() {
     let maxHeightParam = req.url.queryObj.get("maxheight");
     let linesParam = req.url.queryObj.get("lines");
 
-    let width = Option.get(do ? { Nat.fromText(maxWidthParam!)! }, defaultWidth);
-
+    // Calculate default embed height based on number of lines in the code snippet
     let defaultHeight = Option.get(do ? { baseHeight + Nat.fromText(linesParam!)! * lineHeight }, 500);
+
+    let width = Option.get(do ? { Nat.fromText(maxWidthParam!)! }, defaultWidth);
     let height = Option.get(do ? { Nat.min(Nat.fromText(maxHeightParam!)!, defaultHeight) }, defaultHeight);
 
     let widthText = Nat.toText(width);
