@@ -21,8 +21,7 @@ shared ({ caller = installer }) actor class Backend() {
 
   var server = Server.Server({ serializedEntries });
 
-  // let cacheStrategy = #default;
-  let cacheStrategy = #noCache;
+  let cacheStrategy = #default;
 
   func error(res : Server.ResponseClass, message : Text) : Response {
     res.send({
