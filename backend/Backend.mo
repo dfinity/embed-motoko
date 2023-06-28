@@ -1,5 +1,6 @@
 import Server "mo:server";
 import Text "mo:base/Text";
+import Utils "./Utils";
 
 shared ({ caller = installer }) actor class Backend() {
   type Response = Server.Response;
@@ -10,50 +11,49 @@ shared ({ caller = installer }) actor class Backend() {
 
   var server = Server.Server({ serializedEntries });
 
-  let template = (
-    "<!DOCTYPE html>" #
-    "<html lang=\"en\">" #
-    "<head>" #
-    "<meta charset=\"UTF-8\">" #
-    "<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">" #
-    "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">" #
-    "<title>Motoko Server SSR</title>" #
-    "<meta name=\"description\" content=\"Placeholder\">" #
-    "</head>" #
-    "  <body>" #
-    "    <h1>Hello, world!</h1>" #
-    "  </body>" #
-    "</html>"
-  );
+  func handleRequest(
+    req : Server.Request,
+    res : Server.ResponseClass,
+    width : Nat,
+    baseHeight : Nat,
+    lineHeight : Nat,
+  ) : Response {
+    let body = (
+      "<!DOCTYPE html>" #
+      "<html lang=\"en\">" #
+      "<head>" #
+      "<meta charset=\"UTF-8\">" #
+      "<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">" #
+      "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">" #
+      "<title>Motoko Server SSR</title>" #
+      "<meta name=\"description\" content=\"Placeholder\">" #
+      "</head>" #
+      "  <body>" #
+      "    <h1>Hello, world!</h1>" #
+      "  </body>" #
+      "</html>"
+    );
+
+    res.send({
+      status_code = 200;
+      headers = [("Content-Type", "text/html")];
+      body = Text.encodeUtf8(body);
+      streaming_strategy = null;
+      cache_strategy = #default;
+    });
+  };
 
   server.get(
     "/services/oembed",
-    func(req, res) : Response {
-      let result = (
-        "<!DOCTYPE html>" #
-        "<html lang=\"en\">" #
-        "<head>" #
-        "<meta charset=\"UTF-8\">" #
-        "<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">" #
-        "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">" #
-        "<title>Motoko Server SSR</title>" #
-        "<meta name=\"description\" content=\"Placeholder\">" #
-        "</head>" #
-        "  <body>" #
-        "    <h1>Hello, world!</h1>" #
-        "  </body>" #
-        "</html>"
-      );
+    func(req, res) {
+      handleRequest(req, res, 800, 145, 28);
+    },
+  );
 
-      res.send({
-        status_code = 200;
-        headers = [("Content-Type", "text/html")];
-        body = Text.encodeUtf8(
-          template
-        );
-        streaming_strategy = null;
-        cache_strategy = #default;
-      });
+  server.get(
+    "/services/onebox",
+    func(req, res) {
+      handleRequest(req, res, 695, 120, 24);
     },
   );
 
