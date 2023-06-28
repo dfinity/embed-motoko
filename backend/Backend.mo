@@ -101,7 +101,7 @@ shared ({ caller = installer }) actor class Backend() {
           "<oembed>" # (
             "<version>1.0</version>" #
             "<provider_name>Embed Motoko</provider_name>" #
-            "<provider_url>https://embed.smartcontracts.org</provider_url>" #
+            "<provider_url>https://embed.motoko.org</provider_url>" #
             "<type>rich</type>" #
             "<width>" # Utils.escapeXml(widthText) # "</width>" #
             "<height>" # Utils.escapeXml(heightText) # "</height>" #
@@ -121,7 +121,7 @@ shared ({ caller = installer }) actor class Backend() {
         let json = #Object([
           ("version", #String "1.0"),
           ("provider_name", #String "Embed Motoko"),
-          ("provider_url", #String "https://embed.smartcontracts.org"),
+          ("provider_url", #String "https://embed.motoko.org"),
           ("type", #String "rich"),
           ("width", #Number width),
           ("height", #Number height),
