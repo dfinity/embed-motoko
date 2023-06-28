@@ -21,7 +21,7 @@ shared ({ caller = installer }) actor class Backend() {
 
   var server = Server.Server({ serializedEntries });
 
-  let cacheStrategy = #noCache; // TODO: cache?
+  let cacheStrategy = #default;
 
   func error(res : Server.ResponseClass, message : Text) : Response {
     res.send({
@@ -111,10 +111,8 @@ shared ({ caller = installer }) actor class Backend() {
         );
         res.send({
           status_code = 200;
-          // headers = [("Content-Type", "text/xml")];
-          // body = Text.encodeUtf8(xml);
-          headers = [("Content-Type", "text/plain")];
-          body = Text.encodeUtf8("ENCODED");
+          headers = [("Content-Type", "text/xml")];
+          body = Text.encodeUtf8(xml);
           streaming_strategy = null;
           cache_strategy = cacheStrategy;
         });
