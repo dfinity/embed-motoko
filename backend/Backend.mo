@@ -55,9 +55,23 @@ shared ({ caller = installer }) actor class Backend() {
     let heightText = Nat.toText(height);
 
     let body = (
-      "\nURL: " # url #
-      "\nWIDTH: " # widthText #
-      "\nHEIGHT: " #heightText
+      "<oembed>" #
+      "<version>1.0</version>" #
+      "<provider_name>Embed Motoko</provider_name>" #
+      "<provider_url>https://embed.smartcontracts.org</provider_url>" #
+      "<type>rich</type>" #
+      "<width>" # Utils.escapeXml(widthText) # "</width>" #
+      "<height>" # Utils.escapeXml(heightText) # "</height>" #
+      "<html>" # (
+        "<iframe src=" #
+        Utils.escapeXml(url) #
+        " width=" #
+        Utils.escapeXml(widthText) #
+        " height=" #
+        Utils.escapeXml(heightText) #
+        " style=\"border:0\" />"
+      ) # "</html>" #
+      "</oembed>"
     );
 
     res.send({
