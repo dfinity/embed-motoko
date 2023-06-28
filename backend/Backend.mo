@@ -32,7 +32,7 @@ shared ({ caller = installer }) actor class Backend() {
     baseHeight : Nat,
     lineHeight : Nat,
   ) : Response {
-    let ?urlParam = req.url.queryObj.get("key") else return error(res, "Expected `url` parameter");
+    let ?urlParam = req.url.queryObj.get("url") else return error(res, "Expected `url` parameter");
     let formatParam = req.url.queryObj.get("format");
 
     let url = Utils.decodeUriComponent(urlParam);
