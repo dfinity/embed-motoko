@@ -105,7 +105,6 @@ shared ({ caller = installer }) actor class Backend() {
           ) #
           "</oembed>"
         );
-
         res.send({
           status_code = 200;
           headers = [("Content-Type", "text/xml")];
