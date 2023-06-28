@@ -2,6 +2,7 @@ import Nat "mo:base/Nat";
 import Text "mo:base/Text";
 import Option "mo:base/Option";
 import Server "mo:server";
+import Json "mo:json/JSON";
 
 import Utils "./Utils";
 import Types "./Types";
@@ -82,33 +83,56 @@ shared ({ caller = installer }) actor class Backend() {
     let widthText = Nat.toText(width);
     let heightText = Nat.toText(height);
 
-    let xml = (
-      "<oembed>" # (
-        "<version>1.0</version>" #
-        "<provider_name>Embed Motoko</provider_name>" #
-        "<provider_url>https://embed.smartcontracts.org</provider_url>" #
-        "<type>rich</type>" #
-        "<width>" # Utils.escapeXml(widthText) # "</width>" #
-        "<height>" # Utils.escapeXml(heightText) # "</height>" #
-        "<html>" # (
-          "<iframe " #
-          " src=" # Utils.escapeXml(url) #
-          " width=" # Utils.escapeXml(widthText) #
-          " height=" # Utils.escapeXml(heightText) #
-          " style=\"border:0\" />"
-        ) #
-        "</html>"
-      ) #
-      "</oembed>"
+    let iframeHtml = (
+      "<iframe " #
+      " src=" # Utils.escapeXml(url) #
+      " width=" # Utils.escapeXml(widthText) #
+      " height=" # Utils.escapeXml(heightText) #
+      " style=\"border:0\" />"
     );
 
-    res.send({
-      status_code = 200;
-      headers = [("Content-Type", "text/xml")];
-      body = Text.encodeUtf8(xml);
-      streaming_strategy = null;
-      cache_strategy = #default;
-    });
+    switch format {
+      case (#xml) {
+        let xml = (
+          "<oembed>" # (
+            "<version>1.0</version>" #
+            "<provider_name>Embed Motoko</provider_name>" #
+            "<provider_url>https://embed.smartcontracts.org</provider_url>" #
+            "<type>rich</type>" #
+            "<width>" # Utils.escapeXml(widthText) # "</width>" #
+            "<height>" # Utils.escapeXml(heightText) # "</height>" #
+            "<html>" # iframeHtml # "</html>"
+          ) #
+          "</oembed>"
+        );
+
+        res.send({
+          status_code = 200;
+          headers = [("Content-Type", "text/xml")];
+          body = Text.encodeUtf8(xml);
+          streaming_strategy = null;
+          cache_strategy = #default;
+        });
+      };
+      case (#json) {
+        let json = #Object([
+          ("version", #String "1.0"),
+          ("provider_name", #String "Embed Motoko"),
+          ("provider_url", #String "https://embed.smartcontracts.org"),
+          ("type", #String "rich"),
+          ("width", #Number width),
+          ("height", #Number height),
+          ("html", #String iframeHtml),
+        ]);
+        res.send({
+          status_code = 200;
+          headers = [("Content-Type", "application/json")];
+          body = Text.encodeUtf8(Json.show(json));
+          streaming_strategy = null;
+          cache_strategy = #default;
+        });
+      };
+    };
   };
 
   server.get(

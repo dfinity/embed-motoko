@@ -1,5 +1,4 @@
-# Motoko dependencies (https://mops.one/)
-
 [dependencies]
 base = "0.9.1"
 server = "0.2.2"
+json = "0.1.2"
