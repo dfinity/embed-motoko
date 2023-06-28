@@ -11,6 +11,11 @@ shared ({ caller = installer }) actor class Backend() {
   type HttpRequest = Server.HttpRequest;
   type HttpResponse = Server.HttpResponse;
 
+  let baseUrls = [
+    "https://embed.motoko.org",
+    "https://embed.smartcontracts.org",
+  ];
+
   stable var serializedEntries : Server.SerializedEntries = ([], [], [installer]);
 
   var server = Server.Server({ serializedEntries });
@@ -33,9 +38,32 @@ shared ({ caller = installer }) actor class Backend() {
     lineHeight : Nat,
   ) : Response {
     let ?urlParam = req.url.queryObj.get("url") else return error(res, "Expected `url` parameter");
-    let formatParam = req.url.queryObj.get("format");
-
     let url = Utils.decodeUriComponent(urlParam);
+    var isAllowed = false;
+    label checkUrls for (baseUrl in baseUrls.vals()) {
+      if (
+        url == baseUrl or (
+          Text.startsWith(
+            url,
+            #text(baseUrl # "/"),
+          ) and not Text.startsWith(
+            url,
+            #text(baseUrl # "/api"),
+          ) and not Text.startsWith(
+            url,
+            #text(baseUrl # "/services"),
+          )
+        )
+      ) {
+        isAllowed := true;
+        break checkUrls;
+      };
+    };
+    if (not isAllowed) {
+      return error(res, "Invalid URL");
+    };
+
+    let formatParam = req.url.queryObj.get("format");
     let format : Types.Format = switch formatParam {
       case (?"xml") #xml;
       case (?"json") #json;
