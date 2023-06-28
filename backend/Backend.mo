@@ -17,7 +17,8 @@ shared ({ caller = installer }) actor class Backend() {
     "https://embed.smartcontracts.org",
   ];
 
-  stable var serializedEntries : Server.SerializedEntries = ([], [], [installer]);
+  // stable var serializedEntries : Server.SerializedEntries = ([], [], [installer]);
+  var serializedEntries : Server.SerializedEntries = ([], [], [installer]);
 
   var server = Server.Server({ serializedEntries });
 
