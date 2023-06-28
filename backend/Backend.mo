@@ -21,13 +21,15 @@ shared ({ caller = installer }) actor class Backend() {
 
   var server = Server.Server({ serializedEntries });
 
+  let cacheStrategy = #noCache; // TODO: cache?
+
   func error(res : Server.ResponseClass, message : Text) : Response {
     res.send({
       status_code = 400;
       headers = [("Content-Type", "text/plain")];
       body = Text.encodeUtf8(message);
       streaming_strategy = null;
-      cache_strategy = #default;
+      cache_strategy = cacheStrategy;
     });
   };
 
@@ -95,6 +97,7 @@ shared ({ caller = installer }) actor class Backend() {
     switch format {
       case (#xml) {
         let xml = (
+          "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"?>" #
           "<oembed>" # (
             "<version>1.0</version>" #
             "<provider_name>Embed Motoko</provider_name>" #
@@ -108,10 +111,12 @@ shared ({ caller = installer }) actor class Backend() {
         );
         res.send({
           status_code = 200;
-          headers = [("Content-Type", "text/xml")];
-          body = Text.encodeUtf8(xml);
+          // headers = [("Content-Type", "text/xml")];
+          // body = Text.encodeUtf8(xml);
+          headers = [("Content-Type", "text/plain")];
+          body = Text.encodeUtf8("ENCODED");
           streaming_strategy = null;
-          cache_strategy = #default;
+          cache_strategy = cacheStrategy;
         });
       };
       case (#json) {
@@ -129,7 +134,7 @@ shared ({ caller = installer }) actor class Backend() {
           headers = [("Content-Type", "application/json")];
           body = Text.encodeUtf8(Json.show(json));
           streaming_strategy = null;
-          cache_strategy = #default;
+          cache_strategy = cacheStrategy;
         });
       };
     };
