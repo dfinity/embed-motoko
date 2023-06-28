@@ -128,10 +128,9 @@ shared ({ caller = installer }) actor class Backend() {
           ("height", #Number height),
           ("html", #String iframeHtml),
         ]);
-        res.send({
+        res.json({
           status_code = 200;
-          headers = [("Content-Type", "application/json")];
-          body = Text.encodeUtf8(Json.show(json));
+          body = Json.show(json);
           streaming_strategy = null;
           cache_strategy = cacheStrategy;
         });
