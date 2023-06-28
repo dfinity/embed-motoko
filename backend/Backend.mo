@@ -17,7 +17,6 @@ shared ({ caller = installer }) actor class Backend() {
     "https://embed.smartcontracts.org",
   ];
 
-  // stable var serializedEntries : Server.SerializedEntries = ([], [], [installer]);
   var serializedEntries : Server.SerializedEntries = ([], [], [installer]);
 
   var server = Server.Server({ serializedEntries });
@@ -92,7 +91,7 @@ shared ({ caller = installer }) actor class Backend() {
       " width=" # Utils.escapeXml(widthText) #
       " height=" # Utils.escapeXml(heightText) #
       " style=" # Utils.escapeXml("border:0") #
-      "/>"
+      " />"
     );
 
     switch format {
