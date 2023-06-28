@@ -4,6 +4,7 @@ import Option "mo:base/Option";
 import Server "mo:server";
 
 import Utils "./Utils";
+import Types "./Types";
 
 shared ({ caller = installer }) actor class Backend() {
   type Response = Server.Response;
@@ -35,7 +36,7 @@ shared ({ caller = installer }) actor class Backend() {
     let formatParam = req.url.queryObj.get("format");
 
     let url = Utils.decodeUriComponent(urlParam);
-    let format = switch formatParam {
+    let format : Types.Format = switch formatParam {
       case (?"xml") #xml;
       case (?"json") #json;
       case _ return error(res, "Invalid response format");

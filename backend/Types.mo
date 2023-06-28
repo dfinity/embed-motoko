@@ -1,3 +1,3 @@
 module {
-  type Format = { #xml; #json };
+  public type Format = { #xml; #json };
 };
