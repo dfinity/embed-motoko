@@ -40,8 +40,7 @@ shared ({ caller = installer }) actor class Backend() {
     baseHeight : Nat,
     lineHeight : Nat,
   ) : Response {
-    let ?urlParam = req.url.queryObj.get("url") else return error(res, "Expected `url` parameter");
-    let url = Utils.decodeUriComponent(urlParam);
+    let ?url = req.url.queryObj.get("url") else return error(res, "Expected `url` parameter");
     var isAllowed = false;
     label checkUrls for (baseUrl in baseUrls.vals()) {
       if (

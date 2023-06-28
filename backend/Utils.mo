@@ -1,17 +1,6 @@
 import Text "mo:base/Text";
 
 module {
-  /// Partial implementation of `decodeURIComponent()` from JavaScript.
-  public func decodeUriComponent(uri : Text) : Text {
-    // TODO: replace with pipe operator
-    var t = uri;
-    t := Text.replace(t, #text "%26", "&");
-    t := Text.replace(t, #text "%2F", "/");
-    t := Text.replace(t, #text "%3A", ":");
-    t := Text.replace(t, #text "%3F", "?");
-    t;
-  };
-
   /// Returns an escaped XML text.
   public func escapeXml(xml : Text) : Text {
     // TODO: replace with pipe operator
