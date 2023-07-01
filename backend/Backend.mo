@@ -7,7 +7,7 @@ import HttpParser "mo:http-parser.mo";
 import Types "./Types";
 import Utils "./Utils";
 
-shared ({ caller = installer }) actor class Backend() {
+actor class Backend() {
   type Request = HttpParser.ParsedHttpRequest;
   type HttpRequest = HttpParser.HttpRequest;
   type HttpResponse = HttpParser.HttpResponse;
