@@ -2,45 +2,39 @@ import Nat "mo:base/Nat";
 import Option "mo:base/Option";
 import Text "mo:base/Text";
 import Json "mo:json/JSON";
-import Server "mo:server";
+import HttpParser "mo:http-parser.mo";
 
 import Types "./Types";
 import Utils "./Utils";
 
 shared ({ caller = installer }) actor class Backend() {
-  type Response = Server.Response;
-  type HttpRequest = Server.HttpRequest;
-  type HttpResponse = Server.HttpResponse;
+  type Request = HttpParser.ParsedHttpRequest;
+  type HttpRequest = HttpParser.HttpRequest;
+  type HttpResponse = HttpParser.HttpResponse;
 
   let baseUrls = [
     "https://embed.motoko.org",
     "https://embed.smartcontracts.org",
   ];
 
-  let cacheStrategy = #noCache;
-
-  stable var serializedEntries : Server.SerializedEntries = ([], [], [installer]);
-
-  var server = Server.Server({ serializedEntries });
-
-  func error(res : Server.ResponseClass, message : Text) : Response {
-    res.send({
+  func error(message : Text) : HttpResponse {
+    {
       status_code = 400;
       headers = [("Content-Type", "text/plain")];
       body = Text.encodeUtf8(message);
       streaming_strategy = null;
-      cache_strategy = cacheStrategy;
-    });
+      cache_strategy = #noCache;
+      upgrade = null;
+    };
   };
 
   func handleRequest(
-    req : Server.Request,
-    res : Server.ResponseClass,
+    req : Request,
     defaultWidth : Nat,
     baseHeight : Nat,
     lineHeight : Nat,
-  ) : Response {
-    let ?url = req.url.queryObj.get("url") else return error(res, "Expected `url` parameter");
+  ) : HttpResponse {
+    let ?url = req.url.queryObj.get("url") else return error("Expected `url` parameter");
     var isAllowed = false;
     label checkUrls for (baseUrl in baseUrls.vals()) {
       if (
@@ -62,14 +56,14 @@ shared ({ caller = installer }) actor class Backend() {
       };
     };
     if (not isAllowed) {
-      return error(res, "Invalid URL");
+      return error("Invalid URL");
     };
 
     let formatParam = req.url.queryObj.get("format");
     let format : Types.Format = switch formatParam {
       case (?"xml") #xml;
       case (?"json") #json;
-      case _ return error(res, "Invalid response format");
+      case _ return error("Invalid response format");
     };
 
     let maxWidthParam = req.url.queryObj.get("maxwidth");
@@ -109,13 +103,14 @@ shared ({ caller = installer }) actor class Backend() {
           ) #
           "</oembed>"
         );
-        res.send({
+        return {
           status_code = 200;
           headers = [("Content-Type", "text/xml")];
           body = Text.encodeUtf8(xml);
           streaming_strategy = null;
-          cache_strategy = cacheStrategy;
-        });
+          cache_strategy = #noCache;
+          upgrade = null;
+        };
       };
       case (#json) {
         let json = #Object([
@@ -127,43 +122,37 @@ shared ({ caller = installer }) actor class Backend() {
           ("height", #Number height),
           ("html", #String iframeHtml),
         ]);
-        res.json({
+        {
           status_code = 200;
-          body = Json.show(json);
+          headers = [("Content-Type", "application/json")];
+          body = Text.encodeUtf8(Json.show(json));
           streaming_strategy = null;
-          cache_strategy = cacheStrategy;
-        });
+          cache_strategy = #noCache;
+          upgrade = null;
+        };
       };
     };
   };
 
-  server.get(
-    "/services/oembed",
-    func(req, res) {
-      handleRequest(req, res, 800, 145, 28);
-    },
-  );
+  public query func http_request(request : HttpRequest) : async HttpResponse {
+    let req = HttpParser.parse(request);
 
-  server.get(
-    "/services/onebox",
-    func(req, res) {
-      handleRequest(req, res, 695, 120, 24);
-    },
-  );
-
-  public query func http_request(req : HttpRequest) : async HttpResponse {
-    server.http_request(req);
-  };
-  public func http_request_update(req : HttpRequest) : async HttpResponse {
-    server.http_request_update(req);
-  };
-  public func invalidate_cache() : async () {
-    server.empty_cache();
-  };
-  system func preupgrade() {
-    serializedEntries := server.entries();
-  };
-  system func postupgrade() {
-    ignore server.cache.pruneAll();
+    switch (req.url.path.original) {
+      case "/services/oembed" {
+        handleRequest(req, 800, 145, 28);
+      };
+      case "/services/onebox" {
+        handleRequest(req, 695, 120, 24);
+      };
+      case _ {
+        {
+          headers = [("Content-Type", "text/plain")];
+          body = "Not found";
+          status_code = 404;
+          streaming_strategy = null;
+          upgrade = null;
+        };
+      };
+    };
   };
 };
