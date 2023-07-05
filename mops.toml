@@ -1,5 +1,4 @@
-# Motoko dependencies (https://mops.one/)
-
 [dependencies]
 base = "0.9.1"
-# server = "0.2.2"
+"http-parser.mo" = "https://github.com/NatLabs/http-parser.mo#v0.1.2"
+json = "https://github.com/aviate-labs/json.mo#v0.2.0"
