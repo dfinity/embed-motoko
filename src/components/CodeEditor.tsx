@@ -9,7 +9,7 @@ configureHighlightJS(hljs);
 
 export const EDITOR_FONT_SIZE = isMobile() ? 14 : 16;
 
-const hightlightWithLineNumbers = (input: string, language: string) => {
+const highlightWithLineNumbers = (input: string, language: string) => {
   return hljs
     .highlight(input, { language })
     .value.split('\n')
@@ -47,7 +47,7 @@ export default function CodeEditor({
       placeholder="Write some Motoko..."
       value={value}
       onValueChange={(value) => onChange?.(value)}
-      highlight={(code) => hightlightWithLineNumbers(code, 'motoko')}
+      highlight={(code) => highlightWithLineNumbers(code, 'motoko')}
       padding={10}
       textareaClassName="code-area"
       className="code-editor font-mono bg-white"

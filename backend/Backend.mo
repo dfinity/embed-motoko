@@ -63,6 +63,7 @@ actor class Backend() {
     let format : Types.Format = switch formatParam {
       case (?"xml") #xml;
       case (?"json") #json;
+      case null #json;
       case _ return error("Invalid response format");
     };
 
