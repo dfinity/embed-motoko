@@ -21,7 +21,7 @@ const defaultLanguage = 'motoko'; // TODO: refactor
 export const getEmbedSnippet = (src?: string | undefined) =>
   `
 <iframe
-  src="${src || 'https://embed.smartcontracts.org'}"
+  src="${src || 'https://embed.motoko.org'}"
   width="100%"
   height="${getEmbedHeight(Number(/[?&]lines=([0-9]+)/.exec(src || '')?.[1]))}"
   style="border:0"
