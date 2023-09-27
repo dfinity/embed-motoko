@@ -139,6 +139,16 @@ actor class Backend() {
     let req = HttpParser.parse(request);
 
     switch (req.url.path.original) {
+      case "/.well-known/ic-domains" {
+        return {
+          status_code = 200;
+          headers = [("Content-Type", "text/plain")];
+          body = Text.encodeUtf8("embed.smartcontracts.org\n");
+          streaming_strategy = null;
+          cache_strategy = #default;
+          upgrade = null;
+        };
+      };
       case "/services/oembed" {
         handleRequest(req, 800, 145, 28);
       };
