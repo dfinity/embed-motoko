@@ -22,9 +22,6 @@ actor class Backend() {
       status_code = 400;
       headers = [("Content-Type", "text/plain")];
       body = Text.encodeUtf8(message);
-      streaming_strategy = null;
-      cache_strategy = #noCache;
-      upgrade = null;
     };
   };
 
@@ -108,9 +105,6 @@ actor class Backend() {
           status_code = 200;
           headers = [("Content-Type", "text/xml")];
           body = Text.encodeUtf8(xml);
-          streaming_strategy = null;
-          cache_strategy = #noCache;
-          upgrade = null;
         };
       };
       case (#json) {
@@ -127,9 +121,6 @@ actor class Backend() {
           status_code = 200;
           headers = [("Content-Type", "application/json")];
           body = Text.encodeUtf8(Json.show(json));
-          streaming_strategy = null;
-          cache_strategy = #noCache;
-          upgrade = null;
         };
       };
     };
@@ -144,9 +135,6 @@ actor class Backend() {
           status_code = 200;
           headers = [("Content-Type", "text/plain")];
           body = Text.encodeUtf8("embed.smartcontracts.org\n");
-          streaming_strategy = null;
-          cache_strategy = #default;
-          upgrade = null;
         };
       };
       case "/services/oembed" {
@@ -160,8 +148,6 @@ actor class Backend() {
           headers = [("Content-Type", "text/plain")];
           body = "Not found";
           status_code = 404;
-          streaming_strategy = null;
-          upgrade = null;
         };
       };
     };
