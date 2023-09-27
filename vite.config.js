@@ -7,9 +7,8 @@ import { imagetools } from 'vite-imagetools';
 dotenv.config();
 
 export default defineConfig({
-  root: 'src',
   build: {
-    outDir: '../dist',
+    outDir: 'dist',
     emptyOutDir: true,
   },
   optimizeDeps: {
@@ -36,7 +35,7 @@ export default defineConfig({
   ],
   test: {
     environment: 'jsdom',
-    setupFiles: './setupTests.ts',
+    setupFiles: 'src/setupTests.ts',
     coverage: {
       reporter: ['text', 'json', 'html'],
     },
