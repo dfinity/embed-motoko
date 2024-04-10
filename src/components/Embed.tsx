@@ -37,11 +37,11 @@ export default function Embed() {
   const [message, setMessage] = useState('');
   const [autoRun, setAutoRun] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [_output, setOutput] = useState<Partial<ReturnType<typeof mo.run>>>({});
+  const [output_, setOutput] = useState<Partial<ReturnType<typeof mo.run>>>({});
 
   const showPreview = isEmbedded() && isMobile();
 
-  const output = autoRun && !showPreview ? _output : {};
+  const output = autoRun && !showPreview ? output_ : {};
 
   const { code, attributes /* , lineCount */ } = useMemo(() => {
     return preprocessMotoko(inputCode || '');
