@@ -78,7 +78,7 @@ export default function preprocessMotoko(code: string): PreprocessResult {
           trimmedLine.endsWith('[') ||
           ((trimmedLine.startsWith('/*') || !trimmedLine.includes('/*')) &&
             trimmedLine.endsWith('*/')) ||
-          /^(else|catch)([^a-zA-Z0-9_]|$)/.test(nextTrimmedLine)
+          /^(else|catch|finally)([^a-zA-Z0-9_]|$)/.test(nextTrimmedLine)
         )
       ) {
         line += ';';
