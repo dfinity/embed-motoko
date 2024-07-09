@@ -22,7 +22,7 @@
     "classnames": "2.3.1",
     "copy-to-clipboard": "3.3.1",
     "highlight.js": "11.6.0",
-    "highlightjs-motoko": "1.0.0",
+    "highlightjs-motoko": "1.0.3",
     "motoko": "3.7.0",
     "pako": "2.0.4",
     "react": "17.0.2",
