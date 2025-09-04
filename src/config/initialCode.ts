@@ -1,7 +1,7 @@
 const initialCode = `
 // A simple Motoko smart contract.
 
-actor Main {
+persistent actor Main {
   public query func hello() : async Text {
     "Hello, world!"
   };
